@@ -5,333 +5,498 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#083b7a">
 <title>BOAT SCORE</title>
 
 <style>
-*{
-  box-sizing:border-box;
+:root{
+  --navy:#082c66;
+  --blue:#075ad7;
+  --blue2:#0b438f;
+  --red:#e33434;
+  --green:#12833c;
+  --text:#172033;
+  --muted:#707887;
+  --bg:#f4f6fa;
+  --line:#aeb7c5;
+  --card:#fff;
 }
-
+*{box-sizing:border-box}
+html{background:var(--bg)}
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#f4f6fa;
-  color:#172033;
+  background:var(--bg);
+  color:var(--text);
 }
-
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
 header{
-  background:linear-gradient(135deg,#082c66,#0b438f);
-  color:white;
-  padding:48px 18px 22px;
+  background:linear-gradient(135deg,var(--navy),var(--blue2));
+  color:#fff;
+  padding:calc(44px + env(safe-area-inset-top)) 18px 22px;
   text-align:center;
 }
-
 header h1{
   margin:0;
   font-size:29px;
   font-style:italic;
   letter-spacing:1px;
 }
-
 header p{
   margin:5px 0 0;
-  opacity:.85;
+  opacity:.86;
   font-size:13px;
 }
-
 .container{
-  max-width:600px;
+  max-width:680px;
   margin:auto;
-  padding:14px 14px 110px;
+  padding:14px 14px calc(112px + env(safe-area-inset-bottom));
 }
-
 .card{
-  background:white;
+  background:var(--card);
   border-radius:16px;
   padding:16px;
   margin-bottom:14px;
   box-shadow:0 3px 12px rgba(0,0,0,.07);
 }
-
 .month-title{
-  font-size:17px;
-  font-weight:700;
+  font-size:18px;
+  font-weight:800;
   margin-bottom:14px;
 }
-
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+.label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+.value{
+  font-size:18px;
+  font-weight:800;
+}
+.plus{color:var(--blue)!important}
+.minus{color:var(--red)!important}
+.zero{color:#333!important}
+.hit{color:var(--green)!important}
+.main-profit{
+  text-align:center;
+  padding:8px 0 16px;
+}
+.main-profit .label{font-size:14px}
+.main-profit .value{font-size:36px}
 .summary{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   text-align:center;
 }
-
-.summary div{
-  border-right:1px solid #eee;
+.summary>div{
+  padding:2px 6px;
+  border-right:1px solid #e8ebf0;
 }
-
-.summary div:last-child{
-  border-right:none;
-}
-
-.label{
-  font-size:12px;
-  color:#6f7785;
-  margin-bottom:7px;
-}
-
-.value{
-  font-size:18px;
-  font-weight:700;
-}
-
-.plus{
-  color:#075ad7;
-}
-
-.minus{
-  color:#e33434;
-}
-
-.zero{
-  color:#333;
-}
-
-.main-profit{
-  text-align:center;
-  padding:12px 0 2px;
-}
-
-.main-profit .label{
-  font-size:14px;
-}
-
-.main-profit .value{
-  font-size:34px;
-}
-
+.summary>div:last-child{border-right:0}
 .stats-row{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
+  margin-bottom:14px;
 }
-
 .stat-box{
-  background:#f7f9fc;
-  border-radius:12px;
-  padding:13px;
-  text-align:center;
-}
-
-button{
-  font-family:inherit;
-}
-
-.add-button{
-  width:100%;
-  border:none;
-  background:#075ad7;
-  color:white;
+  background:#fff;
   border-radius:14px;
-  padding:16px;
-  font-size:17px;
-  font-weight:700;
+  padding:14px;
+  text-align:center;
+  box-shadow:0 2px 9px rgba(0,0,0,.045);
 }
-
+.add-button,
+.secondary-button,
+.danger-button{
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:15px 14px;
+  font-weight:800;
+  font-size:16px;
+}
+.add-button{
+  background:var(--blue);
+  color:#fff;
+}
+.secondary-button{
+  background:#eef4ff;
+  color:var(--blue);
+  border:1px solid #bdd0f6;
+}
+.danger-button{
+  background:#fff0f0;
+  color:var(--red);
+  border:1px solid #f0b7b7;
+}
 .history-title{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  margin-bottom:10px;
-  font-weight:700;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:4px;
+  font-weight:800;
 }
-
 .race-item{
-  padding:12px 0;
-  border-bottom:1px solid #eee;
+  padding:13px 0;
+  border-bottom:1px solid #e7eaf0;
 }
-
-.race-item:last-child{
-  border-bottom:none;
-}
-
+.race-item:last-child{border-bottom:0}
 .race-top{
   display:flex;
+  gap:8px;
   justify-content:space-between;
+  align-items:flex-start;
   font-size:14px;
 }
-
 .race-detail{
   margin-top:6px;
   color:#697180;
   font-size:13px;
+  line-height:1.6;
 }
-
-.thumb{
-  width:70px;
-  height:52px;
-  object-fit:cover;
+.race-actions{
+  display:flex;
+  gap:8px;
+  margin-top:9px;
+}
+.small-btn{
+  border:1px solid #cad3df;
+  background:#fff;
+  color:#445066;
   border-radius:8px;
-  margin-top:8px;
+  padding:7px 11px;
+  font-size:12px;
+  font-weight:700;
 }
-
-.form-group{
-  margin-bottom:16px;
+.small-btn.edit{color:var(--blue);border-color:#a8c2f2}
+.small-btn.delete{color:var(--red);border-color:#efbbbb}
+.thumb{
+  width:92px;
+  height:68px;
+  object-fit:cover;
+  border-radius:9px;
+  margin-top:9px;
+  border:1px solid #d8dde5;
 }
-
+.form-group{margin-bottom:16px}
 .form-group label{
   display:block;
   font-size:13px;
-  font-weight:700;
+  font-weight:800;
   margin-bottom:7px;
 }
-
 input,select,textarea{
   width:100%;
-  border:1px solid #cfd5df;
+  border:1px solid #cbd3df;
   border-radius:11px;
   padding:13px;
   font-size:16px;
-  background:white;
+  color:var(--text);
+  background:#fff;
 }
-
-textarea{
-  resize:none;
+textarea{resize:vertical}
+.quick-money{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:8px;
 }
-
+.quick-money button{
+  border:1px solid #cbd3df;
+  background:#fff;
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:12px;
+  color:#465268;
+}
 .race-buttons{
   display:grid;
   grid-template-columns:repeat(6,1fr);
   gap:7px;
 }
-
 .race-btn{
-  border:1px solid #ccd3de;
-  background:white;
-  padding:10px 2px;
+  border:1px solid #cbd3df;
+  background:#fff;
+  color:var(--blue);
+  padding:11px 2px;
   border-radius:9px;
 }
-
 .race-btn.active{
-  background:#075ad7;
-  color:white;
-  border-color:#075ad7;
+  background:var(--blue);
+  color:#fff;
+  border-color:var(--blue);
 }
-
 .image-preview{
   width:100%;
-  max-height:220px;
+  max-height:250px;
   object-fit:contain;
-  border-radius:10px;
+  border-radius:11px;
   display:none;
   margin-top:10px;
+  border:1px solid #dde2ea;
+  background:#fafbfc;
 }
-
+.helper{
+  font-size:12px;
+  line-height:1.55;
+  color:#7c8593;
+  margin-top:7px;
+}
+.success{
+  display:none;
+  background:#eaf8ee;
+  color:var(--green);
+  padding:10px 12px;
+  border-radius:10px;
+  text-align:center;
+  margin-bottom:12px;
+  font-weight:700;
+}
+.edit-banner{
+  display:none;
+  background:#eef4ff;
+  color:#1455a8;
+  border:1px solid #c3d4f0;
+  border-radius:10px;
+  padding:10px 12px;
+  margin-bottom:14px;
+  font-size:13px;
+  font-weight:700;
+}
+.calendar-toolbar{
+  display:grid;
+  grid-template-columns:44px 1fr 44px;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+.calendar-toolbar button{
+  border:1px solid #c7d0dc;
+  background:#fff;
+  color:var(--blue);
+  border-radius:10px;
+  height:40px;
+  font-size:20px;
+  font-weight:800;
+}
+.calendar-toolbar strong{
+  text-align:center;
+  font-size:18px;
+}
+.today-button{
+  display:block;
+  margin:0 auto 12px;
+  border:1px solid #bed0ed;
+  background:#eef4ff;
+  color:var(--blue);
+  padding:7px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+}
 .calendar-grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  border-top:1px solid #aeb7c5;
-  border-left:1px solid #aeb7c5;
+  border-top:1.3px solid var(--line);
+  border-left:1.3px solid var(--line);
 }
-
-.cal-head,
-.cal-day{
-  border-right:1px solid #aeb7c5;
-  border-bottom:1px solid #aeb7c5;
+.cal-head,.cal-day{
+  border-right:1.3px solid var(--line);
+  border-bottom:1.3px solid var(--line);
   text-align:center;
 }
-
 .cal-head{
-  padding:7px 1px;
-  font-size:12px;
-  font-weight:700;
+  padding:8px 1px;
   background:#f3f5f8;
-}
-
-.cal-day{
-  min-height:72px;
-  padding:5px 2px;
   font-size:12px;
+  font-weight:800;
 }
-
-.cal-number{
-  font-weight:700;
+.cal-day{
+  min-height:78px;
+  padding:6px 2px;
+  background:#fff;
 }
-
+.cal-day.has-data{background:#fbfdff}
+.cal-day.selected{
+  outline:3px solid var(--blue);
+  outline-offset:-3px;
+  background:#f1f6ff;
+}
+.cal-number{font-weight:800}
 .cal-profit{
-  font-size:11px;
   margin-top:8px;
+  font-size:11px;
+  font-weight:800;
+}
+.cal-count{
+  font-size:10px;
+  margin-top:3px;
+  color:#596579;
+}
+.day-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  text-align:center;
+  margin-bottom:10px;
+}
+.day-summary>div{
+  border-right:1px solid #e6e9ee;
+  padding:4px;
+}
+.day-summary>div:last-child{border-right:0}
+.empty{
+  color:#8a919d;
+  text-align:center;
+  padding:24px 5px;
+  font-size:14px;
+}
+.tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:13px;
+  padding-bottom:2px;
+}
+.tab-btn{
+  flex:0 0 auto;
+  border:1px solid #c8d1de;
+  background:#fff;
+  color:#526076;
+  border-radius:999px;
+  padding:8px 13px;
+  font-size:12px;
   font-weight:700;
 }
-
+.tab-btn.active{
+  color:#fff;
+  background:var(--blue);
+  border-color:var(--blue);
+}
+.analysis-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.analysis-card{
+  background:#f8fafc;
+  border:1px solid #e2e7ee;
+  border-radius:12px;
+  padding:12px;
+}
+.analysis-card .big{
+  font-size:22px;
+  font-weight:900;
+  margin-top:4px;
+}
+.rank-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.rank-table th,.rank-table td{
+  border-bottom:1px solid #e7eaf0;
+  padding:10px 5px;
+  text-align:right;
+}
+.rank-table th:first-child,.rank-table td:first-child{text-align:left}
+.rank-table th{
+  color:#6e7785;
+  font-size:11px;
+}
+.rank-table tr:last-child td{border-bottom:0}
+.badge{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+.badge.good{background:#eaf8ee;color:var(--green)}
+.badge.bad{background:#fff0f0;color:var(--red)}
+.notice{
+  background:#fff8e7;
+  border:1px solid #f1d89d;
+  color:#6d5723;
+  border-radius:11px;
+  padding:11px 12px;
+  font-size:12px;
+  line-height:1.55;
+}
 .bottom-nav{
   position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:84px;
-  background:white;
-  border-top:1px solid #ddd;
+  left:0;right:0;bottom:0;
+  min-height:82px;
+  background:#fff;
+  border-top:1px solid #dde1e7;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   padding-bottom:env(safe-area-inset-bottom);
   z-index:50;
 }
-
 .nav-btn{
   border:0;
-  background:white;
-  font-size:11px;
+  background:#fff;
   color:#707887;
+  font-size:11px;
+  min-height:70px;
 }
-
 .nav-icon{
   display:block;
-  font-size:22px;
+  font-size:23px;
   margin-bottom:3px;
 }
-
 .nav-btn.active{
-  color:#075ad7;
-  font-weight:700;
+  color:var(--blue);
+  font-weight:800;
 }
-
-.page{
+.page{display:none}
+.page.active{display:block}
+.modal{
+  position:fixed;
+  inset:0;
   display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  background:rgba(0,0,0,.82);
+  padding:20px;
 }
-
-.page.active{
-  display:block;
+.modal.show{display:flex}
+.modal img{
+  max-width:100%;
+  max-height:84vh;
+  border-radius:12px;
+  background:#fff;
 }
-
-.empty{
-  color:#8a919d;
-  text-align:center;
-  padding:25px 5px;
-  font-size:14px;
+.modal-close{
+  position:absolute;
+  top:calc(18px + env(safe-area-inset-top));
+  right:18px;
+  width:42px;height:42px;
+  border-radius:50%;
+  border:0;
+  background:#fff;
+  color:#111;
+  font-size:24px;
 }
-
-.delete-btn{
-  background:none;
-  border:none;
-  color:#e33434;
-  font-size:12px;
-  padding:5px 0;
-}
-
-.success{
-  background:#eaf8ee;
-  color:#16813c;
-  padding:10px;
-  border-radius:10px;
-  text-align:center;
-  display:none;
-  margin-bottom:12px;
-}
-
-.analysis-placeholder{
-  text-align:center;
-  padding:35px 15px;
-  color:#777;
+@media(max-width:390px){
+  .container{padding-left:10px;padding-right:10px}
+  .card{padding:14px}
+  .summary .value{font-size:16px}
+  .race-buttons{gap:5px}
+  .cal-day{min-height:72px}
 }
 </style>
 </head>
@@ -345,73 +510,43 @@ textarea{
 
 <div class="container">
 
-  <!-- ホーム -->
   <section id="homePage" class="page active">
-
     <div class="card">
       <div class="month-title" id="monthTitle"></div>
-
       <div class="main-profit">
         <div class="label">今月の収支</div>
         <div id="totalProfit" class="value zero">0円</div>
       </div>
-
       <div class="summary">
-        <div>
-          <div class="label">投資</div>
-          <div id="totalBet" class="value">0円</div>
-        </div>
-
-        <div>
-          <div class="label">払戻</div>
-          <div id="totalReturn" class="value">0円</div>
-        </div>
-
-        <div>
-          <div class="label">回収率</div>
-          <div id="returnRate" class="value">0%</div>
-        </div>
+        <div><div class="label">投資</div><div id="totalBet" class="value">0円</div></div>
+        <div><div class="label">払戻</div><div id="totalReturn" class="value">0円</div></div>
+        <div><div class="label">回収率</div><div id="returnRate" class="value">0%</div></div>
       </div>
     </div>
 
     <div class="stats-row">
-      <div class="stat-box">
-        <div class="label">登録レース</div>
-        <div id="raceCount" class="value">0</div>
-      </div>
-
-      <div class="stat-box">
-        <div class="label">的中数</div>
-        <div id="hitCount" class="value">0</div>
-      </div>
+      <div class="stat-box"><div class="label">登録レース</div><div id="raceCount" class="value">0</div></div>
+      <div class="stat-box"><div class="label">的中数</div><div id="hitCount" class="value">0</div></div>
     </div>
 
-    <br>
-
-    <button class="add-button" onclick="showPage('inputPage')">
-      ＋ 収支を入力
-    </button>
+    <button class="add-button" onclick="openNewInput()">＋ 収支を入力</button>
 
     <div class="card" style="margin-top:14px">
-      <div class="history-title">
-        <span>最近のレース</span>
-      </div>
+      <div class="history-title"><span>最近のレース</span></div>
       <div id="recentList"></div>
     </div>
-
   </section>
 
 
-  <!-- 入力 -->
   <section id="inputPage" class="page">
-
-    <div id="successMessage" class="success">
-      保存しました！
-    </div>
+    <div id="successMessage" class="success">保存しました！</div>
 
     <div class="card">
-
-      <div class="month-title">収支を入力</div>
+      <div id="editBanner" class="edit-banner">編集中です。保存するとこの記録を更新します。</div>
+      <div class="section-title">
+        <span id="inputTitle">収支を入力</span>
+        <button id="cancelEditBtn" class="small-btn" style="display:none" onclick="cancelEdit()">編集をやめる</button>
+      </div>
 
       <div class="form-group">
         <label>日付</label>
@@ -421,30 +556,12 @@ textarea{
       <div class="form-group">
         <label>レース場</label>
         <select id="place">
-          <option>桐生</option>
-          <option>戸田</option>
-          <option>江戸川</option>
-          <option>平和島</option>
-          <option>多摩川</option>
-          <option>浜名湖</option>
-          <option>蒲郡</option>
-          <option>常滑</option>
-          <option>津</option>
-          <option>三国</option>
-          <option>びわこ</option>
-          <option>住之江</option>
-          <option>尼崎</option>
-          <option>鳴門</option>
-          <option>丸亀</option>
-          <option>児島</option>
-          <option>宮島</option>
-          <option>徳山</option>
-          <option>下関</option>
-          <option>若松</option>
-          <option>芦屋</option>
-          <option>福岡</option>
-          <option>唐津</option>
-          <option>大村</option>
+          <option>桐生</option><option>戸田</option><option>江戸川</option><option>平和島</option>
+          <option>多摩川</option><option>浜名湖</option><option>蒲郡</option><option>常滑</option>
+          <option>津</option><option>三国</option><option>びわこ</option><option>住之江</option>
+          <option>尼崎</option><option>鳴門</option><option>丸亀</option><option>児島</option>
+          <option>宮島</option><option>徳山</option><option>下関</option><option>若松</option>
+          <option>芦屋</option><option>福岡</option><option>唐津</option><option>大村</option>
         </select>
       </div>
 
@@ -455,18 +572,31 @@ textarea{
 
       <div class="form-group">
         <label>投資額</label>
-        <input type="number" id="bet" inputmode="numeric" placeholder="例 5000">
+        <input type="number" id="bet" inputmode="numeric" min="0" placeholder="例 5000">
+        <div class="quick-money">
+          <button type="button" onclick="addMoney('bet',1000)">+1,000</button>
+          <button type="button" onclick="addMoney('bet',5000)">+5,000</button>
+          <button type="button" onclick="addMoney('bet',10000)">+10,000</button>
+        </div>
       </div>
 
       <div class="form-group">
         <label>払戻額</label>
-        <input type="number" id="returnAmount" inputmode="numeric" placeholder="不的中なら 0">
+        <input type="number" id="returnAmount" inputmode="numeric" min="0" placeholder="不的中なら 0">
+        <div class="quick-money">
+          <button type="button" onclick="setMoney('returnAmount',0)">0</button>
+          <button type="button" onclick="addMoney('returnAmount',1000)">+1,000</button>
+          <button type="button" onclick="addMoney('returnAmount',5000)">+5,000</button>
+          <button type="button" onclick="addMoney('returnAmount',10000)">+10,000</button>
+        </div>
       </div>
 
       <div class="form-group">
         <label>舟券・ネット投票画面</label>
         <input type="file" accept="image/*" id="imageInput">
-        <img id="imagePreview" class="image-preview">
+        <img id="imagePreview" class="image-preview" alt="画像プレビュー">
+        <div class="helper">画像は保存前に自動で縮小・圧縮します。投票画面に個人情報が写っていないか確認してください。</div>
+        <button id="removeImageBtn" type="button" class="small-btn delete" style="display:none;margin-top:8px" onclick="removeSelectedImage()">画像を削除</button>
       </div>
 
       <div class="form-group">
@@ -474,492 +604,615 @@ textarea{
         <textarea id="memo" rows="3" placeholder="例：向かい風が強かった"></textarea>
       </div>
 
-      <button class="add-button" onclick="saveRace()">
-        保存する
-      </button>
-
+      <button id="saveButton" class="add-button" onclick="saveRace()">保存する</button>
     </div>
-
   </section>
 
 
-  <!-- カレンダー -->
   <section id="calendarPage" class="page">
-
     <div class="card">
-      <div class="month-title" id="calendarTitle"></div>
-
+      <div class="calendar-toolbar">
+        <button onclick="moveCalendar(-1)">‹</button>
+        <strong id="calendarTitle"></strong>
+        <button onclick="moveCalendar(1)">›</button>
+      </div>
+      <button class="today-button" onclick="goCalendarToday()">今月に戻る</button>
       <div class="calendar-grid" id="calendar"></div>
     </div>
 
+    <div class="card">
+      <div class="section-title">
+        <span id="selectedDayTitle">日付をタップしてください</span>
+      </div>
+      <div id="dayDetail"></div>
+    </div>
   </section>
 
 
-  <!-- 分析 -->
   <section id="analysisPage" class="page">
-
     <div class="card">
-      <div class="month-title">分析</div>
+      <div class="section-title"><span>分析</span></div>
 
-      <div class="analysis-placeholder">
-        📊<br><br>
-        データが増えたら、ここに<br>
-        場別・R別・月別・得意条件などを<br>
-        表示していきます。
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="summary" onclick="setAnalysisTab('summary',this)">サマリー</button>
+        <button class="tab-btn" data-tab="place" onclick="setAnalysisTab('place',this)">場別</button>
+        <button class="tab-btn" data-tab="race" onclick="setAnalysisTab('race',this)">R別</button>
       </div>
-    </div>
 
+      <div id="analysisContent"></div>
+    </div>
   </section>
 
 </div>
 
-
 <nav class="bottom-nav">
-
-  <button class="nav-btn active" onclick="showPage('homePage',this)">
-    <span class="nav-icon">⌂</span>
-    ホーム
+  <button class="nav-btn active" data-page="homePage" onclick="showPage('homePage',this)">
+    <span class="nav-icon">⌂</span>ホーム
   </button>
-
-  <button class="nav-btn" onclick="showPage('calendarPage',this)">
-    <span class="nav-icon">▣</span>
-    カレンダー
+  <button class="nav-btn" data-page="calendarPage" onclick="showPage('calendarPage',this)">
+    <span class="nav-icon">▣</span>カレンダー
   </button>
-
-  <button class="nav-btn" onclick="showPage('inputPage',this)">
-    <span class="nav-icon">＋</span>
-    収支入力
+  <button class="nav-btn" data-page="inputPage" onclick="openNewInput(this)">
+    <span class="nav-icon">＋</span>収支入力
   </button>
-
-  <button class="nav-btn" onclick="showPage('analysisPage',this)">
-    <span class="nav-icon">◔</span>
-    分析
+  <button class="nav-btn" data-page="analysisPage" onclick="showPage('analysisPage',this)">
+    <span class="nav-icon">◔</span>分析
   </button>
-
 </nav>
 
+<div id="imageModal" class="modal" onclick="closeImageModal()">
+  <button class="modal-close" onclick="closeImageModal()">×</button>
+  <img id="modalImage" alt="保存画像">
+</div>
 
 <script>
-
+const STORAGE_KEY = "boatScoreData";
 let selectedRace = 1;
 let selectedImage = "";
+let editingId = null;
+let analysisTab = "summary";
 
-const today = new Date();
+const nowLocal = new Date();
+let calendarDate = new Date(nowLocal.getFullYear(), nowLocal.getMonth(), 1);
+let selectedCalendarDate = "";
 
-document.getElementById("date").value =
-  today.toISOString().split("T")[0];
+function localDateString(d = new Date()){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
 
-document.getElementById("monthTitle").textContent =
-  `${today.getFullYear()}年${today.getMonth()+1}月`;
+function parseLocalDate(s){
+  const [y,m,d] = s.split("-").map(Number);
+  return new Date(y,m-1,d);
+}
 
-document.getElementById("calendarTitle").textContent =
-  `${today.getFullYear()}年${today.getMonth()+1}月`;
+function formatDateJP(s){
+  if(!s) return "";
+  const d = parseLocalDate(s);
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
 
-
-/* レースボタン */
+document.getElementById("date").value = localDateString();
 
 const raceButtons = document.getElementById("raceButtons");
-
 for(let i=1;i<=12;i++){
-
   const btn=document.createElement("button");
-
-  btn.className="race-btn";
+  btn.type="button";
+  btn.className="race-btn" + (i===1 ? " active" : "");
   btn.textContent=i+"R";
-
-  if(i===1) btn.classList.add("active");
-
-  btn.onclick=()=>{
-
-    selectedRace=i;
-
-    document.querySelectorAll(".race-btn")
-      .forEach(b=>b.classList.remove("active"));
-
-    btn.classList.add("active");
-  };
-
+  btn.onclick=()=>setSelectedRace(i);
   raceButtons.appendChild(btn);
 }
 
-
-/* 画像 */
-
-document.getElementById("imageInput")
-.addEventListener("change",function(){
-
-  const file=this.files[0];
-
-  if(!file) return;
-
-  const reader=new FileReader();
-
-  reader.onload=function(e){
-
-    selectedImage=e.target.result;
-
-    const preview=
-      document.getElementById("imagePreview");
-
-    preview.src=selectedImage;
-    preview.style.display="block";
-  };
-
-  reader.readAsDataURL(file);
-
-});
-
+function setSelectedRace(r){
+  selectedRace=r;
+  document.querySelectorAll(".race-btn").forEach((b,idx)=>{
+    b.classList.toggle("active",idx===r-1);
+  });
+}
 
 function getData(){
-
-  return JSON.parse(
-    localStorage.getItem("boatScoreData") || "[]"
-  );
-
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY) || "[]";
+    const data = JSON.parse(raw);
+    return Array.isArray(data) ? data : [];
+  }catch(e){
+    return [];
+  }
 }
-
 
 function saveData(data){
-
-  localStorage.setItem(
-    "boatScoreData",
-    JSON.stringify(data)
-  );
-
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
 }
 
+function formatMoney(n){
+  const num = Number(n)||0;
+  return num.toLocaleString()+"円";
+}
+
+function signedMoney(n){
+  const num = Number(n)||0;
+  return (num>0?"+":"")+num.toLocaleString()+"円";
+}
+
+function profitClass(n){
+  if(n>0) return "plus";
+  if(n<0) return "minus";
+  return "zero";
+}
+
+function calcStats(list){
+  const bet=list.reduce((s,r)=>s+(Number(r.bet)||0),0);
+  const ret=list.reduce((s,r)=>s+(Number(r.returnAmount)||0),0);
+  const profit=ret-bet;
+  const hits=list.filter(r=>(Number(r.returnAmount)||0)>0).length;
+  return {
+    bet,ret,profit,hits,
+    count:list.length,
+    rate:bet ? ret/bet*100 : 0,
+    hitRate:list.length ? hits/list.length*100 : 0
+  };
+}
+
+function escapeHTML(s){
+  return String(s??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function addMoney(id,amount){
+  const el=document.getElementById(id);
+  el.value=(Number(el.value)||0)+amount;
+}
+
+function setMoney(id,amount){
+  document.getElementById(id).value=amount;
+}
+
+document.getElementById("imageInput").addEventListener("change",async function(){
+  const file=this.files[0];
+  if(!file) return;
+  try{
+    selectedImage=await compressImage(file,1280,0.72);
+    showImagePreview(selectedImage);
+  }catch(e){
+    alert("画像を読み込めませんでした。別の画像を試してください。");
+  }
+});
+
+function compressImage(file,maxSide=1280,quality=.72){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=e=>{
+      const img=new Image();
+      img.onerror=reject;
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        const scale=Math.min(1,maxSide/Math.max(w,h));
+        w=Math.round(w*scale);
+        h=Math.round(h*scale);
+        const canvas=document.createElement("canvas");
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL("image/jpeg",quality));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function showImagePreview(src){
+  const preview=document.getElementById("imagePreview");
+  preview.src=src;
+  preview.style.display="block";
+  document.getElementById("removeImageBtn").style.display="inline-block";
+}
+
+function removeSelectedImage(){
+  selectedImage="";
+  const preview=document.getElementById("imagePreview");
+  preview.src="";
+  preview.style.display="none";
+  document.getElementById("imageInput").value="";
+  document.getElementById("removeImageBtn").style.display="none";
+}
+
+function resetForm(){
+  editingId=null;
+  document.getElementById("inputTitle").textContent="収支を入力";
+  document.getElementById("editBanner").style.display="none";
+  document.getElementById("cancelEditBtn").style.display="none";
+  document.getElementById("saveButton").textContent="保存する";
+  document.getElementById("date").value=localDateString();
+  document.getElementById("bet").value="";
+  document.getElementById("returnAmount").value="";
+  document.getElementById("memo").value="";
+  document.getElementById("place").selectedIndex=0;
+  setSelectedRace(1);
+  removeSelectedImage();
+}
+
+function openNewInput(navButton){
+  resetForm();
+  showPage("inputPage",navButton || document.querySelector('[data-page="inputPage"]'));
+}
+
+function cancelEdit(){
+  openNewInput(document.querySelector('[data-page="inputPage"]'));
+}
 
 function saveRace(){
+  const date=document.getElementById("date").value;
+  const place=document.getElementById("place").value;
+  const bet=Number(document.getElementById("bet").value);
+  const ret=Number(document.getElementById("returnAmount").value || 0);
+  const memo=document.getElementById("memo").value.trim();
 
-  const date=
-    document.getElementById("date").value;
-
-  const place=
-    document.getElementById("place").value;
-
-  const bet=
-    Number(document.getElementById("bet").value);
-
-  const returnAmount=
-    Number(document.getElementById("returnAmount").value);
-
-  const memo=
-    document.getElementById("memo").value;
-
-  if(!date || !bet){
-
-    alert("日付と投資額を入力してください");
+  if(!date || !Number.isFinite(bet) || bet<=0){
+    alert("日付と投資額を入力してください。");
+    return;
+  }
+  if(ret<0){
+    alert("払戻額は0円以上で入力してください。");
     return;
   }
 
-  const record={
-    id:Date.now(),
-    date,
-    place,
-    race:selectedRace,
-    bet,
-    returnAmount,
-    profit:returnAmount-bet,
-    hit:returnAmount>0,
-    memo,
-    image:selectedImage
-  };
-
   const data=getData();
 
-  data.push(record);
+  if(editingId){
+    const idx=data.findIndex(r=>r.id===editingId);
+    if(idx<0){
+      alert("編集対象が見つかりませんでした。");
+      return;
+    }
+    data[idx]={
+      ...data[idx],
+      date,place,race:selectedRace,bet,
+      returnAmount:ret,
+      profit:ret-bet,
+      hit:ret>0,
+      memo,
+      image:selectedImage
+    };
+  }else{
+    data.push({
+      id:Date.now(),
+      date,place,race:selectedRace,bet,
+      returnAmount:ret,
+      profit:ret-bet,
+      hit:ret>0,
+      memo,
+      image:selectedImage
+    });
+  }
 
   try{
     saveData(data);
   }catch(e){
-    alert("画像サイズが大きすぎる可能性があります。画像なしで保存してください。");
+    alert("保存容量が不足しました。画像を外すか、不要な記録を削除してください。");
     return;
   }
-
-  document.getElementById("bet").value="";
-  document.getElementById("returnAmount").value="";
-  document.getElementById("memo").value="";
-  document.getElementById("imageInput").value="";
-  document.getElementById("imagePreview").style.display="none";
-
-  selectedImage="";
 
   document.getElementById("successMessage").style.display="block";
+  setTimeout(()=>document.getElementById("successMessage").style.display="none",1400);
 
-  setTimeout(()=>{
-    document.getElementById("successMessage").style.display="none";
-  },1800);
-
+  resetForm();
   refresh();
+  showPage("homePage",document.querySelector('[data-page="homePage"]'));
 }
 
+function editRace(id){
+  const r=getData().find(x=>x.id===id);
+  if(!r) return;
+  editingId=id;
+  document.getElementById("inputTitle").textContent="収支を編集";
+  document.getElementById("editBanner").style.display="block";
+  document.getElementById("cancelEditBtn").style.display="inline-block";
+  document.getElementById("saveButton").textContent="変更を保存";
+  document.getElementById("date").value=r.date;
+  document.getElementById("place").value=r.place;
+  document.getElementById("bet").value=r.bet;
+  document.getElementById("returnAmount").value=r.returnAmount;
+  document.getElementById("memo").value=r.memo||"";
+  setSelectedRace(Number(r.race)||1);
+  selectedImage=r.image||"";
+  if(selectedImage) showImagePreview(selectedImage);
+  else removeSelectedImage();
+  showPage("inputPage",document.querySelector('[data-page="inputPage"]'));
+}
 
 function deleteRace(id){
-
   if(!confirm("この記録を削除しますか？")) return;
-
-  const data=
-    getData().filter(r=>r.id!==id);
-
-  saveData(data);
-
+  saveData(getData().filter(r=>r.id!==id));
   refresh();
-
 }
 
-
-function formatMoney(n){
-
-  return n.toLocaleString()+"円";
-
+function recordHTML(r){
+  const p=(Number(r.returnAmount)||0)-(Number(r.bet)||0);
+  const memo=r.memo ? `<div class="race-detail">メモ：${escapeHTML(r.memo)}</div>` : "";
+  const image=r.image
+    ? `<img class="thumb" src="${r.image}" alt="舟券画像" onclick="openImageModal('${r.id}')">`
+    : "";
+  return `
+    <div class="race-item">
+      <div class="race-top">
+        <strong>${escapeHTML(r.date)} ${escapeHTML(r.place)} ${Number(r.race)||1}R</strong>
+        <strong class="${profitClass(p)}">${signedMoney(p)}</strong>
+      </div>
+      <div class="race-detail">投資 ${formatMoney(r.bet)} ・ 払戻 ${formatMoney(r.returnAmount)}</div>
+      ${memo}
+      ${image}
+      <div class="race-actions">
+        <button class="small-btn edit" onclick="editRace(${r.id})">編集</button>
+        <button class="small-btn delete" onclick="deleteRace(${r.id})">削除</button>
+      </div>
+    </div>`;
 }
-
-
-function profitClass(n){
-
-  if(n>0) return "plus";
-  if(n<0) return "minus";
-
-  return "zero";
-
-}
-
 
 function refreshHome(){
-
   const data=getData();
-
-  const month=
-    today.getMonth()+1;
-
-  const year=
-    today.getFullYear();
-
+  const d=new Date();
+  const y=d.getFullYear(), m=d.getMonth();
   const monthData=data.filter(r=>{
-
-    const d=new Date(r.date);
-
-    return d.getFullYear()===year &&
-      d.getMonth()+1===month;
-
+    const rd=parseLocalDate(r.date);
+    return rd.getFullYear()===y && rd.getMonth()===m;
   });
+  const s=calcStats(monthData);
+  document.getElementById("monthTitle").textContent=`${y}年${m+1}月`;
+  document.getElementById("totalBet").textContent=formatMoney(s.bet);
+  document.getElementById("totalReturn").textContent=formatMoney(s.ret);
+  document.getElementById("returnRate").textContent=s.rate.toFixed(1)+"%";
+  document.getElementById("raceCount").textContent=s.count;
+  document.getElementById("hitCount").textContent=s.hits;
 
-  const bet=
-    monthData.reduce((s,r)=>s+r.bet,0);
+  const profit=document.getElementById("totalProfit");
+  profit.textContent=signedMoney(s.profit);
+  profit.className="value "+profitClass(s.profit);
 
-  const ret=
-    monthData.reduce((s,r)=>s+r.returnAmount,0);
-
-  const profit=
-    ret-bet;
-
-  const rate=
-    bet ? (ret/bet*100).toFixed(1) : 0;
-
-  const hit=
-    monthData.filter(r=>r.hit).length;
-
-
-  document.getElementById("totalBet").textContent=
-    formatMoney(bet);
-
-  document.getElementById("totalReturn").textContent=
-    formatMoney(ret);
-
-  const profitEl=
-    document.getElementById("totalProfit");
-
-  profitEl.textContent=
-    (profit>0?"+":"")+formatMoney(profit);
-
-  profitEl.className=
-    "value "+profitClass(profit);
-
-  document.getElementById("returnRate").textContent=
-    rate+"%";
-
-  document.getElementById("raceCount").textContent=
-    monthData.length;
-
-  document.getElementById("hitCount").textContent=
-    hit;
-
-
-  const recent=
-    [...data]
-    .sort((a,b)=>b.id-a.id)
-    .slice(0,5);
-
-  const list=
-    document.getElementById("recentList");
-
-  if(!recent.length){
-
-    list.innerHTML=
-      '<div class="empty">まだ収支記録がありません</div>';
-
-    return;
-  }
-
-  list.innerHTML=recent.map(r=>`
-
-    <div class="race-item">
-
-      <div class="race-top">
-
-        <strong>
-          ${r.date} ${r.place} ${r.race}R
-        </strong>
-
-        <strong class="${profitClass(r.profit)}">
-          ${r.profit>0?"+":""}${formatMoney(r.profit)}
-        </strong>
-
-      </div>
-
-      <div class="race-detail">
-        投資 ${formatMoney(r.bet)}
-        ・ 払戻 ${formatMoney(r.returnAmount)}
-      </div>
-
-      ${r.image
-        ? `<img class="thumb" src="${r.image}">`
-        : ""
-      }
-
-      <br>
-
-      <button class="delete-btn"
-        onclick="deleteRace(${r.id})">
-        削除
-      </button>
-
-    </div>
-
-  `).join("");
-
+  const recent=[...data].sort((a,b)=>b.id-a.id).slice(0,5);
+  document.getElementById("recentList").innerHTML=recent.length
+    ? recent.map(recordHTML).join("")
+    : '<div class="empty">まだ収支記録がありません</div>';
 }
 
+function moveCalendar(delta){
+  calendarDate=new Date(calendarDate.getFullYear(),calendarDate.getMonth()+delta,1);
+  selectedCalendarDate="";
+  renderCalendar();
+  renderDayDetail();
+}
+
+function goCalendarToday(){
+  const d=new Date();
+  calendarDate=new Date(d.getFullYear(),d.getMonth(),1);
+  selectedCalendarDate=localDateString(d);
+  renderCalendar();
+  renderDayDetail();
+}
+
+function selectCalendarDay(dateString){
+  selectedCalendarDate=dateString;
+  renderCalendar();
+  renderDayDetail();
+}
 
 function renderCalendar(){
-
-  const grid=
-    document.getElementById("calendar");
-
+  const grid=document.getElementById("calendar");
   grid.innerHTML="";
+  const year=calendarDate.getFullYear();
+  const month=calendarDate.getMonth();
+  document.getElementById("calendarTitle").textContent=`${year}年${month+1}月`;
 
-  ["日","月","火","水","木","金","土"]
-  .forEach(day=>{
-
+  ["日","月","火","水","木","金","土"].forEach(day=>{
     const el=document.createElement("div");
-
     el.className="cal-head";
     el.textContent=day;
-
     grid.appendChild(el);
-
   });
 
-  const year=today.getFullYear();
-  const month=today.getMonth();
-
-  const firstDay=
-    new Date(year,month,1).getDay();
-
-  const days=
-    new Date(year,month+1,0).getDate();
+  const firstDay=new Date(year,month,1).getDay();
+  const days=new Date(year,month+1,0).getDate();
 
   for(let i=0;i<firstDay;i++){
-
-    const blank=
-      document.createElement("div");
-
+    const blank=document.createElement("div");
     blank.className="cal-day";
-
     grid.appendChild(blank);
   }
 
-
   const data=getData();
 
-
   for(let day=1;day<=days;day++){
+    const dateString=`${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const dayData=data.filter(r=>r.date===dateString);
+    const s=calcStats(dayData);
 
-    const dateString=
-      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-
-    const dayData=
-      data.filter(r=>r.date===dateString);
-
-    const profit=
-      dayData.reduce((s,r)=>s+r.profit,0);
-
-    const el=
-      document.createElement("div");
-
+    const el=document.createElement("div");
     el.className="cal-day";
+    if(dayData.length) el.classList.add("has-data");
+    if(selectedCalendarDate===dateString) el.classList.add("selected");
+    el.onclick=()=>selectCalendarDay(dateString);
 
     el.innerHTML=`
-
-      <div class="cal-number">
-        ${day}
-      </div>
-
-      ${dayData.length
-        ? `
-          <div class="cal-profit ${profitClass(profit)}">
-          ${profit>0?"+":""}${profit.toLocaleString()}
-          </div>
-
-          <div style="font-size:10px;margin-top:3px">
-          ${dayData.length}R
-          </div>
-        `
-        : ""
-      }
-
+      <div class="cal-number">${day}</div>
+      ${dayData.length ? `
+        <div class="cal-profit ${profitClass(s.profit)}">${s.profit>0?"+":""}${s.profit.toLocaleString()}</div>
+        <div class="cal-count">${s.count}R</div>
+      ` : ""}
     `;
-
     grid.appendChild(el);
-
   }
-
 }
 
+function renderDayDetail(){
+  const title=document.getElementById("selectedDayTitle");
+  const box=document.getElementById("dayDetail");
+  if(!selectedCalendarDate){
+    title.textContent="日付をタップしてください";
+    box.innerHTML='<div class="empty">カレンダーの日付を押すと、その日の収支を確認できます。</div>';
+    return;
+  }
+
+  title.textContent=formatDateJP(selectedCalendarDate);
+  const list=getData().filter(r=>r.date===selectedCalendarDate).sort((a,b)=>a.race-b.race);
+  if(!list.length){
+    box.innerHTML='<div class="empty">この日の記録はありません</div>';
+    return;
+  }
+  const s=calcStats(list);
+  box.innerHTML=`
+    <div class="day-summary">
+      <div><div class="label">収支</div><div class="value ${profitClass(s.profit)}">${signedMoney(s.profit)}</div></div>
+      <div><div class="label">回収率</div><div class="value">${s.rate.toFixed(1)}%</div></div>
+      <div><div class="label">的中</div><div class="value">${s.hits}/${s.count}</div></div>
+    </div>
+    ${list.map(recordHTML).join("")}
+  `;
+}
+
+function groupStats(keyFn){
+  const map=new Map();
+  for(const r of getData()){
+    const key=keyFn(r);
+    if(!map.has(key)) map.set(key,[]);
+    map.get(key).push(r);
+  }
+  return [...map.entries()].map(([key,list])=>({key,...calcStats(list)}));
+}
+
+function setAnalysisTab(tab,btn){
+  analysisTab=tab;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  renderAnalysis();
+}
+
+function renderAnalysis(){
+  const box=document.getElementById("analysisContent");
+  const data=getData();
+  if(!data.length){
+    box.innerHTML='<div class="empty">記録が増えると分析結果が表示されます。</div>';
+    return;
+  }
+
+  if(analysisTab==="summary"){
+    const s=calcStats(data);
+    const places=groupStats(r=>r.place);
+    const races=groupStats(r=>`${r.race}R`);
+    const profitablePlaces=places.filter(x=>x.bet>0).sort((a,b)=>b.rate-a.rate);
+    const profitableRaces=races.filter(x=>x.bet>0).sort((a,b)=>b.rate-a.rate);
+    const bestPlace=profitablePlaces[0];
+    const worstPlace=[...profitablePlaces].sort((a,b)=>a.rate-b.rate)[0];
+    const bestRace=profitableRaces[0];
+
+    box.innerHTML=`
+      <div class="analysis-grid">
+        <div class="analysis-card"><div class="label">通算収支</div><div class="big ${profitClass(s.profit)}">${signedMoney(s.profit)}</div></div>
+        <div class="analysis-card"><div class="label">通算回収率</div><div class="big">${s.rate.toFixed(1)}%</div></div>
+        <div class="analysis-card"><div class="label">的中率</div><div class="big">${s.hitRate.toFixed(1)}%</div></div>
+        <div class="analysis-card"><div class="label">登録レース</div><div class="big">${s.count}R</div></div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="analysis-grid">
+        <div class="analysis-card">
+          <div class="label">得意な場</div>
+          <div class="big">${bestPlace ? escapeHTML(bestPlace.key) : "-"}</div>
+          <div class="helper">${bestPlace ? `回収率 ${bestPlace.rate.toFixed(1)}%` : ""}</div>
+        </div>
+        <div class="analysis-card">
+          <div class="label">苦手な場</div>
+          <div class="big">${worstPlace ? escapeHTML(worstPlace.key) : "-"}</div>
+          <div class="helper">${worstPlace ? `回収率 ${worstPlace.rate.toFixed(1)}%` : ""}</div>
+        </div>
+        <div class="analysis-card">
+          <div class="label">得意R</div>
+          <div class="big">${bestRace ? escapeHTML(bestRace.key) : "-"}</div>
+          <div class="helper">${bestRace ? `回収率 ${bestRace.rate.toFixed(1)}%` : ""}</div>
+        </div>
+        <div class="analysis-card">
+          <div class="label">平均投資額</div>
+          <div class="big">${formatMoney(s.count ? Math.round(s.bet/s.count) : 0)}</div>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="notice">※まだ記録数が少ない場合、「得意・苦手」は参考値です。データが増えるほど傾向が見えやすくなります。</div>
+    `;
+    return;
+  }
+
+  const groups=analysisTab==="place"
+    ? groupStats(r=>r.place)
+    : groupStats(r=>`${r.race}R`);
+
+  groups.sort((a,b)=>b.rate-a.rate);
+
+  box.innerHTML=`
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>${analysisTab==="place"?"レース場":"R"}</th>
+          <th>回収率</th>
+          <th>収支</th>
+          <th>的中</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${groups.map(g=>`
+          <tr>
+            <td><strong>${escapeHTML(g.key)}</strong></td>
+            <td>${g.rate.toFixed(1)}%</td>
+            <td class="${profitClass(g.profit)}">${signedMoney(g.profit)}</td>
+            <td>${g.hits}/${g.count}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function openImageModal(id){
+  const r=getData().find(x=>String(x.id)===String(id));
+  if(!r || !r.image) return;
+  document.getElementById("modalImage").src=r.image;
+  document.getElementById("imageModal").classList.add("show");
+}
+
+function closeImageModal(){
+  document.getElementById("imageModal").classList.remove("show");
+}
 
 function showPage(id,navButton){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
 
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
+  const activeBtn=navButton || document.querySelector(`[data-page="${id}"]`);
+  if(activeBtn) activeBtn.classList.add("active");
 
-  document.getElementById(id)
-    .classList.add("active");
-
-  if(navButton){
-
-    document.querySelectorAll(".nav-btn")
-      .forEach(b=>b.classList.remove("active"));
-
-    navButton.classList.add("active");
+  if(id==="calendarPage"){
+    renderCalendar();
+    renderDayDetail();
   }
-
+  if(id==="analysisPage"){
+    renderAnalysis();
+  }
   window.scrollTo(0,0);
-
-  refresh();
 }
-
 
 function refresh(){
-
   refreshHome();
   renderCalendar();
-
+  renderDayDetail();
+  renderAnalysis();
 }
 
-
 refresh();
-
 </script>
-
 </body>
 </html>
