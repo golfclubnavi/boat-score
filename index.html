@@ -726,6 +726,12 @@ header{
       </div>
 
       <div class="form-group">
+        <label>オッズ（倍）</label>
+        <input type="number" id="odds" inputmode="decimal" min="0" step="0.1" placeholder="例 12.5">
+        <div class="helper">投資額 × オッズで払戻額を自動計算します。払戻額はあとから手動で変更できます。</div>
+      </div>
+
+      <div class="form-group">
         <label>払戻額</label>
         <input type="number" id="returnAmount" inputmode="numeric" min="0" placeholder="不的中なら 0">
         <div class="quick-money">
@@ -782,6 +788,7 @@ header{
         <button class="tab-btn active" data-tab="summary" onclick="setAnalysisTab('summary',this)">サマリー</button>
         <button class="tab-btn" data-tab="place" onclick="setAnalysisTab('place',this)">場別</button>
         <button class="tab-btn" data-tab="race" onclick="setAnalysisTab('race',this)">R別</button>
+        <button class="tab-btn" data-tab="odds" onclick="setAnalysisTab('odds',this)">オッズ別</button>
       </div>
 
       <div id="analysisContent"></div>
@@ -801,7 +808,7 @@ header{
       </label>
       <div style="height:18px"></div>
       <div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 0.4<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <div class="helper">Version 0.5.1<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -897,6 +904,35 @@ function setSelectedRace(r){
   document.querySelectorAll(".race-btn").forEach((b,idx)=>{
     b.classList.toggle("active",idx===r-1);
   });
+}
+
+
+let autoReturnEnabled=true;
+
+function recalcReturnFromOdds(){
+  const bet=Number(document.getElementById("bet").value)||0;
+  const odds=Number(document.getElementById("odds").value)||0;
+  if(autoReturnEnabled && bet>0 && odds>0){
+    document.getElementById("returnAmount").value=Math.floor(bet*odds);
+  }
+}
+
+document.getElementById("bet").addEventListener("input",recalcReturnFromOdds);
+document.getElementById("odds").addEventListener("input",()=>{
+  autoReturnEnabled=true;
+  recalcReturnFromOdds();
+});
+document.getElementById("returnAmount").addEventListener("input",()=>{
+  autoReturnEnabled=false;
+});
+
+function oddsBand(r){
+  const o=Number(r.odds)||0;
+  if(o<=0) return "未入力";
+  if(o<5) return "1〜5倍";
+  if(o<10) return "5〜10倍";
+  if(o<30) return "10〜30倍";
+  return "30倍以上";
 }
 
 function getData(){
@@ -1019,6 +1055,8 @@ function resetForm(){
   document.getElementById("date").value=localDateString();
   document.getElementById("bet").value="";
   document.getElementById("returnAmount").value="";
+  document.getElementById("odds").value="";
+  autoReturnEnabled=true;
   document.getElementById("memo").value="";
   document.getElementById("place").selectedIndex=0;
   setSelectedRace(1);
@@ -1040,6 +1078,7 @@ function saveRace(){
   const bet=Number(document.getElementById("bet").value);
   const ret=Number(document.getElementById("returnAmount").value || 0);
   const memo=document.getElementById("memo").value.trim();
+  const odds=Number(document.getElementById("odds").value)||0;
 
   if(!date || !Number.isFinite(bet) || bet<=0){
     alert("日付と投資額を入力してください。");
@@ -1065,6 +1104,7 @@ function saveRace(){
       profit:ret-bet,
       hit:ret>0,
       memo,
+      odds,
       image:selectedImage
     };
   }else{
@@ -1075,6 +1115,7 @@ function saveRace(){
       profit:ret-bet,
       hit:ret>0,
       memo,
+      odds,
       image:selectedImage
     });
   }
@@ -1106,6 +1147,8 @@ function editRace(id){
   document.getElementById("place").value=r.place;
   document.getElementById("bet").value=r.bet;
   document.getElementById("returnAmount").value=r.returnAmount;
+  document.getElementById("odds").value=r.odds||"";
+  autoReturnEnabled=false;
   document.getElementById("memo").value=r.memo||"";
   setSelectedRace(Number(r.race)||1);
   selectedImage=r.image||"";
@@ -1132,7 +1175,7 @@ function recordHTML(r){
         <strong>${escapeHTML(r.date)} ${escapeHTML(r.place)} ${Number(r.race)||1}R</strong>
         <strong class="${profitClass(p)}">${signedMoney(p)}</strong>
       </div>
-      <div class="race-detail">投資 ${formatMoney(r.bet)} ・ 払戻 ${formatMoney(r.returnAmount)}</div>
+      <div class="race-detail">投資 ${formatMoney(r.bet)} ・ 払戻 ${formatMoney(r.returnAmount)}${Number(r.odds)>0 ? ` ・ オッズ ${Number(r.odds).toFixed(1)}倍` : ""}</div>
       ${memo}
       ${image}
       <div class="race-actions">
@@ -1367,17 +1410,24 @@ function renderAnalysis(){
     return;
   }
 
-  const groups=analysisTab==="place"
-    ? groupStats(r=>r.place)
-    : groupStats(r=>`${r.race}R`);
+  let groups;
+  if(analysisTab==="place"){
+    groups=groupStats(r=>r.place);
+  }else if(analysisTab==="race"){
+    groups=groupStats(r=>`${r.race}R`);
+  }else{
+    groups=groupStats(r=>oddsBand(r));
+    const order={"1〜5倍":1,"5〜10倍":2,"10〜30倍":3,"30倍以上":4,"未入力":5};
+    groups.sort((a,b)=>(order[a.key]||99)-(order[b.key]||99));
+  }
 
-  groups.sort((a,b)=>b.rate-a.rate);
+  if(analysisTab!=="odds") groups.sort((a,b)=>b.rate-a.rate);
 
   box.innerHTML=`
     <table class="rank-table">
       <thead>
         <tr>
-          <th>${analysisTab==="place"?"レース場":"R"}</th>
+          <th>${analysisTab==="place"?"レース場":analysisTab==="race"?"R":"オッズ帯"}</th>
           <th>回収率</th>
           <th>収支</th>
           <th>的中</th>
