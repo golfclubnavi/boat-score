@@ -6,6 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#083b7a">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-title" content="BOAT SCORE">
 <title>BOAT SCORE</title>
 
 <style>
@@ -529,9 +532,29 @@ textarea{resize:vertical}
       <div class="stat-box"><div class="label">的中数</div><div id="hitCount" class="value">0</div></div>
     </div>
 
+    <div class="card">
+      <div class="section-title"><span>今月の傾向</span></div>
+      <div class="analysis-grid">
+        <div class="analysis-card">
+          <div class="label">得意な場</div>
+          <div id="homeBestPlace" class="big">-</div>
+          <div id="homeBestPlaceSub" class="helper"></div>
+        </div>
+        <div class="analysis-card">
+          <div class="label">得意R</div>
+          <div id="homeBestRace" class="big">-</div>
+          <div id="homeBestRaceSub" class="helper"></div>
+        </div>
+      </div>
+    </div>
+
     <button class="add-button" onclick="openNewInput()">＋ 収支を入力</button>
 
-    <div class="card" style="margin-top:14px">
+    <div class="card" style="margin-top:14px;padding:10px 14px;text-align:center;background:#f8fafc;box-shadow:none;border:1px dashed #cbd3df">
+      <div class="label" style="margin:0">広告スペース（公開時に設定）</div>
+    </div>
+
+    <div class="card">
       <div class="history-title"><span>最近のレース</span></div>
       <div id="recentList"></div>
     </div>
@@ -972,6 +995,27 @@ function refreshHome(){
   document.getElementById("raceCount").textContent=s.count;
   document.getElementById("hitCount").textContent=s.hits;
 
+  const monthPlaceMap=new Map();
+  const monthRaceMap=new Map();
+  monthData.forEach(r=>{
+    if(!monthPlaceMap.has(r.place)) monthPlaceMap.set(r.place,[]);
+    monthPlaceMap.get(r.place).push(r);
+    const rk=`${r.race}R`;
+    if(!monthRaceMap.has(rk)) monthRaceMap.set(rk,[]);
+    monthRaceMap.get(rk).push(r);
+  });
+  const bestFromMap=(map)=>{
+    const rows=[...map.entries()].map(([key,list])=>({key,...calcStats(list)}));
+    rows.sort((a,b)=>b.rate-a.rate);
+    return rows[0]||null;
+  };
+  const bp=bestFromMap(monthPlaceMap);
+  const br=bestFromMap(monthRaceMap);
+  document.getElementById("homeBestPlace").textContent=bp?bp.key:"-";
+  document.getElementById("homeBestPlaceSub").textContent=bp?`回収率 ${bp.rate.toFixed(1)}%`:"記録がありません";
+  document.getElementById("homeBestRace").textContent=br?br.key:"-";
+  document.getElementById("homeBestRaceSub").textContent=br?`回収率 ${br.rate.toFixed(1)}%`:"記録がありません";
+
   const profit=document.getElementById("totalProfit");
   profit.textContent=signedMoney(s.profit);
   profit.className="value "+profitClass(s.profit);
@@ -1213,6 +1257,12 @@ function refresh(){
 }
 
 refresh();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
