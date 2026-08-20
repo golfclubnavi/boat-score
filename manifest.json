@@ -1,5 +1,5 @@
 {
-  "name": "BOAT SCORE - ボートレース収支管理",
+  "name": "BOAT SCORE - ボートレース収支・回収率管理",
   "short_name": "BOAT SCORE",
   "description": "ボートレースの収支・回収率・的中率を記録して分析するアプリ",
   "start_url": "./",

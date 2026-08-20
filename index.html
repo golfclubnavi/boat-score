@@ -544,6 +544,69 @@ textarea{resize:vertical}
   .race-buttons{gap:5px}
   .cal-day{min-height:72px}
 }
+
+/* ===== BOAT SCORE v0.5 UI ===== */
+:root{
+  --navy:#082f67;
+  --navy2:#0a448e;
+  --blue:#0867df;
+  --blue2:#0d78f2;
+  --soft:#f3f7fc;
+  --line:#d7e0ec;
+  --text:#10203a;
+  --muted:#748198;
+}
+body{background:var(--soft);color:var(--text)}
+header{
+  background:linear-gradient(120deg,var(--navy),var(--navy2) 58%,#0b58ad);
+  padding:44px 18px 18px;
+  box-shadow:0 5px 20px rgba(8,47,103,.16);
+}
+.brand-name{
+  font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  font-size:30px;font-weight:900;font-style:italic;letter-spacing:1.5px;
+}
+.brand-mark{width:52px;height:34px}
+.brand-boat{
+  left:3px;top:8px;width:43px;height:14px;
+  transform:skewX(-12deg) rotate(-4deg);
+  clip-path:polygon(0 30%,100% 0,82% 78%,24% 100%);
+}
+.brand-boat:before{
+  left:17px;top:-9px;width:17px;height:11px;
+  clip-path:polygon(0 100%,18% 12%,100% 100%);
+}
+.brand-wave{left:0;right:2px;bottom:0;border-top-width:3px}
+.card{border:1px solid rgba(215,224,236,.65)}
+.period-switch{
+  display:grid;grid-template-columns:1fr 1fr;background:#e8eef7;
+  border-radius:12px;padding:4px;margin-bottom:16px;
+}
+.period-btn{
+  border:0;background:transparent;padding:10px;border-radius:9px;
+  font-weight:800;color:#66748b;font-size:14px;
+}
+.period-btn.active{
+  background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(8,47,103,.10);
+}
+.quick-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}
+.quick-btn{
+  border:1px solid #cbd7e6;background:#fff;color:#17406f;
+  padding:9px 2px;border-radius:9px;font-weight:700;font-size:12px;
+}
+.input-hint{
+  background:#eef6ff;border:1px solid #cfe3fb;color:#174d8e;
+  border-radius:11px;padding:10px 12px;font-size:12px;margin-bottom:14px;
+}
+.favorite-place{
+  display:flex;gap:7px;overflow:auto;padding:2px 0 8px;
+}
+.favorite-place button{
+  flex:0 0 auto;border:1px solid #cbd7e6;background:#fff;color:#17406f;
+  padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;
+}
+.home-year-note{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+
 </style>
 </head>
 
@@ -564,9 +627,13 @@ textarea{resize:vertical}
 
   <section id="homePage" class="page active">
     <div class="card">
+      <div class="period-switch">
+        <button id="monthPeriodBtn" class="period-btn active" onclick="setHomePeriod('month')">今月</button>
+        <button id="yearPeriodBtn" class="period-btn" onclick="setHomePeriod('year')">年間</button>
+      </div>
       <div class="month-title" id="monthTitle"></div>
       <div class="main-profit">
-        <div class="label">今月の収支</div>
+        <div class="label" id="mainProfitLabel">今月の収支</div>
         <div id="totalProfit" class="value zero">0円</div>
       </div>
       <div class="summary">
@@ -582,7 +649,7 @@ textarea{resize:vertical}
     </div>
 
     <div class="card">
-      <div class="section-title"><span>今月の傾向</span></div>
+      <div class="section-title"><span id="trendTitle">今月の傾向</span></div>
       <div class="analysis-grid">
         <div class="analysis-card">
           <div class="label">得意な場</div>
@@ -635,6 +702,12 @@ textarea{resize:vertical}
           <option>宮島</option><option>徳山</option><option>下関</option><option>若松</option>
           <option>芦屋</option><option>福岡</option><option>唐津</option><option>大村</option>
         </select>
+        <div class="favorite-place">
+          <button type="button" onclick="pickPlace('江戸川')">★ 江戸川</button>
+          <button type="button" onclick="pickPlace('平和島')">平和島</button>
+          <button type="button" onclick="pickPlace('住之江')">住之江</button>
+          <button type="button" onclick="pickPlace('福岡')">福岡</button>
+        </div>
       </div>
 
       <div class="form-group">
@@ -760,6 +833,27 @@ textarea{resize:vertical}
 <script>
 const STORAGE_KEY = "boatScoreData";
 let selectedRace = 1;
+
+let homePeriod="month";
+
+function setHomePeriod(period){
+  homePeriod=period;
+  document.getElementById("monthPeriodBtn")?.classList.toggle("active",period==="month");
+  document.getElementById("yearPeriodBtn")?.classList.toggle("active",period==="year");
+  refreshHome();
+}
+
+function addAmount(id,amount){
+  const el=document.getElementById(id);
+  el.value=(Number(el.value)||0)+amount;
+}
+function setAmount(id,amount){
+  document.getElementById(id).value=amount;
+}
+function pickPlace(name){
+  document.getElementById("place").value=name;
+}
+
 let selectedImage = "";
 let editingId = null;
 let analysisTab = "summary";
@@ -1063,6 +1157,9 @@ function refreshHome(){
   document.getElementById("returnRate").textContent=s.rate.toFixed(1)+"%";
   document.getElementById("raceCount").textContent=s.count;
   document.getElementById("hitCount").textContent=s.hits;
+
+  const trendTitle=document.getElementById("trendTitle");
+  if(trendTitle) trendTitle.textContent=homePeriod==="year"?"年間の傾向":"今月の傾向";
 
   const monthPlaceMap=new Map();
   const monthRaceMap=new Map();
