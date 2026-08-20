@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BOAT SCORE</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f4f6fa;
+  color:#172033;
+}
+
+header{
+  background:linear-gradient(135deg,#082c66,#0b438f);
+  color:white;
+  padding:48px 18px 22px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:29px;
+  font-style:italic;
+  letter-spacing:1px;
+}
+
+header p{
+  margin:5px 0 0;
+  opacity:.85;
+  font-size:13px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:14px 14px 110px;
+}
+
+.card{
+  background:white;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+.month-title{
+  font-size:17px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  text-align:center;
+}
+
+.summary div{
+  border-right:1px solid #eee;
+}
+
+.summary div:last-child{
+  border-right:none;
+}
+
+.label{
+  font-size:12px;
+  color:#6f7785;
+  margin-bottom:7px;
+}
+
+.value{
+  font-size:18px;
+  font-weight:700;
+}
+
+.plus{
+  color:#075ad7;
+}
+
+.minus{
+  color:#e33434;
+}
+
+.zero{
+  color:#333;
+}
+
+.main-profit{
+  text-align:center;
+  padding:12px 0 2px;
+}
+
+.main-profit .label{
+  font-size:14px;
+}
+
+.main-profit .value{
+  font-size:34px;
+}
+
+.stats-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stat-box{
+  background:#f7f9fc;
+  border-radius:12px;
+  padding:13px;
+  text-align:center;
+}
+
+button{
+  font-family:inherit;
+}
+
+.add-button{
+  width:100%;
+  border:none;
+  background:#075ad7;
+  color:white;
+  border-radius:14px;
+  padding:16px;
+  font-size:17px;
+  font-weight:700;
+}
+
+.history-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  font-weight:700;
+}
+
+.race-item{
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+}
+
+.race-item:last-child{
+  border-bottom:none;
+}
+
+.race-top{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+}
+
+.race-detail{
+  margin-top:6px;
+  color:#697180;
+  font-size:13px;
+}
+
+.thumb{
+  width:70px;
+  height:52px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-top:8px;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid #cfd5df;
+  border-radius:11px;
+  padding:13px;
+  font-size:16px;
+  background:white;
+}
+
+textarea{
+  resize:none;
+}
+
+.race-buttons{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:7px;
+}
+
+.race-btn{
+  border:1px solid #ccd3de;
+  background:white;
+  padding:10px 2px;
+  border-radius:9px;
+}
+
+.race-btn.active{
+  background:#075ad7;
+  color:white;
+  border-color:#075ad7;
+}
+
+.image-preview{
+  width:100%;
+  max-height:220px;
+  object-fit:contain;
+  border-radius:10px;
+  display:none;
+  margin-top:10px;
+}
+
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  border-top:1px solid #aeb7c5;
+  border-left:1px solid #aeb7c5;
+}
+
+.cal-head,
+.cal-day{
+  border-right:1px solid #aeb7c5;
+  border-bottom:1px solid #aeb7c5;
+  text-align:center;
+}
+
+.cal-head{
+  padding:7px 1px;
+  font-size:12px;
+  font-weight:700;
+  background:#f3f5f8;
+}
+
+.cal-day{
+  min-height:72px;
+  padding:5px 2px;
+  font-size:12px;
+}
+
+.cal-number{
+  font-weight:700;
+}
+
+.cal-profit{
+  font-size:11px;
+  margin-top:8px;
+  font-weight:700;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:84px;
+  background:white;
+  border-top:1px solid #ddd;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:50;
+}
+
+.nav-btn{
+  border:0;
+  background:white;
+  font-size:11px;
+  color:#707887;
+}
+
+.nav-icon{
+  display:block;
+  font-size:22px;
+  margin-bottom:3px;
+}
+
+.nav-btn.active{
+  color:#075ad7;
+  font-weight:700;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.empty{
+  color:#8a919d;
+  text-align:center;
+  padding:25px 5px;
+  font-size:14px;
+}
+
+.delete-btn{
+  background:none;
+  border:none;
+  color:#e33434;
+  font-size:12px;
+  padding:5px 0;
+}
+
+.success{
+  background:#eaf8ee;
+  color:#16813c;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+  display:none;
+  margin-bottom:12px;
+}
+
+.analysis-placeholder{
+  text-align:center;
+  padding:35px 15px;
+  color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🚤 BOAT SCORE</h1>
+  <p>ボートレース収支・回収率管理</p>
+</header>
+
+<div class="container">
+
+  <!-- ホーム -->
+  <section id="homePage" class="page active">
+
+    <div class="card">
+      <div class="month-title" id="monthTitle"></div>
+
+      <div class="main-profit">
+        <div class="label">今月の収支</div>
+        <div id="totalProfit" class="value zero">0円</div>
+      </div>
+
+      <div class="summary">
+        <div>
+          <div class="label">投資</div>
+          <div id="totalBet" class="value">0円</div>
+        </div>
+
+        <div>
+          <div class="label">払戻</div>
+          <div id="totalReturn" class="value">0円</div>
+        </div>
+
+        <div>
+          <div class="label">回収率</div>
+          <div id="returnRate" class="value">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="label">登録レース</div>
+        <div id="raceCount" class="value">0</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="label">的中数</div>
+        <div id="hitCount" class="value">0</div>
+      </div>
+    </div>
+
+    <br>
+
+    <button class="add-button" onclick="showPage('inputPage')">
+      ＋ 収支を入力
+    </button>
+
+    <div class="card" style="margin-top:14px">
+      <div class="history-title">
+        <span>最近のレース</span>
+      </div>
+      <div id="recentList"></div>
+    </div>
+
+  </section>
+
+
+  <!-- 入力 -->
+  <section id="inputPage" class="page">
+
+    <div id="successMessage" class="success">
+      保存しました！
+    </div>
+
+    <div class="card">
+
+      <div class="month-title">収支を入力</div>
+
+      <div class="form-group">
+        <label>日付</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="form-group">
+        <label>レース場</label>
+        <select id="place">
+          <option>桐生</option>
+          <option>戸田</option>
+          <option>江戸川</option>
+          <option>平和島</option>
+          <option>多摩川</option>
+          <option>浜名湖</option>
+          <option>蒲郡</option>
+          <option>常滑</option>
+          <option>津</option>
+          <option>三国</option>
+          <option>びわこ</option>
+          <option>住之江</option>
+          <option>尼崎</option>
+          <option>鳴門</option>
+          <option>丸亀</option>
+          <option>児島</option>
+          <option>宮島</option>
+          <option>徳山</option>
+          <option>下関</option>
+          <option>若松</option>
+          <option>芦屋</option>
+          <option>福岡</option>
+          <option>唐津</option>
+          <option>大村</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>レース</label>
+        <div class="race-buttons" id="raceButtons"></div>
+      </div>
+
+      <div class="form-group">
+        <label>投資額</label>
+        <input type="number" id="bet" inputmode="numeric" placeholder="例 5000">
+      </div>
+
+      <div class="form-group">
+        <label>払戻額</label>
+        <input type="number" id="returnAmount" inputmode="numeric" placeholder="不的中なら 0">
+      </div>
+
+      <div class="form-group">
+        <label>舟券・ネット投票画面</label>
+        <input type="file" accept="image/*" id="imageInput">
+        <img id="imagePreview" class="image-preview">
+      </div>
+
+      <div class="form-group">
+        <label>メモ（任意）</label>
+        <textarea id="memo" rows="3" placeholder="例：向かい風が強かった"></textarea>
+      </div>
+
+      <button class="add-button" onclick="saveRace()">
+        保存する
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- カレンダー -->
+  <section id="calendarPage" class="page">
+
+    <div class="card">
+      <div class="month-title" id="calendarTitle"></div>
+
+      <div class="calendar-grid" id="calendar"></div>
+    </div>
+
+  </section>
+
+
+  <!-- 分析 -->
+  <section id="analysisPage" class="page">
+
+    <div class="card">
+      <div class="month-title">分析</div>
+
+      <div class="analysis-placeholder">
+        📊<br><br>
+        データが増えたら、ここに<br>
+        場別・R別・月別・得意条件などを<br>
+        表示していきます。
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+
+<nav class="bottom-nav">
+
+  <button class="nav-btn active" onclick="showPage('homePage',this)">
+    <span class="nav-icon">⌂</span>
+    ホーム
+  </button>
+
+  <button class="nav-btn" onclick="showPage('calendarPage',this)">
+    <span class="nav-icon">▣</span>
+    カレンダー
+  </button>
+
+  <button class="nav-btn" onclick="showPage('inputPage',this)">
+    <span class="nav-icon">＋</span>
+    収支入力
+  </button>
+
+  <button class="nav-btn" onclick="showPage('analysisPage',this)">
+    <span class="nav-icon">◔</span>
+    分析
+  </button>
+
+</nav>
+
+
+<script>
+
+let selectedRace = 1;
+let selectedImage = "";
+
+const today = new Date();
+
+document.getElementById("date").value =
+  today.toISOString().split("T")[0];
+
+document.getElementById("monthTitle").textContent =
+  `${today.getFullYear()}年${today.getMonth()+1}月`;
+
+document.getElementById("calendarTitle").textContent =
+  `${today.getFullYear()}年${today.getMonth()+1}月`;
+
+
+/* レースボタン */
+
+const raceButtons = document.getElementById("raceButtons");
+
+for(let i=1;i<=12;i++){
+
+  const btn=document.createElement("button");
+
+  btn.className="race-btn";
+  btn.textContent=i+"R";
+
+  if(i===1) btn.classList.add("active");
+
+  btn.onclick=()=>{
+
+    selectedRace=i;
+
+    document.querySelectorAll(".race-btn")
+      .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+  };
+
+  raceButtons.appendChild(btn);
+}
+
+
+/* 画像 */
+
+document.getElementById("imageInput")
+.addEventListener("change",function(){
+
+  const file=this.files[0];
+
+  if(!file) return;
+
+  const reader=new FileReader();
+
+  reader.onload=function(e){
+
+    selectedImage=e.target.result;
+
+    const preview=
+      document.getElementById("imagePreview");
+
+    preview.src=selectedImage;
+    preview.style.display="block";
+  };
+
+  reader.readAsDataURL(file);
+
+});
+
+
+function getData(){
+
+  return JSON.parse(
+    localStorage.getItem("boatScoreData") || "[]"
+  );
+
+}
+
+
+function saveData(data){
+
+  localStorage.setItem(
+    "boatScoreData",
+    JSON.stringify(data)
+  );
+
+}
+
+
+function saveRace(){
+
+  const date=
+    document.getElementById("date").value;
+
+  const place=
+    document.getElementById("place").value;
+
+  const bet=
+    Number(document.getElementById("bet").value);
+
+  const returnAmount=
+    Number(document.getElementById("returnAmount").value);
+
+  const memo=
+    document.getElementById("memo").value;
+
+  if(!date || !bet){
+
+    alert("日付と投資額を入力してください");
+    return;
+  }
+
+  const record={
+    id:Date.now(),
+    date,
+    place,
+    race:selectedRace,
+    bet,
+    returnAmount,
+    profit:returnAmount-bet,
+    hit:returnAmount>0,
+    memo,
+    image:selectedImage
+  };
+
+  const data=getData();
+
+  data.push(record);
+
+  try{
+    saveData(data);
+  }catch(e){
+    alert("画像サイズが大きすぎる可能性があります。画像なしで保存してください。");
+    return;
+  }
+
+  document.getElementById("bet").value="";
+  document.getElementById("returnAmount").value="";
+  document.getElementById("memo").value="";
+  document.getElementById("imageInput").value="";
+  document.getElementById("imagePreview").style.display="none";
+
+  selectedImage="";
+
+  document.getElementById("successMessage").style.display="block";
+
+  setTimeout(()=>{
+    document.getElementById("successMessage").style.display="none";
+  },1800);
+
+  refresh();
+}
+
+
+function deleteRace(id){
+
+  if(!confirm("この記録を削除しますか？")) return;
+
+  const data=
+    getData().filter(r=>r.id!==id);
+
+  saveData(data);
+
+  refresh();
+
+}
+
+
+function formatMoney(n){
+
+  return n.toLocaleString()+"円";
+
+}
+
+
+function profitClass(n){
+
+  if(n>0) return "plus";
+  if(n<0) return "minus";
+
+  return "zero";
+
+}
+
+
+function refreshHome(){
+
+  const data=getData();
+
+  const month=
+    today.getMonth()+1;
+
+  const year=
+    today.getFullYear();
+
+  const monthData=data.filter(r=>{
+
+    const d=new Date(r.date);
+
+    return d.getFullYear()===year &&
+      d.getMonth()+1===month;
+
+  });
+
+  const bet=
+    monthData.reduce((s,r)=>s+r.bet,0);
+
+  const ret=
+    monthData.reduce((s,r)=>s+r.returnAmount,0);
+
+  const profit=
+    ret-bet;
+
+  const rate=
+    bet ? (ret/bet*100).toFixed(1) : 0;
+
+  const hit=
+    monthData.filter(r=>r.hit).length;
+
+
+  document.getElementById("totalBet").textContent=
+    formatMoney(bet);
+
+  document.getElementById("totalReturn").textContent=
+    formatMoney(ret);
+
+  const profitEl=
+    document.getElementById("totalProfit");
+
+  profitEl.textContent=
+    (profit>0?"+":"")+formatMoney(profit);
+
+  profitEl.className=
+    "value "+profitClass(profit);
+
+  document.getElementById("returnRate").textContent=
+    rate+"%";
+
+  document.getElementById("raceCount").textContent=
+    monthData.length;
+
+  document.getElementById("hitCount").textContent=
+    hit;
+
+
+  const recent=
+    [...data]
+    .sort((a,b)=>b.id-a.id)
+    .slice(0,5);
+
+  const list=
+    document.getElementById("recentList");
+
+  if(!recent.length){
+
+    list.innerHTML=
+      '<div class="empty">まだ収支記録がありません</div>';
+
+    return;
+  }
+
+  list.innerHTML=recent.map(r=>`
+
+    <div class="race-item">
+
+      <div class="race-top">
+
+        <strong>
+          ${r.date} ${r.place} ${r.race}R
+        </strong>
+
+        <strong class="${profitClass(r.profit)}">
+          ${r.profit>0?"+":""}${formatMoney(r.profit)}
+        </strong>
+
+      </div>
+
+      <div class="race-detail">
+        投資 ${formatMoney(r.bet)}
+        ・ 払戻 ${formatMoney(r.returnAmount)}
+      </div>
+
+      ${r.image
+        ? `<img class="thumb" src="${r.image}">`
+        : ""
+      }
+
+      <br>
+
+      <button class="delete-btn"
+        onclick="deleteRace(${r.id})">
+        削除
+      </button>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+function renderCalendar(){
+
+  const grid=
+    document.getElementById("calendar");
+
+  grid.innerHTML="";
+
+  ["日","月","火","水","木","金","土"]
+  .forEach(day=>{
+
+    const el=document.createElement("div");
+
+    el.className="cal-head";
+    el.textContent=day;
+
+    grid.appendChild(el);
+
+  });
+
+  const year=today.getFullYear();
+  const month=today.getMonth();
+
+  const firstDay=
+    new Date(year,month,1).getDay();
+
+  const days=
+    new Date(year,month+1,0).getDate();
+
+  for(let i=0;i<firstDay;i++){
+
+    const blank=
+      document.createElement("div");
+
+    blank.className="cal-day";
+
+    grid.appendChild(blank);
+  }
+
+
+  const data=getData();
+
+
+  for(let day=1;day<=days;day++){
+
+    const dateString=
+      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+    const dayData=
+      data.filter(r=>r.date===dateString);
+
+    const profit=
+      dayData.reduce((s,r)=>s+r.profit,0);
+
+    const el=
+      document.createElement("div");
+
+    el.className="cal-day";
+
+    el.innerHTML=`
+
+      <div class="cal-number">
+        ${day}
+      </div>
+
+      ${dayData.length
+        ? `
+          <div class="cal-profit ${profitClass(profit)}">
+          ${profit>0?"+":""}${profit.toLocaleString()}
+          </div>
+
+          <div style="font-size:10px;margin-top:3px">
+          ${dayData.length}R
+          </div>
+        `
+        : ""
+      }
+
+    `;
+
+    grid.appendChild(el);
+
+  }
+
+}
+
+
+function showPage(id,navButton){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  if(navButton){
+
+    document.querySelectorAll(".nav-btn")
+      .forEach(b=>b.classList.remove("active"));
+
+    navButton.classList.add("active");
+  }
+
+  window.scrollTo(0,0);
+
+  refresh();
+}
+
+
+function refresh(){
+
+  refreshHome();
+  renderCalendar();
+
+}
+
+
+refresh();
+
+</script>
+
+</body>
+</html>
