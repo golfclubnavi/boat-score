@@ -51,6 +51,49 @@ header p{
   opacity:.86;
   font-size:13px;
 }
+.brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+}
+.brand-name{
+  font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  font-size:29px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:1.8px;
+  transform:skew(-5deg);
+}
+.brand-mark{
+  position:relative;
+  width:42px;
+  height:31px;
+  display:inline-block;
+}
+.brand-boat{
+  position:absolute;
+  left:5px; top:8px;
+  width:31px; height:11px;
+  background:#fff;
+  clip-path:polygon(0 15%,100% 15%,76% 100%,25% 100%);
+}
+.brand-boat:before{
+  content:"";
+  position:absolute;
+  left:12px; top:-8px;
+  width:13px; height:10px;
+  background:#fff;
+  clip-path:polygon(0 100%,0 0,100% 100%);
+}
+.brand-wave{
+  position:absolute;
+  left:2px; right:0; bottom:1px;
+  height:5px;
+  border-top:3px solid rgba(255,255,255,.95);
+  border-radius:50%;
+  transform:skewX(-18deg);
+}
 .container{
   max-width:680px;
   margin:auto;
@@ -444,7 +487,7 @@ textarea{resize:vertical}
   background:#fff;
   border-top:1px solid #dde1e7;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   padding-bottom:env(safe-area-inset-bottom);
   z-index:50;
 }
@@ -507,7 +550,13 @@ textarea{resize:vertical}
 <body>
 
 <header>
-  <h1>🚤 BOAT SCORE</h1>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <span class="brand-boat"></span>
+      <span class="brand-wave"></span>
+    </span>
+    <span class="brand-name">BOAT SCORE</span>
+  </div>
   <p>ボートレース収支・回収率管理</p>
 </header>
 
@@ -666,6 +715,23 @@ textarea{resize:vertical}
     </div>
   </section>
 
+  <section id="settingsPage" class="page">
+    <div class="card">
+      <div class="section-title"><span>設定・データ管理</span></div>
+      <div class="notice">データはこのiPhoneのブラウザ内に保存されています。機種変更やSafariのデータ削除に備えて、定期的なバックアップがおすすめです。</div>
+      <div style="height:14px"></div>
+      <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
+      <div style="height:10px"></div>
+      <label class="secondary-button" style="display:block;text-align:center">
+        バックアップを復元
+        <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
+      </label>
+      <div style="height:18px"></div>
+      <div class="section-title"><span>BOAT SCORE</span></div>
+      <div class="helper">Version 0.4<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+    </div>
+  </section>
+
 </div>
 
 <nav class="bottom-nav">
@@ -680,6 +746,9 @@ textarea{resize:vertical}
   </button>
   <button class="nav-btn" data-page="analysisPage" onclick="showPage('analysisPage',this)">
     <span class="nav-icon">◔</span>分析
+  </button>
+  <button class="nav-btn" data-page="settingsPage" onclick="showPage('settingsPage',this)">
+    <span class="nav-icon">⚙︎</span>設定
   </button>
 </nav>
 
@@ -1185,8 +1254,19 @@ function renderAnalysis(){
         </div>
       </div>
       <div style="height:12px"></div>
+      <div class="analysis-card">
+        <div class="section-title"><span>年間成績</span><span id="analysisYearLabel"></span></div>
+        <div id="yearStats"></div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="analysis-card">
+        <div class="section-title"><span>月別収支推移</span></div>
+        <div id="profitChart" style="display:flex;align-items:flex-end;gap:5px;height:150px;padding-top:12px"></div>
+      </div>
+      <div style="height:12px"></div>
       <div class="notice">※まだ記録数が少ない場合、「得意・苦手」は参考値です。データが増えるほど傾向が見えやすくなります。</div>
     `;
+    setTimeout(renderYearExtras,0);
     return;
   }
 
@@ -1231,6 +1311,82 @@ function closeImageModal(){
   document.getElementById("imageModal").classList.remove("show");
 }
 
+
+function renderYearExtras(){
+  const year=new Date().getFullYear();
+  const all=getData();
+  const yd=all.filter(r=>parseLocalDate(r.date).getFullYear()===year);
+  const ys=calcStats(yd);
+  const yl=document.getElementById("analysisYearLabel");
+  const yb=document.getElementById("yearStats");
+  if(yl) yl.textContent=year+"年";
+  if(yb){
+    yb.innerHTML=`
+      <div class="day-summary">
+        <div><div class="label">年間収支</div><div class="value ${profitClass(ys.profit)}">${signedMoney(ys.profit)}</div></div>
+        <div><div class="label">回収率</div><div class="value">${ys.rate.toFixed(1)}%</div></div>
+        <div><div class="label">的中率</div><div class="value">${ys.hitRate.toFixed(1)}%</div></div>
+      </div>`;
+  }
+
+  const months=[];
+  for(let m=0;m<12;m++){
+    const list=yd.filter(r=>parseLocalDate(r.date).getMonth()===m);
+    months.push(calcStats(list).profit);
+  }
+  const chart=document.getElementById("profitChart");
+  if(!chart) return;
+  const max=Math.max(1,...months.map(v=>Math.abs(v)));
+  chart.innerHTML=months.map((v,i)=>{
+    const h=Math.max(3,Math.round(Math.abs(v)/max*105));
+    const bg=v>0?"#075ad7":v<0?"#e33434":"#cbd3df";
+    return `<div style="flex:1;text-align:center;min-width:0">
+      <div title="${v}" style="height:${h}px;background:${bg};border-radius:5px 5px 2px 2px;margin:auto;max-width:24px"></div>
+      <div style="font-size:9px;color:#7a8492;margin-top:5px">${i+1}</div>
+    </div>`;
+  }).join("");
+}
+
+function exportBackup(){
+  const payload={
+    app:"BOAT SCORE",
+    version:"0.4",
+    exportedAt:new Date().toISOString(),
+    data:getData()
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`boat-score-backup-${localDateString()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+document.getElementById("restoreFile").addEventListener("change",function(){
+  const file=this.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const parsed=JSON.parse(e.target.result);
+      const data=Array.isArray(parsed)?parsed:parsed.data;
+      if(!Array.isArray(data)) throw new Error("invalid");
+      if(!confirm(`${data.length}件の記録を復元します。現在のデータは置き換えられます。よろしいですか？`)) return;
+      saveData(data);
+      refresh();
+      alert("バックアップを復元しました。");
+    }catch(err){
+      alert("BOAT SCOREのバックアップファイルを読み込めませんでした。");
+    }
+  };
+  reader.readAsText(file);
+  this.value="";
+});
+
+
 function showPage(id,navButton){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -1245,6 +1401,7 @@ function showPage(id,navButton){
   }
   if(id==="analysisPage"){
     renderAnalysis();
+    setTimeout(renderYearExtras,0);
   }
   window.scrollTo(0,0);
 }
