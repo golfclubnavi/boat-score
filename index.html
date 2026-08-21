@@ -607,6 +607,30 @@ header{
 }
 .home-year-note{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
 
+
+/* ===== Public-ready v0.6 ===== */
+.ad-slot{
+  margin:14px 0;background:#fff;border:1px solid #dfe6ef;border-radius:12px;
+  min-height:72px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;color:#8b96a8;font-size:12px;
+}
+.ad-slot span{
+  font-size:9px;border:1px solid #d9e0e9;border-radius:4px;
+  padding:1px 4px;margin-bottom:5px;color:#98a2b1;
+}
+.safety-card{
+  background:#f8fbff;border:1px solid #d7e8fb;border-radius:12px;
+  padding:12px;font-size:12px;line-height:1.6;color:#49627f;
+}
+.storage-meter{
+  height:8px;background:#e8edf4;border-radius:999px;overflow:hidden;margin:8px 0 4px;
+}
+.storage-meter>div{height:100%;background:#0867df;border-radius:999px}
+.first-guide{
+  display:none;background:#eef6ff;border:1px solid #cfe3fb;border-radius:13px;
+  padding:13px;margin-bottom:14px;color:#174d8e;font-size:13px;line-height:1.6;
+}
+
 </style>
 </head>
 
@@ -626,6 +650,10 @@ header{
 <div class="container">
 
   <section id="homePage" class="page active">
+    <div id="firstGuide" class="first-guide">
+      <strong>BOAT SCOREへようこそ</strong><br>
+      まずは「＋ 収支を入力」から1レース記録すると、収支・回収率・分析が自動で更新されます。
+    </div>
     <div class="card">
       <div class="period-switch">
         <button id="monthPeriodBtn" class="period-btn active" onclick="setHomePeriod('month')">今月</button>
@@ -666,8 +694,9 @@ header{
 
     <button class="add-button" onclick="openNewInput()">＋ 収支を入力</button>
 
-    <div class="card" style="margin-top:14px;padding:10px 14px;text-align:center;background:#f8fafc;box-shadow:none;border:1px dashed #cbd3df">
-      <div class="label" style="margin:0">広告スペース（公開時に設定）</div>
+    <div class="ad-slot" aria-label="広告">
+      <span>広告</span>
+      <div>広告掲載スペース</div>
     </div>
 
     <div class="card">
@@ -801,14 +830,27 @@ header{
       <div class="notice">データはこのiPhoneのブラウザ内に保存されています。機種変更やSafariのデータ削除に備えて、定期的なバックアップがおすすめです。</div>
       <div style="height:14px"></div>
       <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
-      <div style="height:10px"></div>
+      <div class="helper" id="lastBackupText" style="margin:7px 2px 12px">まだバックアップ履歴がありません</div>
+
       <label class="secondary-button" style="display:block;text-align:center">
-        バックアップを復元
+        バックアップから復元
         <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
       </label>
+      <div class="helper" style="margin-top:7px">復元時に「追加」または「置き換え」を選べます。追加では同じIDの記録は重複させません。</div>
       <div style="height:18px"></div>
+      <div class="section-title"><span>データの状態</span></div>
+      <div class="safety-card">
+        記録はこの端末内に保存されています。画像を多く保存すると容量を使うため、定期的にバックアップしてください。
+        <div class="storage-meter"><div id="storageBar" style="width:0%"></div></div>
+        <div id="storageText">使用量を確認中…</div>
+      </div>
+      <div style="height:18px"></div>
+      <button id="restoreSafetyBtn" class="secondary-button" style="display:none;margin-bottom:10px" onclick="restoreSafetyBackup()">直前の復元前データに戻す</button>
+      <button class="danger-button" onclick="clearAllData()">全データを削除</button>
+      <div style="height:18px"></div>
+
       <div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 0.5.1<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <div class="helper">Version 0.7<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -1131,7 +1173,10 @@ function saveRace(){
   setTimeout(()=>document.getElementById("successMessage").style.display="none",1400);
 
   resetForm();
-  refresh();
+  updateFirstGuide();
+updateStorageStatus();
+updateBackupStatus();
+refresh();
   showPage("homePage",document.querySelector('[data-page="homePage"]'));
 }
 
@@ -1497,7 +1542,7 @@ function renderYearExtras(){
 function exportBackup(){
   const payload={
     app:"BOAT SCORE",
-    version:"0.4",
+    version:"0.7",
     exportedAt:new Date().toISOString(),
     data:getData()
   };
@@ -1509,6 +1554,8 @@ function exportBackup(){
   document.body.appendChild(a);
   a.click();
   a.remove();
+  localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
+  updateBackupStatus();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
@@ -1519,12 +1566,52 @@ document.getElementById("restoreFile").addEventListener("change",function(){
   reader.onload=e=>{
     try{
       const parsed=JSON.parse(e.target.result);
-      const data=Array.isArray(parsed)?parsed:parsed.data;
-      if(!Array.isArray(data)) throw new Error("invalid");
-      if(!confirm(`${data.length}件の記録を復元します。現在のデータは置き換えられます。よろしいですか？`)) return;
-      saveData(data);
+      const incoming=Array.isArray(parsed)?parsed:parsed.data;
+      if(!Array.isArray(incoming)) throw new Error("invalid");
+
+      const valid=incoming.filter(r =>
+        r && r.id!=null && r.date && r.place &&
+        Number.isFinite(Number(r.bet)) &&
+        Number.isFinite(Number(r.returnAmount))
+      );
+
+      if(!valid.length && incoming.length) throw new Error("invalid-records");
+
+      const current=getData();
+      const mode=confirm(
+        `バックアップに ${valid.length}件あります。
+
+OK：現在のデータに追加
+キャンセル：次に「置き換え」を選択できます`
+      ) ? "merge" : (confirm(
+        `現在の ${current.length}件をバックアップの ${valid.length}件で置き換えますか？
+
+置き換える前に現在データを自動退避します。`
+      ) ? "replace" : "cancel");
+
+      if(mode==="cancel") return;
+
+      if(mode==="replace"){
+        localStorage.setItem("boatScoreSafetyBackup",JSON.stringify({
+          savedAt:new Date().toISOString(),
+          data:current
+        }));
+        saveData(valid);
+      }else{
+        const ids=new Set(current.map(r=>String(r.id)));
+        const merged=[...current];
+        for(const r of valid){
+          if(!ids.has(String(r.id))){
+            merged.push(r);
+            ids.add(String(r.id));
+          }
+        }
+        saveData(merged);
+      }
+
       refresh();
-      alert("バックアップを復元しました。");
+      updateStorageStatus();
+      alert(mode==="replace" ? "バックアップで置き換えました。" : "バックアップを追加しました。");
     }catch(err){
       alert("BOAT SCOREのバックアップファイルを読み込めませんでした。");
     }
@@ -1554,6 +1641,9 @@ function showPage(id,navButton){
 }
 
 function refresh(){
+  updateFirstGuide();
+  updateStorageStatus();
+  updateBackupStatus();
   refreshHome();
   renderCalendar();
   renderDayDetail();
