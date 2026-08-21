@@ -718,6 +718,59 @@ header{
 /* ===== v0.9.3 input/result/bottom-nav ===== */
 .result-toggle{display:grid;grid-template-columns:1fr 1fr;gap:9px}.result-btn{height:48px;border:1.5px solid #d3dae5;background:#fff;color:#596273;border-radius:10px;font-weight:900;font-size:15px}.result-btn span{margin-right:5px}.result-btn.hit-choice.selected{background:#eaf9ef;border-color:#22a94f;color:#16813c;box-shadow:0 0 0 1px rgba(34,169,79,.08)}.result-btn.miss-choice.selected{background:#fff0f0;border-color:#ef3d3d;color:#d92323;box-shadow:0 0 0 1px rgba(239,61,61,.08)}
 .continue-button{width:100%;height:46px;margin-top:8px;border:1.5px solid #075bd2;background:#fff;color:#075bd2;border-radius:10px;font-weight:900;font-size:15px}.bottom-nav{min-height:88px;border-top:1px solid #e3e8f0;box-shadow:0 -5px 20px rgba(14,41,77,.08);padding:5px 4px env(safe-area-inset-bottom);align-items:center}.nav-btn{position:relative;min-height:72px;border-radius:14px;font-size:11px;font-weight:700}.nav-icon{height:34px;display:grid;place-items:center!important;font-size:25px!important;margin:0 auto 2px!important}.nav-btn[data-page="inputPage"] .nav-icon{width:54px;height:54px;margin:-25px auto 2px!important;border-radius:50%;background:#075bd2;color:#fff;font-size:34px!important;box-shadow:0 5px 14px rgba(7,91,210,.3)}.nav-btn[data-page="inputPage"]{padding-top:20px;color:#596579}.nav-btn[data-page="inputPage"].active{color:#075bd2}.nav-btn.active:not([data-page="inputPage"]){color:#075bd2}.nav-btn.active:not([data-page="inputPage"]) .nav-icon{font-weight:900}
+
+/* ===== BOAT SCORE 1.0 RC final polish ===== */
+.bottom-nav{
+  background:linear-gradient(180deg,#083d86 0%,#062d69 100%)!important;
+  border-top:0!important;
+  box-shadow:0 -7px 24px rgba(8,35,77,.20)!important;
+}
+.nav-btn{
+  background:transparent!important;
+  color:#fff!important;
+  border-radius:0!important;
+}
+.nav-btn.active{
+  background:rgba(13,102,225,.22)!important;
+  color:#fff!important;
+}
+.nav-btn.active:after{
+  content:"";
+  position:absolute;
+  left:24%;
+  right:24%;
+  bottom:3px;
+  height:3px;
+  border-radius:999px;
+  background:#4e86ff;
+}
+.nav-btn[data-page="inputPage"] .nav-icon{
+  width:60px!important;
+  height:60px!important;
+  margin-top:-24px!important;
+  background:linear-gradient(145deg,#2a78ff,#0a4dcc)!important;
+  border:3px solid rgba(255,255,255,.65)!important;
+  box-shadow:0 6px 14px rgba(0,57,145,.35)!important;
+  color:#fff!important;
+}
+.nav-btn[data-page="inputPage"]{
+  color:#fff!important;
+  overflow:visible;
+}
+.nav-btn[data-page="inputPage"] .nav-icon + *{white-space:nowrap}
+.cal-head,.cal-day,.cal-number,.cal-profit,.cal-count{
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow:hidden;
+  text-overflow:clip;
+}
+.cal-count{font-size:9px!important}
+@media(max-width:390px){
+  .cal-head{font-size:11px!important}
+  .cal-profit{font-size:9px!important}
+  .cal-count{font-size:8px!important}
+}
+
 </style>
 </head>
 
@@ -936,7 +989,7 @@ header{
       <div style="height:18px"></div>
 
       <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 0.9.3<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <div class="helper">Version 1.0 RC<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -958,7 +1011,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 0.9.3</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC</div>
     </div>
   </section>
 
