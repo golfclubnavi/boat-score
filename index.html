@@ -1496,7 +1496,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC11</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC12</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1521,7 +1521,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC11</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC12</div>
     </div>
   </section>
 
@@ -1968,17 +1968,25 @@ function saveRace(continueInput=false){
     showPage("inputPage",document.querySelector('[data-page="inputPage"]'));
     const jumpToInputTop=()=>{
       const inputPage=document.getElementById("inputPage");
+      // BOAT SCORE pages can themselves be the scrolling element on iPhone Safari.
       if(inputPage){
-        inputPage.scrollIntoView({behavior:"auto",block:"start"});
+        inputPage.scrollTop=0;
+        const scrollers=inputPage.querySelectorAll("*");
+        scrollers.forEach(el=>{
+          if(el.scrollHeight>el.clientHeight+4) el.scrollTop=0;
+        });
       }
+      document.scrollingElement && (document.scrollingElement.scrollTop=0);
       document.documentElement.scrollTop=0;
       document.body.scrollTop=0;
-      window.scrollTo(0,0);
+      window.scrollTo({top:0,left:0,behavior:"instant"});
     };
+    // Run after the page switch and after Safari has finished layout.
     jumpToInputTop();
-    requestAnimationFrame(jumpToInputTop);
-    setTimeout(jumpToInputTop,80);
-    setTimeout(jumpToInputTop,220);
+    requestAnimationFrame(()=>requestAnimationFrame(jumpToInputTop));
+    setTimeout(jumpToInputTop,120);
+    setTimeout(jumpToInputTop,350);
+    setTimeout(jumpToInputTop,700);
   }else{
     showPage("homePage",document.querySelector('[data-page="homePage"]'));
   }
@@ -2373,7 +2381,7 @@ function renderYearExtras(){
   }).join("");
 }
 
-function exportBackup(){
+async function exportBackup(){
   try{
     const records=getData().map((r,i)=>({
       ...r,
@@ -2391,148 +2399,156 @@ function exportBackup(){
     const payload={
       app:"BOAT SCORE",
       format:"boat-score-backup",
-      formatVersion:2,
-      appVersion:"1.0-rc11",
+      formatVersion:3,
+      appVersion:"1.0-rc12",
       exportedAt:new Date().toISOString(),
       recordCount:records.length,
       records
     };
 
     const text=JSON.stringify(payload,null,2);
-    const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+    const filename=`BOAT-SCORE-backup-${localDateString()}.json`;
+    const file=new File([text],filename,{type:"application/json"});
+
+    // iPhone Safari: sharing a File is much more reliable than a synthetic <a download>.
+    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      try{
+        await navigator.share({
+          files:[file],
+          title:"BOAT SCORE バックアップ"
+        });
+        localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
+        updateBackupStatus();
+        showSaveToast(`バックアップを作成しました（${records.length}件）`);
+        return;
+      }catch(shareErr){
+        // User cancellation should not be reported as a broken backup.
+        if(shareErr && shareErr.name==="AbortError") return;
+        console.warn("share fallback",shareErr);
+      }
+    }
+
+    const blob=new Blob([text],{type:"application/json;charset=utf-8"});
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
     a.href=url;
-    a.download=`BOAT-SCORE-backup-${localDateString()}.json`;
-    a.style.display="none";
+    a.download=filename;
+    a.rel="noopener";
     document.body.appendChild(a);
     a.click();
-    setTimeout(()=>{
-      a.remove();
-      URL.revokeObjectURL(url);
-    },1200);
+    setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},3000);
 
     localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
     updateBackupStatus();
     showSaveToast(`バックアップを書き出しました（${records.length}件）`);
   }catch(err){
-    console.error(err);
-    alert("バックアップを書き出せませんでした。");
+    console.error("backup export error",err);
+    alert("バックアップを作成できませんでした。\\n詳細："+(err?.message||"不明なエラー"));
   }
 }
 
-document.getElementById("restoreFile").addEventListener("change",async function(){
+document.getElementById("restoreFile").addEventListener("change",function(){
   const input=this;
-  const file=input.files?.[0];
+  const file=input.files && input.files[0];
   if(!file) return;
 
-  try{
-    // file.text() is more reliable with iCloud Drive / iPhone Files than FileReader here.
-    let raw=await file.text();
-    raw=String(raw||"").replace(/^\uFEFF/,"").trim();
-
-    // Some apps may save text with a leading UTF-8 BOM or wrap JSON as a quoted string.
-    let parsed=JSON.parse(raw);
-    if(typeof parsed==="string"){
-      parsed=JSON.parse(parsed);
-    }
-
-    let incoming=null;
-    if(Array.isArray(parsed)) incoming=parsed;
-    else if(Array.isArray(parsed.records)) incoming=parsed.records;
-    else if(Array.isArray(parsed.data)) incoming=parsed.data;
-    else if(parsed.backup && Array.isArray(parsed.backup.records)) incoming=parsed.backup.records;
-
-    if(!Array.isArray(incoming)){
-      throw new Error("記録データが見つかりません");
-    }
-
-    const valid=incoming.map((r,i)=>{
-      if(!r || typeof r!=="object") return null;
-      const bet=Number(r.bet ?? r.investment ?? 0);
-      const ret=Number(r.returnAmount ?? r.ret ?? r.payout ?? 0);
-      const date=String(r.date ?? "").trim();
-      const place=String(r.place ?? r.venue ?? "").trim();
-      if(!date || !place || !Number.isFinite(bet) || !Number.isFinite(ret)) return null;
-
-      return {
-        ...r,
-        id:r.id ?? (Date.now()+i),
-        date,
-        place,
-        race:Number(r.race)||1,
-        bet,
-        returnAmount:ret,
-        winningBet:Number(r.winningBet)||0,
-        odds:Number(r.odds)||0,
-        profit:ret-bet,
-        hit:ret>0,
-        memo:String(r.memo??""),
-        image:r.image||""
-      };
-    }).filter(Boolean);
-
-    // Empty backups are valid too; malformed non-empty backups are not.
-    if(incoming.length>0 && valid.length===0){
-      throw new Error("有効な収支記録がありません");
-    }
-
-    const current=getData();
-    let mode="merge";
-
-    if(current.length>0){
-      const add=confirm(
-        `バックアップを読み込みました（${valid.length}件）。\n\nOK：現在の記録に追加\nキャンセル：置き換えを選ぶ`
-      );
-      if(!add){
-        const replace=confirm(
-          `現在の${current.length}件を、バックアップの${valid.length}件で置き換えますか？\n\n置き換え前のデータは自動退避します。`
-        );
-        if(!replace){
-          input.value="";
-          return;
-        }
-        mode="replace";
-      }
-    }else{
-      mode="replace";
-    }
-
-    if(mode==="replace"){
-      localStorage.setItem("boatScoreSafetyBackup",JSON.stringify({
-        savedAt:new Date().toISOString(),
-        data:current
-      }));
-      saveData(valid);
-    }else{
-      const merged=[...current];
-      const ids=new Set(current.map(r=>String(r.id)));
-      for(const r of valid){
-        if(!ids.has(String(r.id))){
-          merged.push(r);
-          ids.add(String(r.id));
-        }
-      }
-      saveData(merged);
-    }
-
-    refresh();
-    updateStorageStatus();
-    updateBackupStatus();
-    showSaveToast(mode==="replace"
-      ? `バックアップを復元しました（${valid.length}件）`
-      : `バックアップを追加しました（${valid.length}件）`
-    );
-  }catch(err){
+  const fail=(err)=>{
     console.error("restore error",err);
-    alert(
-      "バックアップを読み込めませんでした。\n\n" +
-      "BOAT SCOREから書き出した .json ファイルを選択してください。\n" +
-      "詳細：" + (err?.message||"形式エラー")
-    );
-  }finally{
+    alert("バックアップを読み込めませんでした。\\n\\nBOAT SCOREから書き出したJSONファイルを選択してください。\\n詳細："+(err?.message||"形式エラー"));
     input.value="";
-  }
+  };
+
+  const processText=(text)=>{
+    try{
+      let raw=String(text||"").replace(/^\uFEFF/,"").replace(/\u0000/g,"").trim();
+      let parsed=JSON.parse(raw);
+      if(typeof parsed==="string") parsed=JSON.parse(parsed);
+
+      let incoming=
+        Array.isArray(parsed) ? parsed :
+        Array.isArray(parsed.records) ? parsed.records :
+        Array.isArray(parsed.data) ? parsed.data :
+        (parsed.backup && Array.isArray(parsed.backup.records)) ? parsed.backup.records :
+        null;
+
+      if(!Array.isArray(incoming)) throw new Error("記録データが見つかりません");
+
+      const valid=incoming.map((r,i)=>{
+        if(!r || typeof r!=="object") return null;
+        const bet=Number(r.bet ?? r.investment ?? 0);
+        const ret=Number(r.returnAmount ?? r.ret ?? r.payout ?? 0);
+        const date=String(r.date ?? "").trim();
+        const place=String(r.place ?? r.venue ?? "").trim();
+        if(!date || !place || !Number.isFinite(bet) || !Number.isFinite(ret)) return null;
+        return {
+          ...r,
+          id:r.id ?? (Date.now()+i),
+          date,place,
+          race:Number(r.race)||1,
+          bet,
+          returnAmount:ret,
+          winningBet:Number(r.winningBet)||0,
+          odds:Number(r.odds)||0,
+          profit:ret-bet,
+          hit:ret>0,
+          memo:String(r.memo??""),
+          image:r.image||""
+        };
+      }).filter(Boolean);
+
+      if(incoming.length && !valid.length) throw new Error("有効な収支記録がありません");
+
+      const current=getData();
+      let mode=current.length ? "merge" : "replace";
+
+      if(current.length){
+        if(!confirm(`バックアップを読み込みました（${valid.length}件）。\\n\\nOK：現在の記録に追加\\nキャンセル：置き換えを選ぶ`)){
+          if(!confirm(`現在の${current.length}件を、バックアップの${valid.length}件で置き換えますか？\\n\\n置き換え前のデータは自動退避します。`)){
+            input.value="";
+            return;
+          }
+          mode="replace";
+        }
+      }
+
+      if(mode==="replace"){
+        localStorage.setItem("boatScoreSafetyBackup",JSON.stringify({savedAt:new Date().toISOString(),data:current}));
+        saveData(valid);
+      }else{
+        const merged=[...current];
+        const fingerprints=new Set(current.map(r=>`${r.id}|${r.date}|${r.place}|${r.race}`));
+        for(const r of valid){
+          const fp=`${r.id}|${r.date}|${r.place}|${r.race}`;
+          if(!fingerprints.has(fp)){ merged.push(r); fingerprints.add(fp); }
+        }
+        saveData(merged);
+      }
+
+      refresh();
+      updateStorageStatus();
+      updateBackupStatus();
+      showSaveToast(mode==="replace"?`バックアップを復元しました（${valid.length}件）`:`バックアップを追加しました（${valid.length}件）`);
+      input.value="";
+    }catch(err){ fail(err); }
+  };
+
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const buffer=reader.result;
+      let text="";
+      try{text=new TextDecoder("utf-8",{fatal:false}).decode(buffer)}catch(e){}
+      if(!text || !text.trim()){
+        // Older iOS fallback.
+        const bytes=new Uint8Array(buffer);
+        text=Array.from(bytes,b=>String.fromCharCode(b)).join("");
+        try{text=decodeURIComponent(escape(text))}catch(e){}
+      }
+      processText(text);
+    }catch(err){ fail(err); }
+  };
+  reader.onerror=()=>fail(new Error("ファイルを開けませんでした"));
+  reader.readAsArrayBuffer(file);
 });
 
 function showPage(id,navButton){
