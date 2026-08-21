@@ -1368,7 +1368,7 @@ header{
     <ol class="guide-steps">
       <li>設定から<b>データ管理</b>を開く</li>
       <li><b>「バックアップを書き出す」</b>をタップ</li>
-      <li>作成されたJSONファイルを、iPhoneの<b>ファイル</b>など安全な場所へ保存</li>
+      <li>作成された<b>BOAT-SCORE_日付_時刻.json</b>を、iPhoneの<b>ファイル</b>など安全な場所へ保存</li>
     </ol>
     <div class="guide-warning"><strong>重要</strong><br>端末の故障・機種変更に備えて、定期的にバックアップを保存してください。</div>
   </div>
@@ -1439,7 +1439,7 @@ header{
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>データ管理</strong><span></span></div>
   <div class="card">
     <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
-    <div class="helper" id="lastBackupText" style="margin:8px 2px 14px">まだバックアップ履歴がありません</div>
+    <div class="helper" id="lastBackupText" style="margin:8px 2px 6px">まだバックアップ履歴がありません</div><div class="helper" style="margin:0 2px 14px;font-size:9px">書き出すファイルはJSON 1個だけです。最新日時のファイルを保管してください。</div>
     <label class="secondary-button" style="display:block;text-align:center">
       バックアップから復元
       <input id="restoreFile" type="file" accept=".json,.txt,application/json,text/plain,application/octet-stream" style="display:none">
@@ -1469,7 +1469,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC13</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC14</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1494,7 +1494,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC13</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC14</div>
     </div>
   </section>
 
@@ -2339,7 +2339,8 @@ function updateBackupStatus(){
     el.textContent="バックアップ履歴あり";
     return;
   }
-  el.textContent=`最終バックアップ：${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  const name=localStorage.getItem("boatScoreLastBackupName");
+  el.innerHTML=`最終バックアップ：${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}${name?`<br><span style="font-size:9px;color:#738198">${name}</span>`:""}`;
 }
 
 function updateStorageStatus(){
@@ -2379,7 +2380,7 @@ function clearAllData(){
   showSaveToast("全データを削除しました");
 }
 
-async function exportBackup(){
+function exportBackup(){
   try{
     const records=getData().map((r,i)=>({
       ...r,
@@ -2394,51 +2395,39 @@ async function exportBackup(){
       hit:Number(r.returnAmount)>0
     }));
 
+    const now=new Date();
+    const pad=n=>String(n).padStart(2,"0");
+    const stamp=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+    const filename=`BOAT-SCORE_${stamp}.json`;
+
     const payload={
       app:"BOAT SCORE",
       format:"boat-score-backup",
-      formatVersion:3,
-      appVersion:"1.0-rc13",
-      exportedAt:new Date().toISOString(),
+      formatVersion:4,
+      appVersion:"1.0-rc14",
+      exportedAt:now.toISOString(),
       recordCount:records.length,
       records
     };
 
-    const text=JSON.stringify(payload,null,2);
-    const filename=`BOAT-SCORE-backup-${localDateString()}.json`;
-    const file=new File([text],filename,{type:"application/json"});
-
-    // iPhone Safari: sharing a File is much more reliable than a synthetic <a download>.
-    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-      try{
-        await navigator.share({
-          files:[file],
-          title:"BOAT SCORE バックアップ"
-        });
-        localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
-        try{updateBackupStatus()}catch(e){}
-        showSaveToast(`バックアップを作成しました（${records.length}件）`);
-        return;
-      }catch(shareErr){
-        // User cancellation should not be reported as a broken backup.
-        if(shareErr && shareErr.name==="AbortError") return;
-        console.warn("share fallback",shareErr);
-      }
-    }
-
-    const blob=new Blob([text],{type:"application/json;charset=utf-8"});
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
     const url=URL.createObjectURL(blob);
     const a=document.createElement("a");
     a.href=url;
     a.download=filename;
-    a.rel="noopener";
+    a.style.display="none";
     document.body.appendChild(a);
     a.click();
-    setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},3000);
 
-    localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
+    setTimeout(()=>{
+      a.remove();
+      URL.revokeObjectURL(url);
+    },3000);
+
+    localStorage.setItem("boatScoreLastBackup",now.toISOString());
+    localStorage.setItem("boatScoreLastBackupName",filename);
     try{updateBackupStatus()}catch(e){}
-    showSaveToast(`バックアップを書き出しました（${records.length}件）`);
+    showSaveToast(`バックアップを保存しました（${records.length}件）`);
   }catch(err){
     console.error("backup export error",err);
     alert("バックアップを作成できませんでした。\\n詳細："+(err?.message||"不明なエラー"));
