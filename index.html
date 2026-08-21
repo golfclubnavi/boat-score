@@ -631,6 +631,69 @@ header{
   padding:13px;margin-bottom:14px;color:#174d8e;font-size:13px;line-height:1.6;
 }
 
+
+/* ===== BOAT SCORE v0.9 DESIGN ===== */
+header{
+  background:linear-gradient(125deg,#072d66 0%,#0754b7 70%,#0870df 100%);
+  padding:calc(40px + env(safe-area-inset-top)) 18px 22px;
+  border-radius:0 0 26px 26px;
+}
+.brand{gap:10px}
+.brand-name{font-size:30px;letter-spacing:1.1px}
+.brand-mark{width:46px;height:32px}
+.container{max-width:720px;padding-top:18px}
+.card{border-radius:20px;box-shadow:0 6px 20px rgba(25,56,95,.08)}
+.section-title{font-size:18px}
+#inputPage .card{padding:18px}
+#inputPage .form-group{padding:0 2px;margin-bottom:18px}
+#inputPage .form-group label{font-size:14px;color:#10203a;margin-bottom:8px}
+#inputPage input,#inputPage select,#inputPage textarea{border-color:#cbd6e5;background:#fff}
+.input-hint{display:block}
+.favorite-place{padding-top:7px}
+.quick-money button{min-height:36px}
+.calendar-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid #dce5f1;border-radius:14px;background:#fff;
+  margin:4px 0 14px;overflow:hidden;text-align:center;
+}
+.calendar-summary>div{padding:10px 4px;border-right:1px solid #e5ebf3}
+.calendar-summary>div:last-child{border-right:0}
+.calendar-summary .label{font-size:10px;margin-bottom:4px}
+.calendar-summary .value{font-size:15px;font-weight:850}
+.calendar-grid{border-color:#aebed2}
+.cal-head,.cal-day{border-color:#b9c6d7}
+.cal-head{background:#f5f8fc;padding:9px 1px}
+.cal-day{min-height:82px}
+.cal-day.selected{outline:2px solid #0969df;outline-offset:-2px;background:#f2f7ff}
+.cal-profit{font-size:11px}
+.modal{background:rgba(4,12,25,.88);padding:18px}
+.modal img{max-height:82vh;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.modal-close{
+  top:calc(14px + env(safe-area-inset-top));right:14px;
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.32);
+  background:rgba(12,25,43,.62);color:#fff;
+  font-size:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.modal-close:before,.modal-close:after{
+  content:"";position:absolute;left:9px;top:15px;width:16px;height:2px;
+  background:#fff;border-radius:2px;
+}
+.modal-close:before{transform:rotate(45deg)}
+.modal-close:after{transform:rotate(-45deg)}
+.settings-subcard{background:#f7faff;border:1px solid #dbe6f4;border-radius:14px;padding:14px;margin-bottom:16px}
+.favorite-settings{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.favorite-settings label{
+  display:flex;align-items:center;gap:6px;border:1px solid #cfdae9;background:#fff;
+  border-radius:10px;padding:9px 7px;font-size:12px;font-weight:700
+}
+.favorite-settings input{width:auto}
+@media(max-width:390px){
+ .brand-name{font-size:28px}
+ .cal-day{min-height:76px}
+ .favorite-settings{grid-template-columns:repeat(2,1fr)}
+}
+
 </style>
 </head>
 
@@ -710,7 +773,7 @@ header{
     <div id="successMessage" class="success">保存しました！</div>
 
     <div class="card">
-      <div id="editBanner" class="edit-banner">編集中です。保存するとこの記録を更新します。</div>
+      <div class="input-hint">💡 必須項目を入力するだけでかんたんに記録できます</div><div id="editBanner" class="edit-banner">編集中です。保存するとこの記録を更新します。</div>
       <div class="section-title">
         <span id="inputTitle">収支を入力</span>
         <button id="cancelEditBtn" class="small-btn" style="display:none" onclick="cancelEdit()">編集をやめる</button>
@@ -772,6 +835,14 @@ header{
       </div>
 
       <div class="form-group">
+        <label>結果</label>
+        <div class="result-toggle" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button type="button" class="secondary-button" style="color:#16813c" onclick="document.getElementById('returnAmount').focus()">◎ 的中</button>
+          <button type="button" class="secondary-button" onclick="setMoney('returnAmount',0)">× 不的中</button>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label>舟券・ネット投票画面</label>
         <input type="file" accept="image/*" id="imageInput">
         <img id="imagePreview" class="image-preview" alt="画像プレビュー">
@@ -797,6 +868,11 @@ header{
         <button onclick="moveCalendar(1)">›</button>
       </div>
       <button class="today-button" onclick="goCalendarToday()">今月に戻る</button>
+      <div class="calendar-summary">
+        <div><div class="label">月間収支</div><div id="calendarMonthProfit" class="value">0円</div></div>
+        <div><div class="label">回収率</div><div id="calendarMonthRate" class="value">0%</div></div>
+        <div><div class="label">的中回数</div><div id="calendarMonthHits" class="value">0/0</div></div>
+      </div>
       <div class="calendar-grid" id="calendar"></div>
     </div>
 
@@ -826,6 +902,15 @@ header{
 
   <section id="settingsPage" class="page">
     <div class="card">
+      <div class="settings-subcard">
+        <div class="section-title"><span>★ お気に入りのレース場</span></div>
+        <div class="helper">収支入力画面で優先表示する場を選べます。</div>
+        <div id="favoriteSettings" class="favorite-settings"><label><input type="checkbox" value="桐生" onchange="saveFavoritePlaces()"> 桐生</label><label><input type="checkbox" value="戸田" onchange="saveFavoritePlaces()"> 戸田</label><label><input type="checkbox" value="江戸川" onchange="saveFavoritePlaces()"> 江戸川</label><label><input type="checkbox" value="平和島" onchange="saveFavoritePlaces()"> 平和島</label><label><input type="checkbox" value="多摩川" onchange="saveFavoritePlaces()"> 多摩川</label><label><input type="checkbox" value="浜名湖" onchange="saveFavoritePlaces()"> 浜名湖</label><label><input type="checkbox" value="蒲郡" onchange="saveFavoritePlaces()"> 蒲郡</label><label><input type="checkbox" value="常滑" onchange="saveFavoritePlaces()"> 常滑</label><label><input type="checkbox" value="津" onchange="saveFavoritePlaces()"> 津</label><label><input type="checkbox" value="三国" onchange="saveFavoritePlaces()"> 三国</label><label><input type="checkbox" value="びわこ" onchange="saveFavoritePlaces()"> びわこ</label><label><input type="checkbox" value="住之江" onchange="saveFavoritePlaces()"> 住之江</label><label><input type="checkbox" value="尼崎" onchange="saveFavoritePlaces()"> 尼崎</label><label><input type="checkbox" value="鳴門" onchange="saveFavoritePlaces()"> 鳴門</label><label><input type="checkbox" value="丸亀" onchange="saveFavoritePlaces()"> 丸亀</label><label><input type="checkbox" value="児島" onchange="saveFavoritePlaces()"> 児島</label><label><input type="checkbox" value="宮島" onchange="saveFavoritePlaces()"> 宮島</label><label><input type="checkbox" value="徳山" onchange="saveFavoritePlaces()"> 徳山</label><label><input type="checkbox" value="下関" onchange="saveFavoritePlaces()"> 下関</label><label><input type="checkbox" value="若松" onchange="saveFavoritePlaces()"> 若松</label><label><input type="checkbox" value="芦屋" onchange="saveFavoritePlaces()"> 芦屋</label><label><input type="checkbox" value="福岡" onchange="saveFavoritePlaces()"> 福岡</label><label><input type="checkbox" value="唐津" onchange="saveFavoritePlaces()"> 唐津</label><label><input type="checkbox" value="大村" onchange="saveFavoritePlaces()"> 大村</label></div>
+      </div>
+      <div class="settings-subcard">
+        <div class="section-title"><span>よく使う投資額</span></div>
+        <div class="helper">現在は +1,000 / +5,000 / +10,000 円をワンタッチ入力できます。</div>
+      </div>
       <div class="section-title"><span>設定・データ管理</span></div>
       <div class="notice">データはこのiPhoneのブラウザ内に保存されています。機種変更やSafariのデータ削除に備えて、定期的なバックアップがおすすめです。</div>
       <div style="height:14px"></div>
@@ -849,8 +934,8 @@ header{
       <button class="danger-button" onclick="clearAllData()">全データを削除</button>
       <div style="height:18px"></div>
 
-      <button class="secondary-button" onclick="showPage(\'infoPage\')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 0.8<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
+      <div class="helper">Version 0.9<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -872,7 +957,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 0.8</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 0.9</div>
     </div>
   </section>
 
@@ -924,6 +1009,25 @@ function setAmount(id,amount){
 function pickPlace(name){
   document.getElementById("place").value=name;
 }
+
+function getFavoritePlaces(){
+  try{
+    const v=JSON.parse(localStorage.getItem("boatScoreFavoritePlaces")||"[]");
+    return Array.isArray(v)&&v.length?v:["江戸川","平和島","住之江","福岡"];
+  }catch(e){ return ["江戸川","平和島","住之江","福岡"]; }
+}
+function saveFavoritePlaces(){
+  const selected=[...document.querySelectorAll("#favoriteSettings input:checked")].map(x=>x.value);
+  localStorage.setItem("boatScoreFavoritePlaces",JSON.stringify(selected));
+  renderFavoritePlaces();
+}
+function renderFavoritePlaces(){
+  const favorites=getFavoritePlaces();
+  const box=document.querySelector(".favorite-place");
+  if(box) box.innerHTML=favorites.map((x,i)=>`<button type="button" onclick="pickPlace('${x}')">${i===0?"★ ":""}${x}</button>`).join("");
+  document.querySelectorAll("#favoriteSettings input").forEach(x=>x.checked=favorites.includes(x.value));
+}
+
 
 let selectedImage = "";
 let editingId = null;
@@ -1329,6 +1433,18 @@ function renderCalendar(){
   const year=calendarDate.getFullYear();
   const month=calendarDate.getMonth();
   document.getElementById("calendarTitle").textContent=`${year}年${month+1}月`;
+  const monthRecords=getData().filter(r=>{
+    const d=parseLocalDate(r.date);
+    return d.getFullYear()===year && d.getMonth()===month;
+  });
+  const monthStats=calcStats(monthRecords);
+  const cp=document.getElementById("calendarMonthProfit");
+  if(cp){ cp.textContent=signedMoney(monthStats.profit); cp.className="value "+profitClass(monthStats.profit); }
+  const cr=document.getElementById("calendarMonthRate");
+  if(cr) cr.textContent=monthStats.rate.toFixed(1)+"%";
+  const ch=document.getElementById("calendarMonthHits");
+  if(ch) ch.textContent=`${monthStats.hits}/${monthStats.count}`;
+
 
   ["日","月","火","水","木","金","土"].forEach(day=>{
     const el=document.createElement("div");
@@ -1564,7 +1680,7 @@ function renderYearExtras(){
 function exportBackup(){
   const payload={
     app:"BOAT SCORE",
-    version:"0.7",
+    version:"0.9",
     exportedAt:new Date().toISOString(),
     data:getData()
   };
@@ -1672,6 +1788,7 @@ function refresh(){
   renderAnalysis();
 }
 
+renderFavoritePlaces();
 refresh();
 
 if("serviceWorker" in navigator){
