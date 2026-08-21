@@ -896,6 +896,38 @@ header{
 }
 .settings-page-head span{display:block}
 
+
+/* ===== BOAT SCORE RC7: personal analysis ===== */
+.bs-insight-block{margin:0 0 14px}
+.bs-section-head{display:flex;align-items:flex-end;justify-content:space-between;margin:4px 2px 10px}
+.bs-section-head div small{display:block;color:#7d8ba0;font-size:9px;font-weight:900;letter-spacing:.13em}
+.bs-section-head div strong{display:block;color:#14243c;font-size:16px;margin-top:2px}
+.bs-section-head>span{font-size:10px;color:#7c899b;font-weight:700}
+.bs-best-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bs-best-card{min-width:0;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid #dfe8f4;border-radius:16px;padding:11px 9px;box-shadow:0 5px 16px rgba(22,64,117,.06)}
+.bs-best-card>span{display:grid;width:27px;height:27px;place-items:center;border-radius:9px;background:#edf5ff;margin-bottom:8px;font-size:13px}
+.bs-best-card small{display:block;color:#758297;font-size:9px;font-weight:800}
+.bs-best-card strong{display:block;color:#14243c;font-size:14px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bs-best-card em{display:block;color:#8793a3;font-size:8px;font-style:normal;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bs-best-card.odds{background:linear-gradient(180deg,#fffdf5,#fffaf0);border-color:#efe2b8}
+.bs-best-card.day{background:linear-gradient(180deg,#f8fffb,#f4fbf7);border-color:#d9eadf}
+.insight-title{margin-top:18px}
+.bs-auto-badge{display:inline-flex!important;align-items:center;background:#eaf3ff;color:#0862cf!important;border:1px solid #d2e4fb;border-radius:999px;padding:4px 8px;font-size:8px!important;font-weight:900!important}
+.bs-pattern-grid{display:grid;gap:8px}
+.bs-pattern-card,.bs-analysis-pattern{display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:center;background:#fff;border:1px solid #e0e8f2;border-radius:15px;padding:11px 12px}
+.bs-pattern-card.good,.bs-analysis-pattern.good{background:linear-gradient(135deg,#f7fffa,#fff);border-color:#d8ebdf}
+.bs-pattern-card.weak,.bs-analysis-pattern.weak{background:linear-gradient(135deg,#fff9f7,#fff);border-color:#f0ded8}
+.bs-pattern-icon,.bs-analysis-pattern>span{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:18px;font-weight:900}
+.good .bs-pattern-icon,.bs-analysis-pattern.good>span{background:#e5f6eb;color:#14834a}
+.weak .bs-pattern-icon,.bs-analysis-pattern.weak>span{background:#fdebe7;color:#c8513d}
+.bs-pattern-card small,.bs-analysis-pattern small{display:block;color:#7b8798;font-size:9px;font-weight:800}
+.bs-pattern-card strong,.bs-analysis-pattern strong{display:block;color:#17263d;font-size:13px;margin-top:3px}
+.bs-pattern-card em,.bs-analysis-pattern em{display:block;color:#8490a0;font-size:9px;font-style:normal;margin-top:3px}
+.bs-analysis-insight .section-title{display:flex;justify-content:space-between;align-items:center}
+.bs-analysis-pattern{margin-top:8px}
+.bs-analysis-note{margin-top:10px;line-height:1.55}
+@media(max-width:360px){.bs-best-grid{grid-template-columns:1fr}.bs-best-card{display:grid;grid-template-columns:34px 1fr;column-gap:8px}.bs-best-card>span{grid-row:1/4}.bs-best-card small,.bs-best-card strong,.bs-best-card em{grid-column:2}}
+
 </style>
 <style id="rc3styles">
 .analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style></head>
@@ -916,6 +948,33 @@ header{
 <div class="container">
 
   <section id="homePage" class="page active">
+  <div class="bs-insight-block">
+    <div class="bs-section-head">
+      <div><small>THIS MONTH</small><strong>今月のベスト記録</strong></div>
+      <span id="bestMonthLabel"></span>
+    </div>
+    <div class="bs-best-grid">
+      <div class="bs-best-card payout"><span>💰</span><small>最高払戻</small><strong id="bestPayout">0円</strong><em id="bestPayoutSub">記録なし</em></div>
+      <div class="bs-best-card odds"><span>⭐</span><small>最高オッズ</small><strong id="bestOdds">0倍</strong><em id="bestOddsSub">記録なし</em></div>
+      <div class="bs-best-card day"><span>🏆</span><small>最高日収支</small><strong id="bestDayProfit">0円</strong><em id="bestDaySub">記録なし</em></div>
+    </div>
+
+    <div class="bs-section-head insight-title">
+      <div><small>MY PATTERN</small><strong>あなたの舟券傾向</strong></div>
+      <span class="bs-auto-badge">自動分析</span>
+    </div>
+    <div class="bs-pattern-grid">
+      <div class="bs-pattern-card good">
+        <div class="bs-pattern-icon">↗</div>
+        <div><small>得意パターン</small><strong id="homeStrongPattern">データ収集中</strong><em id="homeStrongSub">記録が増えると分析します</em></div>
+      </div>
+      <div class="bs-pattern-card weak">
+        <div class="bs-pattern-icon">↘</div>
+        <div><small>苦手パターン</small><strong id="homeWeakPattern">データ収集中</strong><em id="homeWeakSub">記録が増えると分析します</em></div>
+      </div>
+    </div>
+  </div>
+
     <div id="firstGuide" class="first-guide">
       <strong>BOAT SCOREへようこそ</strong><br>「＋ 収支を入力」から記録すると、収支・回収率・分析が自動更新されます。
     </div>
@@ -1069,7 +1128,18 @@ header{
   </section>
 
 
-  <section id="analysisPage" class="page"><div class="analysis-upgrade card">
+  <section id="analysisPage" class="page">
+  <div class="card bs-analysis-insight">
+    <div class="section-title"><span>自分の強み・弱み</span><b class="bs-auto-badge">自動分析</b></div>
+    <div class="bs-analysis-pattern good">
+      <span>↗</span><div><small>得意</small><strong id="analysisStrongPattern">データ収集中</strong><em id="analysisStrongSub">記録が増えると分析します</em></div>
+    </div>
+    <div class="bs-analysis-pattern weak">
+      <span>↘</span><div><small>苦手</small><strong id="analysisWeakPattern">データ収集中</strong><em id="analysisWeakSub">記録が増えると分析します</em></div>
+    </div>
+    <div class="helper bs-analysis-note">※ 収支記録からレース場・時間帯（1〜6R / 7〜12R）の傾向を自動集計します。</div>
+  </div>
+<div class="analysis-upgrade card">
 <div class="analysis-period-tabs"><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
 <div class="section-title"><span>収支推移</span></div><div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
 <div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
@@ -1122,11 +1192,11 @@ header{
 <section id="raceSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>レース設定</strong><span></span></div>
   <div class="card">
-    <button class="secondary-button" onclick="openFavoriteModal()">★ お気に入りのレース場</button>
+    <button class="secondary-button" onclick="openFavoriteModal()">お気に入りのレース場</button>
     <div class="helper" id="favoriteSummarySettings" style="margin:8px 2px 16px">未選択</div>
-    <label class="helper">初期表示するレース場</label>
+    <label class="helper">入力時のレース場</label>
     <select id="defaultPlaceSetting" class="setting-select" onchange="saveAppSettings()">
-      <option value="">お気に入り先頭を使う</option>
+      <option value="">お気に入りを優先</option>
       <option>桐生</option><option>戸田</option><option>江戸川</option><option>平和島</option>
       <option>多摩川</option><option>浜名湖</option><option>蒲郡</option><option>常滑</option>
       <option>津</option><option>三国</option><option>びわこ</option><option>住之江</option>
@@ -1203,7 +1273,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC6</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC7</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1228,7 +1298,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC6</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC7</div>
     </div>
   </section>
 
@@ -2108,7 +2178,9 @@ function showPage(id,navButton){
   }
   if(id==="analysisPage"){
     renderAnalysis();
+    renderPersonalInsights();
     renderAnalysisUpgrade();
+renderPersonalInsights();
     setTimeout(renderYearExtras,0);
   }
   if(id==="dayDetailPage") renderDayDetailFull();
@@ -2123,9 +2195,84 @@ function refresh(){
   renderCalendar();
   renderDayDetail();
   renderAnalysis();
+
+  renderPersonalInsights();
 }
 
 
+
+
+function bsGroupStats(records,keyFn){
+  const map=new Map();
+  records.forEach(r=>{
+    const key=keyFn(r);
+    if(!key) return;
+    if(!map.has(key)) map.set(key,[]);
+    map.get(key).push(r);
+  });
+  return [...map.entries()].map(([key,list])=>{
+    const s=calcStats(list);
+    return {key,count:list.length,...s};
+  });
+}
+
+function bsRaceBand(r){
+  const n=Number(r.race)||0;
+  if(!n) return "";
+  return n<=6 ? "1〜6R" : "7〜12R";
+}
+
+function bsPatternCandidates(records){
+  const candidates=[];
+  bsGroupStats(records,r=>r.place).forEach(x=>candidates.push({...x,type:"場"}));
+  bsGroupStats(records,r=>r.place&&r.race ? `${r.place} × ${bsRaceBand(r)}` : "").forEach(x=>candidates.push({...x,type:"場×時間帯"}));
+  bsGroupStats(records,r=>bsRaceBand(r)).forEach(x=>candidates.push({...x,type:"時間帯"}));
+  return candidates.filter(x=>x.count>=2 && x.bet>0);
+}
+
+function renderPersonalInsights(){
+  const all=getData();
+  const now=new Date(), y=now.getFullYear(), m=now.getMonth();
+  const monthRecords=all.filter(r=>{
+    const d=parseLocalDate(r.date);
+    return d.getFullYear()===y && d.getMonth()===m;
+  });
+
+  const set=(id,text)=>{const e=document.getElementById(id);if(e)e.textContent=text};
+  set("bestMonthLabel",`${m+1}月`);
+
+  const payout=[...monthRecords].sort((a,b)=>Number(b.returnAmount)-Number(a.returnAmount))[0];
+  set("bestPayout",payout&&Number(payout.returnAmount)>0?formatMoney(payout.returnAmount):"0円");
+  set("bestPayoutSub",payout&&Number(payout.returnAmount)>0?`${payout.place||""} ${payout.race||""}R`:"記録なし");
+
+  const odds=[...monthRecords].filter(r=>Number(r.returnAmount)>0).sort((a,b)=>Number(b.odds||0)-Number(a.odds||0))[0];
+  set("bestOdds",odds&&Number(odds.odds)>0?`${Number(odds.odds).toFixed(1)}倍`:"0倍");
+  set("bestOddsSub",odds&&Number(odds.odds)>0?(Number(odds.odds)>=100?"⭐ 万舟":"的中記録"):"記録なし");
+
+  const dayMap=new Map();
+  monthRecords.forEach(r=>{
+    const v=Number(r.returnAmount)-Number(r.bet);
+    dayMap.set(r.date,(dayMap.get(r.date)||0)+v);
+  });
+  const bestDay=[...dayMap.entries()].sort((a,b)=>b[1]-a[1])[0];
+  set("bestDayProfit",bestDay?signedMoney(bestDay[1]):"0円");
+  set("bestDaySub",bestDay?`${Number(bestDay[0].split("-")[2])}日`:"記録なし");
+
+  // Use recent/all data for patterns. Require at least two records in a segment.
+  const cands=bsPatternCandidates(all);
+  const strong=[...cands].filter(x=>x.profit>0).sort((a,b)=>b.rate-a.rate || b.profit-a.profit)[0];
+  const weak=[...cands].filter(x=>x.profit<0).sort((a,b)=>a.rate-b.rate || a.profit-b.profit)[0];
+
+  const strongName=strong?strong.key:"データ収集中";
+  const strongSub=strong?`回収率 ${strong.rate.toFixed(1)}% ・ ${strong.count}件`:"同じ条件の記録が2件以上で分析";
+  const weakName=weak?weak.key:"データ収集中";
+  const weakSub=weak?`回収率 ${weak.rate.toFixed(1)}% ・ ${weak.count}件`:"同じ条件の記録が2件以上で分析";
+
+  set("homeStrongPattern",strongName); set("homeStrongSub",strongSub);
+  set("homeWeakPattern",weakName); set("homeWeakSub",weakSub);
+  set("analysisStrongPattern",strongName); set("analysisStrongSub",strongSub);
+  set("analysisWeakPattern",weakName); set("analysisWeakSub",weakSub);
+}
 
 const SETTINGS_KEY="boatScoreSettings";
 let toastTimer=null;
