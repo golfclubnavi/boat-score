@@ -707,7 +707,7 @@ header{
 .icon-label{display:flex!important;align-items:center;gap:8px}.icon-label small{font-weight:500;color:#7a8494}.field-icon{width:26px;height:26px;border-radius:6px;display:inline-grid;place-items:center;color:#fff;font-weight:900;font-size:13px}.field-icon.blue{background:#075bcf}.field-icon.green{background:#16a34a}
 .premium-lock{width:100%;border:1px solid #cbd8e9;background:#f8fbff;border-radius:12px;padding:13px;display:grid;grid-template-columns:28px 1fr 15px;gap:7px;align-items:center;text-align:left;margin:6px 0 14px;color:#17305a}.premium-lock strong,.premium-lock small{display:block}.premium-lock small{color:#6c7a8d;margin-top:3px;font-size:10px}
 .calendar-shell,.calendar-day-preview{background:#fff;border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:0 4px 15px rgba(20,50,90,.06)}.calendar-toolbar.compact{display:grid;grid-template-columns:34px 1fr 34px 52px;align-items:center}.calendar-toolbar.compact button{border:0;background:#fff;font-size:22px}.today-pill{font-size:11px!important;border:1px solid #dbe4ef!important;border-radius:18px!important;padding:7px!important}
-.compact-calendar .cal-day{min-height:64px;padding:5px 2px}.compact-calendar .cal-number{font-size:12px}.compact-calendar .cal-profit{font-size:9px}.compact-calendar .cal-count{font-size:9px}.compact-calendar .cal-day.has-data:after{content:"";display:block;width:4px;height:4px;border-radius:50%;background:#23a455;margin:2px auto 0}.calendar-legend{font-size:8px;color:#68768a;text-align:center;margin-top:8px;display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.calendar-legend .plus{color:#075bd2}.calendar-legend .minus{color:#e33a3a}.calendar-legend .hit{color:#25a55c}
+.compact-calendar .cal-day{min-height:64px;padding:5px 2px}.compact-calendar .cal-number{font-size:12px}.compact-calendar .cal-profit{font-size:9px}.compact-calendar .cal-count{font-size:9px}.compact-calendar .cal-day.has-data:after{content:"";display:block;width:4px;height:4px;border-radius:50%;background:#23a455;margin:2px auto 0}.calendar-legend{font-size:8px;color:#68768a;text-align:center;margin-top:8px;display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.calendar-legend .plus{color:#075bd2}.calendar-legend .minus{color:#e33a3a}
 .day-detail-header{background:#06377c;color:#fff;padding:16px 12px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;text-align:center;border-radius:16px 16px 0 0}.day-detail-header button{border:0;background:none;color:#fff;font-size:24px}.day-date-nav{background:#fff;padding:12px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;text-align:center;border-bottom:1px solid #e5ebf3}.day-date-nav button{border:0;background:#f3f7fc;border-radius:50%;width:30px;height:30px}.day-full-summary{background:#fff;padding:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;border-bottom:1px solid #e5ebf3}.day-full-summary strong{display:block;font-size:18px;margin-top:4px}.day-record-card{background:#fff;border:1px solid #e0e7f0;border-radius:13px;padding:12px;margin:10px 0}.day-record-head{display:flex;justify-content:space-between;gap:8px;font-weight:800}.day-record-tags{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.day-record-tags span{background:#f2f5f9;border-radius:7px;padding:4px 7px;font-size:10px}.day-record-images{display:flex;gap:8px}.day-record-images img{width:46%;height:90px;object-fit:cover;border-radius:9px}.day-add{width:100%;background:#fff;border:1px solid #075bd2;color:#075bd2;border-radius:9px;padding:9px;font-weight:800}.day-total{background:#fff;border:1px solid #e0e7f0;border-radius:13px;padding:13px;margin-top:10px}
 .compact-setting{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:15px!important}.compact-setting strong,.compact-setting small{display:block}.compact-setting small{margin-top:5px;color:#758296}.compact-setting b{font-size:24px;color:#66758a}
 .favorite-modal{position:fixed;inset:0;background:rgba(6,15,28,.55);z-index:1500;display:none;align-items:flex-end}.favorite-modal.show{display:flex}.favorite-modal-card{background:#fff;width:100%;max-height:82vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}.favorite-modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.favorite-modal-head strong{font-size:19px}.favorite-modal-head button{width:34px;height:34px;border:0;border-radius:50%;font-size:22px}
@@ -969,18 +969,6 @@ header{
 .compact-calendar .cal-day.sat .cal-number{color:#1768cc}
 .compact-calendar .cal-day.profit-day{background:linear-gradient(180deg,#f4f9ff,#edf6ff)}
 .compact-calendar .cal-day.loss-day{background:linear-gradient(180deg,#fff7f7,#fff0f0)}
-.compact-calendar .cal-day.zero-day{background:#fafbfd}
-.compact-calendar .cal-day.hit-day:after{
-  content:"✓";
-  display:grid!important;
-  place-items:center;
-  width:14px!important;height:14px!important;
-  position:absolute;right:3px;top:3px;
-  margin:0!important;
-  border-radius:50%!important;
-  background:#25a55c!important;color:#fff!important;
-  font-size:8px;font-weight:900;
-}
 .compact-calendar .cal-day.today{
   box-shadow:inset 0 0 0 2px rgba(8,103,223,.45);
 }
@@ -1196,7 +1184,6 @@ header{
         <span>🔒</span><div><strong>詳細入力（Premium）</strong><small>舟券種・買い目・勝ったコース・決まり手・展示・気象条件など</small></div><b>›</b>
       </button>
       <button id="saveButton" class="add-button" onclick="saveRace(false)">保存する</button>
-      <button id="continueButton" class="continue-button" onclick="saveRace(true)">続けて入力</button>
     </div>
   </section>
 
@@ -1210,7 +1197,7 @@ header{
         <div><div class="label">的中回数</div><div id="calendarMonthHits" class="value">0 / 0R</div></div>
       </div>
       <div class="calendar-grid compact-calendar" id="calendar"></div>
-      <div class="calendar-legend"><span class="plus">●</span>プラス収支 <span class="minus">●</span>マイナス収支 <span>● 0円</span> <span class="hit">●</span>的中あり</div>
+      <div class="calendar-legend"><span class="plus">●</span>プラス収支 <span class="minus">●</span>マイナス収支</div>
     </div>
     <div class="calendar-day-preview">
       <strong id="selectedDayTitle">日付をタップしてください</strong>
@@ -1357,7 +1344,6 @@ header{
       <li>的中した場合は<b>的中投資額 → オッズ</b>を入力</li>
       <li>払戻額を確認して<b>保存</b></li>
     </ol>
-    <div class="guide-tip">✓ 「続けて入力」を使うと、同じ日の次レースを素早く記録できます。</div>
   </div>
 
   <div class="guide-card">
@@ -1433,19 +1419,6 @@ header{
 <section id="inputSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>入力設定</strong><span></span></div>
   <div class="card">
-    <div class="setting-toggle">
-      <span><strong>保存後に次のRへ進む</strong><small>続けて入力するときにRを自動で+1します。</small></span>
-      <label class="switch"><input id="settingNextRace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-    </div>
-    <div class="setting-toggle">
-      <span><strong>払戻を自動計算</strong><small>的中投資額 × オッズで払戻額を自動入力。</small></span>
-      <label class="switch"><input id="settingAutoReturn" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-    </div>
-    <div class="setting-toggle">
-      <span><strong>前回のレース場を引き継ぐ</strong><small>連続入力時にレース場を維持します。</small></span>
-      <label class="switch"><input id="settingKeepPlace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-    </div>
-  </div>
 </section>
 
 <section id="displaySettingsPage" class="page">
@@ -1496,7 +1469,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC12</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC13</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1521,7 +1494,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC12</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC13</div>
     </div>
   </section>
 
@@ -1950,46 +1923,14 @@ function saveRace(continueInput=false){
     alert("保存容量が不足しました。画像を外すか、不要な記録を削除してください。");
     return;
   }
-  showSaveToast(continueInput ? "保存しました　次のレースを入力できます" : "保存しました");
+  showSaveToast("保存しました");
 
   document.getElementById("successMessage").style.display="block";
   setTimeout(()=>document.getElementById("successMessage").style.display="none",1400);
 
-  const keepDate=date, keepPlace=place, nextRace=Math.min(12,selectedRace+1);
   resetForm();
-  updateFirstGuide();
-  updateStorageStatus();
-  updateBackupStatus();
   refresh();
-  if(continueInput){
-    document.getElementById("date").value=keepDate;
-    document.getElementById("place").value=keepPlace;
-    setSelectedRace(nextRace);
-    showPage("inputPage",document.querySelector('[data-page="inputPage"]'));
-    const jumpToInputTop=()=>{
-      const inputPage=document.getElementById("inputPage");
-      // BOAT SCORE pages can themselves be the scrolling element on iPhone Safari.
-      if(inputPage){
-        inputPage.scrollTop=0;
-        const scrollers=inputPage.querySelectorAll("*");
-        scrollers.forEach(el=>{
-          if(el.scrollHeight>el.clientHeight+4) el.scrollTop=0;
-        });
-      }
-      document.scrollingElement && (document.scrollingElement.scrollTop=0);
-      document.documentElement.scrollTop=0;
-      document.body.scrollTop=0;
-      window.scrollTo({top:0,left:0,behavior:"instant"});
-    };
-    // Run after the page switch and after Safari has finished layout.
-    jumpToInputTop();
-    requestAnimationFrame(()=>requestAnimationFrame(jumpToInputTop));
-    setTimeout(jumpToInputTop,120);
-    setTimeout(jumpToInputTop,350);
-    setTimeout(jumpToInputTop,700);
-  }else{
-    showPage("homePage",document.querySelector('[data-page="homePage"]'));
-  }
+  showPage("homePage",document.querySelector('[data-page="homePage"]'));
 }
 
 function editRace(id){
@@ -2166,8 +2107,6 @@ function renderCalendar(){
       el.classList.add("has-data");
       if(s.profit>0) el.classList.add("profit-day");
       else if(s.profit<0) el.classList.add("loss-day");
-      else el.classList.add("zero-day");
-      if(s.hits>0) el.classList.add("hit-day");
     }
     if(selectedCalendarDate===dateString) el.classList.add("selected");
     el.onclick=()=>selectCalendarDay(dateString);
@@ -2381,6 +2320,65 @@ function renderYearExtras(){
   }).join("");
 }
 
+
+function updateFirstGuide(){
+  const guide=document.getElementById("firstGuide");
+  if(guide) guide.style.display=getData().length ? "none" : "";
+}
+
+function updateBackupStatus(){
+  const el=document.getElementById("lastBackupText");
+  if(!el) return;
+  const raw=localStorage.getItem("boatScoreLastBackup");
+  if(!raw){
+    el.textContent="まだバックアップ履歴がありません";
+    return;
+  }
+  const d=new Date(raw);
+  if(Number.isNaN(d.getTime())){
+    el.textContent="バックアップ履歴あり";
+    return;
+  }
+  el.textContent=`最終バックアップ：${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+}
+
+function updateStorageStatus(){
+  const text=document.getElementById("storageText");
+  const bar=document.getElementById("storageBar");
+  if(!text&&!bar) return;
+  try{
+    const bytes=new Blob([localStorage.getItem(STORAGE_KEY)||"[]"]).size;
+    const kb=Math.round(bytes/1024);
+    if(text) text.textContent=`約 ${kb} KB 使用中`;
+    if(bar) bar.style.width=Math.min(100,Math.max(2,bytes/(5*1024*1024)*100))+"%";
+  }catch(e){
+    if(text) text.textContent="使用量を確認できませんでした";
+  }
+}
+
+function restoreSafetyBackup(){
+  try{
+    const raw=localStorage.getItem("boatScoreSafetyBackup");
+    if(!raw){ alert("復元前の退避データはありません。"); return; }
+    const parsed=JSON.parse(raw);
+    if(!Array.isArray(parsed.data)) throw new Error("invalid");
+    if(!confirm("直前の復元前データに戻しますか？")) return;
+    saveData(parsed.data);
+    refresh();
+    showSaveToast("復元前のデータに戻しました");
+  }catch(e){
+    alert("退避データを復元できませんでした。");
+  }
+}
+
+function clearAllData(){
+  if(!confirm("すべての収支データを削除しますか？")) return;
+  if(!confirm("この操作は元に戻せません。本当に削除しますか？")) return;
+  saveData([]);
+  refresh();
+  showSaveToast("全データを削除しました");
+}
+
 async function exportBackup(){
   try{
     const records=getData().map((r,i)=>({
@@ -2400,7 +2398,7 @@ async function exportBackup(){
       app:"BOAT SCORE",
       format:"boat-score-backup",
       formatVersion:3,
-      appVersion:"1.0-rc12",
+      appVersion:"1.0-rc13",
       exportedAt:new Date().toISOString(),
       recordCount:records.length,
       records
@@ -2418,7 +2416,7 @@ async function exportBackup(){
           title:"BOAT SCORE バックアップ"
         });
         localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
-        updateBackupStatus();
+        try{updateBackupStatus()}catch(e){}
         showSaveToast(`バックアップを作成しました（${records.length}件）`);
         return;
       }catch(shareErr){
@@ -2439,7 +2437,7 @@ async function exportBackup(){
     setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},3000);
 
     localStorage.setItem("boatScoreLastBackup",new Date().toISOString());
-    updateBackupStatus();
+    try{updateBackupStatus()}catch(e){}
     showSaveToast(`バックアップを書き出しました（${records.length}件）`);
   }catch(err){
     console.error("backup export error",err);
@@ -2525,8 +2523,8 @@ document.getElementById("restoreFile").addEventListener("change",function(){
       }
 
       refresh();
-      updateStorageStatus();
-      updateBackupStatus();
+      try{updateStorageStatus()}catch(e){}
+      try{updateBackupStatus()}catch(e){}
       showSaveToast(mode==="replace"?`バックアップを復元しました（${valid.length}件）`:`バックアップを追加しました（${valid.length}件）`);
       input.value="";
     }catch(err){ fail(err); }
@@ -2689,12 +2687,11 @@ function showSaveToast(message="保存しました"){
 }
 
 function getAppSettings(){
-  const defaults={nextRace:true,autoReturn:true,keepPlace:true,showManshu:true,plusSign:true,defaultPlace:""};
+  const defaults={autoReturn:true,keepPlace:true,showManshu:true,plusSign:true,defaultPlace:""};
   try{return {...defaults,...JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")}}catch(e){return defaults}
 }
 function saveAppSettings(){
   const s=getAppSettings();
-  s.nextRace=!!document.getElementById("settingNextRace")?.checked;
   s.autoReturn=!!document.getElementById("settingAutoReturn")?.checked;
   s.keepPlace=!!document.getElementById("settingKeepPlace")?.checked;
   s.showManshu=!!document.getElementById("settingManshu")?.checked;
@@ -2705,8 +2702,7 @@ function saveAppSettings(){
 }
 function loadAppSettings(){
   const s=getAppSettings();
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v};
-  set("settingNextRace",s.nextRace);set("settingAutoReturn",s.autoReturn);set("settingKeepPlace",s.keepPlace);set("settingManshu",s.showManshu);set("settingPlusSign",s.plusSign);
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v};set("settingAutoReturn",s.autoReturn);set("settingKeepPlace",s.keepPlace);set("settingManshu",s.showManshu);set("settingPlusSign",s.plusSign);
   const dp=document.getElementById("defaultPlaceSetting");if(dp)dp.value=s.defaultPlace||"";
   autoReturnEnabled=s.autoReturn;updateSettingsFavoriteSummary();
 }
