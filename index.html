@@ -845,6 +845,32 @@ header{
   box-shadow:0 5px 14px rgba(8,103,223,.23)!important;
 }
 
+
+/* ===== BOAT SCORE RC5 settings + save toast ===== */
+.save-toast{
+  position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom));
+  transform:translate(-50%,18px);min-width:210px;max-width:calc(100vw - 36px);
+  background:rgba(15,123,65,.96);color:#fff;border-radius:14px;padding:12px 16px;
+  display:flex;align-items:center;justify-content:center;gap:9px;font-size:13px;font-weight:800;
+  box-shadow:0 10px 26px rgba(10,67,37,.28);opacity:0;pointer-events:none;
+  transition:.22s ease;z-index:3000;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+}
+.save-toast.show{opacity:1;transform:translate(-50%,0)}
+.save-toast-icon{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0f7b41;font-weight:900}
+.settings-list{background:#fff;border:1px solid #dde6f1;border-radius:18px;overflow:hidden;box-shadow:0 5px 16px rgba(25,58,99,.06);margin-bottom:14px}
+.settings-row{width:100%;border:0;background:#fff;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;padding:15px 14px;text-align:left;color:#13233d;border-bottom:1px solid #edf1f6}
+.settings-row:last-child{border-bottom:0}
+.settings-row .sicon{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:900}
+.sicon.blue{background:#0b63d7}.sicon.green{background:#17a05c}.sicon.purple{background:#7257d8}.sicon.orange{background:#ef8a28}.sicon.gold{background:#c79918}.sicon.gray{background:#68778d}
+.settings-row strong{display:block;font-size:14px}.settings-row small{display:block;color:#7c8798;font-size:10px;margin-top:3px}.settings-row b{color:#8490a1;font-size:22px;font-weight:400}
+.settings-panel{display:none;background:#fff;border:1px solid #dde6f1;border-radius:16px;padding:14px;margin:10px 0 14px}.settings-panel.show{display:block}
+.setting-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #edf1f6}.setting-toggle:last-child{border-bottom:0}
+.setting-toggle strong{font-size:13px}.setting-toggle small{display:block;color:#7c8798;font-size:10px;margin-top:3px;line-height:1.45}
+.switch{position:relative;width:44px;height:26px;flex:0 0 auto}.switch input{display:none}.switch span{position:absolute;inset:0;background:#cbd4df;border-radius:999px;transition:.2s}
+.switch span:after{content:"";position:absolute;width:22px;height:22px;left:2px;top:2px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:.2s}
+.switch input:checked+span{background:#0b67df}.switch input:checked+span:after{transform:translateX(18px)}
+.setting-select{width:100%;border:1px solid #ccd7e5;border-radius:10px;padding:10px;background:#fff}
+
 </style>
 <style id="rc3styles">
 .analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style></head>
@@ -1038,41 +1064,115 @@ header{
   </section>
 
   <section id="settingsPage" class="page">
-    <div class="card">
-      <div class="settings-subcard compact-setting" onclick="openFavoriteModal()">
-        <div><strong>★ お気に入りのレース場</strong><small id="favoriteSummary">未選択</small></div><b>›</b>
+  <div class="card">
+    <div class="section-title"><span>設定</span></div>
+
+    <div class="settings-list">
+      <button class="settings-row" onclick="toggleSettingsPanel('raceSettingsPanel')">
+        <span class="sicon blue">★</span>
+        <span><strong>レース設定</strong><small id="settingsFavSummary">お気に入り・初期表示</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="toggleSettingsPanel('inputSettingsPanel')">
+        <span class="sicon green">⚙</span>
+        <span><strong>入力設定</strong><small>保存後の動作・自動計算</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="toggleSettingsPanel('displaySettingsPanel')">
+        <span class="sicon purple">◈</span>
+        <span><strong>表示設定</strong><small>万舟表示・金額表示</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="toggleSettingsPanel('dataSettingsPanel')">
+        <span class="sicon orange">▣</span>
+        <span><strong>データ管理</strong><small>バックアップ・復元</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="toggleSettingsPanel('premiumSettingsPanel')">
+        <span class="sicon gold">♛</span>
+        <span><strong>Premium</strong><small>詳細入力・高度分析</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="toggleSettingsPanel('appInfoPanel')">
+        <span class="sicon gray">i</span>
+        <span><strong>アプリ情報</strong><small>規約・プライバシー・お問い合わせ</small></span><b>›</b>
+      </button>
+    </div>
+
+    <div id="raceSettingsPanel" class="settings-panel">
+      <div class="section-title"><span>レース設定</span></div>
+      <button class="secondary-button" onclick="openFavoriteModal()">★ お気に入りのレース場</button>
+      <div class="helper" id="favoriteSummarySettings" style="margin:7px 2px 12px">未選択</div>
+      <label class="helper">初期表示するレース場</label>
+      <select id="defaultPlaceSetting" class="setting-select" onchange="saveAppSettings()">
+        <option value="">お気に入り先頭を使う</option>
+        <option>桐生</option><option>戸田</option><option>江戸川</option><option>平和島</option>
+        <option>多摩川</option><option>浜名湖</option><option>蒲郡</option><option>常滑</option>
+        <option>津</option><option>三国</option><option>びわこ</option><option>住之江</option>
+        <option>尼崎</option><option>鳴門</option><option>丸亀</option><option>児島</option>
+        <option>宮島</option><option>徳山</option><option>下関</option><option>若松</option>
+        <option>芦屋</option><option>福岡</option><option>唐津</option><option>大村</option>
+      </select>
+    </div>
+
+    <div id="inputSettingsPanel" class="settings-panel">
+      <div class="section-title"><span>入力設定</span></div>
+      <div class="setting-toggle">
+        <span><strong>保存後に次のRへ進む</strong><small>続けて入力するときにRを自動で+1します。</small></span>
+        <label class="switch"><input id="settingNextRace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
       </div>
-      <div class="settings-subcard">
-        <div class="section-title"><span>よく使う投資額</span></div>
-        <div class="helper">現在は +1,000 / +5,000 / +10,000 円をワンタッチ入力できます。</div>
+      <div class="setting-toggle">
+        <span><strong>払戻を自動計算</strong><small>的中投資額 × オッズで払戻額を自動入力。</small></span>
+        <label class="switch"><input id="settingAutoReturn" type="checkbox" onchange="saveAppSettings()"><span></span></label>
       </div>
-      <div class="section-title"><span>設定・データ管理</span></div>
-      <div class="notice">データはこのiPhoneのブラウザ内に保存されています。機種変更やSafariのデータ削除に備えて、定期的なバックアップがおすすめです。</div>
-      <div style="height:14px"></div>
+      <div class="setting-toggle">
+        <span><strong>前回のレース場を引き継ぐ</strong><small>連続入力時にレース場を維持します。</small></span>
+        <label class="switch"><input id="settingKeepPlace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
+      </div>
+    </div>
+
+    <div id="displaySettingsPanel" class="settings-panel">
+      <div class="section-title"><span>表示設定</span></div>
+      <div class="setting-toggle">
+        <span><strong>⭐ 万舟バッジ</strong><small>100倍以上の的中記録に表示します。</small></span>
+        <label class="switch"><input id="settingManshu" type="checkbox" onchange="saveAppSettings()"><span></span></label>
+      </div>
+      <div class="setting-toggle">
+        <span><strong>プラス金額に「+」を表示</strong><small>+12,500円のように表示します。</small></span>
+        <label class="switch"><input id="settingPlusSign" type="checkbox" onchange="saveAppSettings()"><span></span></label>
+      </div>
+    </div>
+
+    <div id="dataSettingsPanel" class="settings-panel">
+      <div class="section-title"><span>データ管理</span></div>
       <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
       <div class="helper" id="lastBackupText" style="margin:7px 2px 12px">まだバックアップ履歴がありません</div>
-
       <label class="secondary-button" style="display:block;text-align:center">
         バックアップから復元
         <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
       </label>
-      <div class="helper" style="margin-top:7px">復元時に「追加」または「置き換え」を選べます。追加では同じIDの記録は重複させません。</div>
-      <div style="height:18px"></div>
-      <div class="section-title"><span>データの状態</span></div>
+      <div class="helper" style="margin-top:7px">復元時に「追加」または「置き換え」を選べます。</div>
+      <div style="height:12px"></div>
       <div class="safety-card">
-        記録はこの端末内に保存されています。画像を多く保存すると容量を使うため、定期的にバックアップしてください。
+        <strong>データ使用量</strong>
         <div class="storage-meter"><div id="storageBar" style="width:0%"></div></div>
         <div id="storageText">使用量を確認中…</div>
       </div>
-      <div style="height:18px"></div>
+      <div style="height:12px"></div>
       <button id="restoreSafetyBtn" class="secondary-button" style="display:none;margin-bottom:10px" onclick="restoreSafetyBackup()">直前の復元前データに戻す</button>
       <button class="danger-button" onclick="clearAllData()">全データを削除</button>
-      <div style="height:18px"></div>
-
-      <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 1.0 RC4<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
-  </section>
+
+    <div id="premiumSettingsPanel" class="settings-panel">
+      <div class="section-title"><span>Premium</span></div>
+      <div class="notice">Premiumは現在準備中です。詳細入力・コース別分析・気象条件分析などを予定しています。</div>
+      <div style="height:10px"></div>
+      <button class="secondary-button" onclick="showPremiumInfo()">Premium機能を見る</button>
+    </div>
+
+    <div id="appInfoPanel" class="settings-panel">
+      <div class="section-title"><span>アプリ情報</span></div>
+      <div class="helper">BOAT SCORE<br>Version 1.0 RC5</div>
+      <div style="height:10px"></div>
+      <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
+    </div>
+  </div>
+</section>
 
   <section id="infoPage" class="page">
     <div class="card">
@@ -1092,7 +1192,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC4</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC5</div>
     </div>
   </section>
 
@@ -1128,6 +1228,11 @@ header{
   <div class="helper">よく使う場を選択してください。0件でも保存できます。</div>
   <div id="favoriteSettings" class="favorite-settings"><label><input type="checkbox" value="桐生" onchange="saveFavoritePlaces()"> 桐生</label><label><input type="checkbox" value="戸田" onchange="saveFavoritePlaces()"> 戸田</label><label><input type="checkbox" value="江戸川" onchange="saveFavoritePlaces()"> 江戸川</label><label><input type="checkbox" value="平和島" onchange="saveFavoritePlaces()"> 平和島</label><label><input type="checkbox" value="多摩川" onchange="saveFavoritePlaces()"> 多摩川</label><label><input type="checkbox" value="浜名湖" onchange="saveFavoritePlaces()"> 浜名湖</label><label><input type="checkbox" value="蒲郡" onchange="saveFavoritePlaces()"> 蒲郡</label><label><input type="checkbox" value="常滑" onchange="saveFavoritePlaces()"> 常滑</label><label><input type="checkbox" value="津" onchange="saveFavoritePlaces()"> 津</label><label><input type="checkbox" value="三国" onchange="saveFavoritePlaces()"> 三国</label><label><input type="checkbox" value="びわこ" onchange="saveFavoritePlaces()"> びわこ</label><label><input type="checkbox" value="住之江" onchange="saveFavoritePlaces()"> 住之江</label><label><input type="checkbox" value="尼崎" onchange="saveFavoritePlaces()"> 尼崎</label><label><input type="checkbox" value="鳴門" onchange="saveFavoritePlaces()"> 鳴門</label><label><input type="checkbox" value="丸亀" onchange="saveFavoritePlaces()"> 丸亀</label><label><input type="checkbox" value="児島" onchange="saveFavoritePlaces()"> 児島</label><label><input type="checkbox" value="宮島" onchange="saveFavoritePlaces()"> 宮島</label><label><input type="checkbox" value="徳山" onchange="saveFavoritePlaces()"> 徳山</label><label><input type="checkbox" value="下関" onchange="saveFavoritePlaces()"> 下関</label><label><input type="checkbox" value="若松" onchange="saveFavoritePlaces()"> 若松</label><label><input type="checkbox" value="芦屋" onchange="saveFavoritePlaces()"> 芦屋</label><label><input type="checkbox" value="福岡" onchange="saveFavoritePlaces()"> 福岡</label><label><input type="checkbox" value="唐津" onchange="saveFavoritePlaces()"> 唐津</label><label><input type="checkbox" value="大村" onchange="saveFavoritePlaces()"> 大村</label></div>
   <button class="add-button" onclick="closeFavoriteModal()">完了</button></div>
+</div>
+
+<div id="saveToast" class="save-toast" role="status" aria-live="polite">
+  <span class="save-toast-icon">✓</span>
+  <span id="saveToastText">保存しました</span>
 </div>
 
 <div id="imageModal" class="modal" onclick="closeImageModal()">
@@ -1173,6 +1278,7 @@ function saveFavoritePlaces(){
   const selected=[...document.querySelectorAll("#favoriteSettings input:checked")].map(x=>x.value);
   localStorage.setItem("boatScoreFavoritePlaces",JSON.stringify(selected));
   renderFavoritePlaces();
+  updateSettingsFavoriteSummary();
 }
 function openFavoriteModal(){renderFavoritePlaces();document.getElementById("favoriteModal").classList.add("show");}
 function closeFavoriteModal(){document.getElementById("favoriteModal").classList.remove("show");}
@@ -1237,7 +1343,7 @@ let autoReturnEnabled=true;
 function recalcReturnFromOdds(){
   const winningBet=Number(document.getElementById("winningBet").value)||0;
   const odds=Number(document.getElementById("odds").value)||0;
-  if(autoReturnEnabled){
+  if(autoReturnEnabled && getAppSettings().autoReturn){
     document.getElementById("returnAmount").value=(winningBet>0 && odds>0) ? Math.floor(winningBet*odds) : 0;
   }
 }
@@ -1283,8 +1389,8 @@ function formatMoney(n){
 }
 
 function signedMoney(n){
-  const num = Number(n)||0;
-  return (num>0?"+":"")+num.toLocaleString()+"円";
+  const num=Number(n)||0;
+  return (num>0&&getAppSettings().plusSign?"+":"")+num.toLocaleString()+"円";
 }
 
 function profitClass(n){
@@ -1387,7 +1493,11 @@ function resetForm(){
   document.getElementById("odds").value="";
   autoReturnEnabled=true;
   document.getElementById("memo").value="";
-  document.getElementById("place").selectedIndex=0;
+  const appSettings=getAppSettings();
+  const favoritePlaces=getFavoritePlaces();
+  const defaultPlace=appSettings.defaultPlace||favoritePlaces[0]||"";
+  if(defaultPlace) document.getElementById("place").value=defaultPlace;
+  else document.getElementById("place").selectedIndex=0;
   setSelectedRace(1);
   removeSelectedImage();
 }
@@ -1478,6 +1588,7 @@ function saveRace(continueInput=false){
     alert("保存容量が不足しました。画像を外すか、不要な記録を削除してください。");
     return;
   }
+  showSaveToast(continueInput ? "保存しました　次のレースを入力できます" : "保存しました");
 
   document.getElementById("successMessage").style.display="block";
   setTimeout(()=>document.getElementById("successMessage").style.display="none",1400);
@@ -1970,11 +2081,55 @@ function refresh(){
 }
 
 
+
+const SETTINGS_KEY="boatScoreSettings";
+let toastTimer=null;
+
+function showSaveToast(message="保存しました"){
+  const toast=document.getElementById("saveToast"), text=document.getElementById("saveToastText");
+  if(!toast||!text) return;
+  text.textContent=message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
+}
+
+function getAppSettings(){
+  const defaults={nextRace:true,autoReturn:true,keepPlace:true,showManshu:true,plusSign:true,defaultPlace:""};
+  try{return {...defaults,...JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")}}catch(e){return defaults}
+}
+function saveAppSettings(){
+  const s=getAppSettings();
+  s.nextRace=!!document.getElementById("settingNextRace")?.checked;
+  s.autoReturn=!!document.getElementById("settingAutoReturn")?.checked;
+  s.keepPlace=!!document.getElementById("settingKeepPlace")?.checked;
+  s.showManshu=!!document.getElementById("settingManshu")?.checked;
+  s.plusSign=!!document.getElementById("settingPlusSign")?.checked;
+  s.defaultPlace=document.getElementById("defaultPlaceSetting")?.value||"";
+  localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
+  autoReturnEnabled=s.autoReturn;
+}
+function loadAppSettings(){
+  const s=getAppSettings();
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v};
+  set("settingNextRace",s.nextRace);set("settingAutoReturn",s.autoReturn);set("settingKeepPlace",s.keepPlace);set("settingManshu",s.showManshu);set("settingPlusSign",s.plusSign);
+  const dp=document.getElementById("defaultPlaceSetting");if(dp)dp.value=s.defaultPlace||"";
+  autoReturnEnabled=s.autoReturn;updateSettingsFavoriteSummary();
+}
+function toggleSettingsPanel(id){
+  document.querySelectorAll(".settings-panel").forEach(p=>p.classList.toggle("show",p.id===id&&!p.classList.contains("show")));
+}
+function updateSettingsFavoriteSummary(){
+  const fav=getFavoritePlaces(), text=fav.length?`${fav.length}場：${fav.slice(0,4).join("・")}${fav.length>4?"…":""}`:"未選択";
+  const a=document.getElementById("settingsFavSummary"),b=document.getElementById("favoriteSummarySettings");
+  if(a)a.textContent=text;if(b)b.textContent=text;
+}
+
 let analysisPeriod="month";
 function showPremiumInfo(){document.getElementById("premiumModal").classList.add("show")}
 function closePremiumModal(){document.getElementById("premiumModal").classList.remove("show")}
 function isManshu(r){return Number(r.odds)>=100&&Number(r.returnAmount)>0}
-function manshuBadge(r){return isManshu(r)?'<span class="manshu-badge">⭐ 万舟</span>':""}
+function manshuBadge(r){return getAppSettings().showManshu && isManshu(r)?'<span class="manshu-badge">⭐ 万舟</span>':""}
 function setAnalysisPeriod(v){analysisPeriod=v;document.getElementById("analysisMonthBtn")?.classList.toggle("active",v==="month");document.getElementById("analysisYearBtn")?.classList.toggle("active",v==="year");renderAnalysisUpgrade()}
 function bestGroup(rs,fn){const m=new Map();rs.forEach(r=>{const k=fn(r);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return [...m].map(([key,list])=>({key,...calcStats(list)})).sort((a,b)=>b.rate-a.rate||b.profit-a.profit)[0]||null}
 function renderAnalysisUpgrade(){
@@ -2125,6 +2280,7 @@ function roundRect(ctx,x,y,w,h,r){
 }
 
 renderFavoritePlaces();
+loadAppSettings();
 refresh();
 renderAnalysisUpgrade();
 
