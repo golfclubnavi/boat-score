@@ -714,6 +714,10 @@ header{
 .favorite-settings{grid-template-columns:repeat(3,1fr)!important;gap:7px!important;margin:14px 0!important}.favorite-settings label{padding:8px 6px!important;font-size:11px!important;border-radius:9px!important}.favorite-settings input{width:18px!important;height:18px!important}
 @media(max-width:390px){.home-trend-grid{gap:5px}.home-trend-card{padding:11px 5px}.home-trend-card strong{font-size:17px}.favorite-settings{grid-template-columns:repeat(2,1fr)!important}}
 
+
+/* ===== v0.9.3 input/result/bottom-nav ===== */
+.result-toggle{display:grid;grid-template-columns:1fr 1fr;gap:9px}.result-btn{height:48px;border:1.5px solid #d3dae5;background:#fff;color:#596273;border-radius:10px;font-weight:900;font-size:15px}.result-btn span{margin-right:5px}.result-btn.hit-choice.selected{background:#eaf9ef;border-color:#22a94f;color:#16813c;box-shadow:0 0 0 1px rgba(34,169,79,.08)}.result-btn.miss-choice.selected{background:#fff0f0;border-color:#ef3d3d;color:#d92323;box-shadow:0 0 0 1px rgba(239,61,61,.08)}
+.continue-button{width:100%;height:46px;margin-top:8px;border:1.5px solid #075bd2;background:#fff;color:#075bd2;border-radius:10px;font-weight:900;font-size:15px}.bottom-nav{min-height:88px;border-top:1px solid #e3e8f0;box-shadow:0 -5px 20px rgba(14,41,77,.08);padding:5px 4px env(safe-area-inset-bottom);align-items:center}.nav-btn{position:relative;min-height:72px;border-radius:14px;font-size:11px;font-weight:700}.nav-icon{height:34px;display:grid;place-items:center!important;font-size:25px!important;margin:0 auto 2px!important}.nav-btn[data-page="inputPage"] .nav-icon{width:54px;height:54px;margin:-25px auto 2px!important;border-radius:50%;background:#075bd2;color:#fff;font-size:34px!important;box-shadow:0 5px 14px rgba(7,91,210,.3)}.nav-btn[data-page="inputPage"]{padding-top:20px;color:#596579}.nav-btn[data-page="inputPage"].active{color:#075bd2}.nav-btn.active:not([data-page="inputPage"]){color:#075bd2}.nav-btn.active:not([data-page="inputPage"]) .nav-icon{font-weight:900}
 </style>
 </head>
 
@@ -832,9 +836,9 @@ header{
 
       <div class="form-group">
         <label class="icon-label"><span class="field-icon blue">♛</span>結果</label>
-        <div class="result-toggle" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <button type="button" class="secondary-button" style="color:#16813c" onclick="document.getElementById('returnAmount').focus()">◎ 的中</button>
-          <button type="button" class="secondary-button" onclick="setMoney('returnAmount',0)">× 不的中</button>
+        <div class="result-toggle">
+          <button id="hitBtn" type="button" class="result-btn hit-choice" onclick="setResultChoice(true)"><span>◎</span> 的中</button>
+          <button id="missBtn" type="button" class="result-btn miss-choice" onclick="setResultChoice(false)"><span>×</span> 不的中</button>
         </div>
       </div>
 
@@ -854,7 +858,8 @@ header{
       <button type="button" class="premium-lock" onclick="showPremiumInfo()">
         <span>🔒</span><div><strong>詳細入力（Premium）</strong><small>舟券種・買い目・進入・天候/風・グレード・決まり手</small></div><b>›</b>
       </button>
-      <button id="saveButton" class="add-button" onclick="saveRace()">保存する</button>
+      <button id="saveButton" class="add-button" onclick="saveRace(false)">保存する</button>
+      <button id="continueButton" class="continue-button" onclick="saveRace(true)">続けて入力</button>
     </div>
   </section>
 
@@ -931,7 +936,7 @@ header{
       <div style="height:18px"></div>
 
       <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 0.9.2<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <div class="helper">Version 0.9.3<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -953,7 +958,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 0.9.2</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 0.9.3</div>
     </div>
   </section>
 
@@ -1225,6 +1230,10 @@ function removeSelectedImage(){
   document.getElementById("removeImageBtn").style.display="none";
 }
 
+let selectedResult=null;
+function setResultChoice(hit){ selectedResult=hit; document.getElementById("hitBtn")?.classList.toggle("selected",hit===true); document.getElementById("missBtn")?.classList.toggle("selected",hit===false); if(hit===false){document.getElementById("returnAmount").value=0;autoReturnEnabled=false;} else {document.getElementById("returnAmount").focus();} }
+function clearResultChoice(){selectedResult=null;document.getElementById("hitBtn")?.classList.remove("selected");document.getElementById("missBtn")?.classList.remove("selected");}
+
 function resetForm(){
   editingId=null;
   document.getElementById("inputTitle").textContent="収支を入力";
@@ -1240,6 +1249,7 @@ function resetForm(){
   document.getElementById("place").selectedIndex=0;
   setSelectedRace(1);
   removeSelectedImage();
+  clearResultChoice();
 }
 
 function openNewInput(navButton){
@@ -1251,7 +1261,7 @@ function cancelEdit(){
   openNewInput(document.querySelector('[data-page="inputPage"]'));
 }
 
-function saveRace(){
+function saveRace(continueInput=false){
   const date=document.getElementById("date").value;
   const place=document.getElementById("place").value;
   const bet=Number(document.getElementById("bet").value);
@@ -1281,7 +1291,7 @@ function saveRace(){
       date,place,race:selectedRace,bet,
       returnAmount:ret,
       profit:ret-bet,
-      hit:ret>0,
+      hit:selectedResult===null ? ret>0 : selectedResult,
       memo,
       odds,
       image:selectedImage
@@ -1292,7 +1302,7 @@ function saveRace(){
       date,place,race:selectedRace,bet,
       returnAmount:ret,
       profit:ret-bet,
-      hit:ret>0,
+      hit:selectedResult===null ? ret>0 : selectedResult,
       memo,
       odds,
       image:selectedImage
@@ -1309,12 +1319,21 @@ function saveRace(){
   document.getElementById("successMessage").style.display="block";
   setTimeout(()=>document.getElementById("successMessage").style.display="none",1400);
 
+  const keepDate=date, keepPlace=place, nextRace=Math.min(12,selectedRace+1);
   resetForm();
   updateFirstGuide();
-updateStorageStatus();
-updateBackupStatus();
-refresh();
-  showPage("homePage",document.querySelector('[data-page="homePage"]'));
+  updateStorageStatus();
+  updateBackupStatus();
+  refresh();
+  if(continueInput){
+    document.getElementById("date").value=keepDate;
+    document.getElementById("place").value=keepPlace;
+    setSelectedRace(nextRace);
+    showPage("inputPage",document.querySelector('[data-page="inputPage"]'));
+    window.scrollTo({top:0,behavior:"smooth"});
+  }else{
+    showPage("homePage",document.querySelector('[data-page="homePage"]'));
+  }
 }
 
 function editRace(id){
@@ -1332,6 +1351,7 @@ function editRace(id){
   document.getElementById("odds").value=r.odds||"";
   autoReturnEnabled=false;
   document.getElementById("memo").value=r.memo||"";
+  setResultChoice(Boolean(r.hit));
   setSelectedRace(Number(r.race)||1);
   selectedImage=r.image||"";
   if(selectedImage) showImagePreview(selectedImage);
