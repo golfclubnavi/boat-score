@@ -871,6 +871,31 @@ header{
 .switch input:checked+span{background:#0b67df}.switch input:checked+span:after{transform:translateX(18px)}
 .setting-select{width:100%;border:1px solid #ccd7e5;border-radius:10px;padding:10px;background:#fff}
 
+
+/* ===== BOAT SCORE RC6 settings sub-pages ===== */
+.settings-page-head{
+  display:grid;
+  grid-template-columns:72px 1fr 72px;
+  align-items:center;
+  margin:0 0 12px;
+  min-height:44px;
+}
+.settings-page-head button{
+  justify-self:start;
+  border:0;
+  background:transparent;
+  color:#075bd2;
+  font-weight:800;
+  font-size:14px;
+  padding:8px 2px;
+}
+.settings-page-head strong{
+  text-align:center;
+  font-size:17px;
+  color:#172033;
+}
+.settings-page-head span{display:block}
+
 </style>
 <style id="rc3styles">
 .analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style></head>
@@ -1066,113 +1091,124 @@ header{
   <section id="settingsPage" class="page">
   <div class="card">
     <div class="section-title"><span>設定</span></div>
-
     <div class="settings-list">
-      <button class="settings-row" onclick="toggleSettingsPanel('raceSettingsPanel')">
+      <button class="settings-row" onclick="showPage('raceSettingsPage')">
         <span class="sicon blue">★</span>
         <span><strong>レース設定</strong><small id="settingsFavSummary">お気に入り・初期表示</small></span><b>›</b>
       </button>
-      <button class="settings-row" onclick="toggleSettingsPanel('inputSettingsPanel')">
+      <button class="settings-row" onclick="showPage('inputSettingsPage')">
         <span class="sicon green">⚙</span>
         <span><strong>入力設定</strong><small>保存後の動作・自動計算</small></span><b>›</b>
       </button>
-      <button class="settings-row" onclick="toggleSettingsPanel('displaySettingsPanel')">
+      <button class="settings-row" onclick="showPage('displaySettingsPage')">
         <span class="sicon purple">◈</span>
         <span><strong>表示設定</strong><small>万舟表示・金額表示</small></span><b>›</b>
       </button>
-      <button class="settings-row" onclick="toggleSettingsPanel('dataSettingsPanel')">
+      <button class="settings-row" onclick="showPage('dataSettingsPage')">
         <span class="sicon orange">▣</span>
         <span><strong>データ管理</strong><small>バックアップ・復元</small></span><b>›</b>
       </button>
-      <button class="settings-row" onclick="toggleSettingsPanel('premiumSettingsPanel')">
+      <button class="settings-row" onclick="showPage('premiumSettingsPage')">
         <span class="sicon gold">♛</span>
         <span><strong>Premium</strong><small>詳細入力・高度分析</small></span><b>›</b>
       </button>
-      <button class="settings-row" onclick="toggleSettingsPanel('appInfoPanel')">
+      <button class="settings-row" onclick="showPage('appInfoSettingsPage')">
         <span class="sicon gray">i</span>
         <span><strong>アプリ情報</strong><small>規約・プライバシー・お問い合わせ</small></span><b>›</b>
       </button>
     </div>
+  </div>
+</section>
+<section id="raceSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>レース設定</strong><span></span></div>
+  <div class="card">
+    <button class="secondary-button" onclick="openFavoriteModal()">★ お気に入りのレース場</button>
+    <div class="helper" id="favoriteSummarySettings" style="margin:8px 2px 16px">未選択</div>
+    <label class="helper">初期表示するレース場</label>
+    <select id="defaultPlaceSetting" class="setting-select" onchange="saveAppSettings()">
+      <option value="">お気に入り先頭を使う</option>
+      <option>桐生</option><option>戸田</option><option>江戸川</option><option>平和島</option>
+      <option>多摩川</option><option>浜名湖</option><option>蒲郡</option><option>常滑</option>
+      <option>津</option><option>三国</option><option>びわこ</option><option>住之江</option>
+      <option>尼崎</option><option>鳴門</option><option>丸亀</option><option>児島</option>
+      <option>宮島</option><option>徳山</option><option>下関</option><option>若松</option>
+      <option>芦屋</option><option>福岡</option><option>唐津</option><option>大村</option>
+    </select>
+  </div>
+</section>
 
-    <div id="raceSettingsPanel" class="settings-panel">
-      <div class="section-title"><span>レース設定</span></div>
-      <button class="secondary-button" onclick="openFavoriteModal()">★ お気に入りのレース場</button>
-      <div class="helper" id="favoriteSummarySettings" style="margin:7px 2px 12px">未選択</div>
-      <label class="helper">初期表示するレース場</label>
-      <select id="defaultPlaceSetting" class="setting-select" onchange="saveAppSettings()">
-        <option value="">お気に入り先頭を使う</option>
-        <option>桐生</option><option>戸田</option><option>江戸川</option><option>平和島</option>
-        <option>多摩川</option><option>浜名湖</option><option>蒲郡</option><option>常滑</option>
-        <option>津</option><option>三国</option><option>びわこ</option><option>住之江</option>
-        <option>尼崎</option><option>鳴門</option><option>丸亀</option><option>児島</option>
-        <option>宮島</option><option>徳山</option><option>下関</option><option>若松</option>
-        <option>芦屋</option><option>福岡</option><option>唐津</option><option>大村</option>
-      </select>
+<section id="inputSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>入力設定</strong><span></span></div>
+  <div class="card">
+    <div class="setting-toggle">
+      <span><strong>保存後に次のRへ進む</strong><small>続けて入力するときにRを自動で+1します。</small></span>
+      <label class="switch"><input id="settingNextRace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
     </div>
-
-    <div id="inputSettingsPanel" class="settings-panel">
-      <div class="section-title"><span>入力設定</span></div>
-      <div class="setting-toggle">
-        <span><strong>保存後に次のRへ進む</strong><small>続けて入力するときにRを自動で+1します。</small></span>
-        <label class="switch"><input id="settingNextRace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-      </div>
-      <div class="setting-toggle">
-        <span><strong>払戻を自動計算</strong><small>的中投資額 × オッズで払戻額を自動入力。</small></span>
-        <label class="switch"><input id="settingAutoReturn" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-      </div>
-      <div class="setting-toggle">
-        <span><strong>前回のレース場を引き継ぐ</strong><small>連続入力時にレース場を維持します。</small></span>
-        <label class="switch"><input id="settingKeepPlace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-      </div>
+    <div class="setting-toggle">
+      <span><strong>払戻を自動計算</strong><small>的中投資額 × オッズで払戻額を自動入力。</small></span>
+      <label class="switch"><input id="settingAutoReturn" type="checkbox" onchange="saveAppSettings()"><span></span></label>
     </div>
-
-    <div id="displaySettingsPanel" class="settings-panel">
-      <div class="section-title"><span>表示設定</span></div>
-      <div class="setting-toggle">
-        <span><strong>⭐ 万舟バッジ</strong><small>100倍以上の的中記録に表示します。</small></span>
-        <label class="switch"><input id="settingManshu" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-      </div>
-      <div class="setting-toggle">
-        <span><strong>プラス金額に「+」を表示</strong><small>+12,500円のように表示します。</small></span>
-        <label class="switch"><input id="settingPlusSign" type="checkbox" onchange="saveAppSettings()"><span></span></label>
-      </div>
-    </div>
-
-    <div id="dataSettingsPanel" class="settings-panel">
-      <div class="section-title"><span>データ管理</span></div>
-      <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
-      <div class="helper" id="lastBackupText" style="margin:7px 2px 12px">まだバックアップ履歴がありません</div>
-      <label class="secondary-button" style="display:block;text-align:center">
-        バックアップから復元
-        <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
-      </label>
-      <div class="helper" style="margin-top:7px">復元時に「追加」または「置き換え」を選べます。</div>
-      <div style="height:12px"></div>
-      <div class="safety-card">
-        <strong>データ使用量</strong>
-        <div class="storage-meter"><div id="storageBar" style="width:0%"></div></div>
-        <div id="storageText">使用量を確認中…</div>
-      </div>
-      <div style="height:12px"></div>
-      <button id="restoreSafetyBtn" class="secondary-button" style="display:none;margin-bottom:10px" onclick="restoreSafetyBackup()">直前の復元前データに戻す</button>
-      <button class="danger-button" onclick="clearAllData()">全データを削除</button>
-    </div>
-
-    <div id="premiumSettingsPanel" class="settings-panel">
-      <div class="section-title"><span>Premium</span></div>
-      <div class="notice">Premiumは現在準備中です。詳細入力・コース別分析・気象条件分析などを予定しています。</div>
-      <div style="height:10px"></div>
-      <button class="secondary-button" onclick="showPremiumInfo()">Premium機能を見る</button>
-    </div>
-
-    <div id="appInfoPanel" class="settings-panel">
-      <div class="section-title"><span>アプリ情報</span></div>
-      <div class="helper">BOAT SCORE<br>Version 1.0 RC5</div>
-      <div style="height:10px"></div>
-      <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
+    <div class="setting-toggle">
+      <span><strong>前回のレース場を引き継ぐ</strong><small>連続入力時にレース場を維持します。</small></span>
+      <label class="switch"><input id="settingKeepPlace" type="checkbox" onchange="saveAppSettings()"><span></span></label>
     </div>
   </div>
 </section>
+
+<section id="displaySettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>表示設定</strong><span></span></div>
+  <div class="card">
+    <div class="setting-toggle">
+      <span><strong>⭐ 万舟バッジ</strong><small>100倍以上の的中記録に表示します。</small></span>
+      <label class="switch"><input id="settingManshu" type="checkbox" onchange="saveAppSettings()"><span></span></label>
+    </div>
+    <div class="setting-toggle">
+      <span><strong>プラス金額に「+」を表示</strong><small>+12,500円のように表示します。</small></span>
+      <label class="switch"><input id="settingPlusSign" type="checkbox" onchange="saveAppSettings()"><span></span></label>
+    </div>
+  </div>
+</section>
+
+<section id="dataSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>データ管理</strong><span></span></div>
+  <div class="card">
+    <button class="secondary-button" onclick="exportBackup()">バックアップを書き出す</button>
+    <div class="helper" id="lastBackupText" style="margin:8px 2px 14px">まだバックアップ履歴がありません</div>
+    <label class="secondary-button" style="display:block;text-align:center">
+      バックアップから復元
+      <input id="restoreFile" type="file" accept="application/json,.json" style="display:none">
+    </label>
+    <div class="helper" style="margin-top:8px">復元時に「追加」または「置き換え」を選べます。</div>
+    <div style="height:14px"></div>
+    <div class="safety-card">
+      <strong>データ使用量</strong>
+      <div class="storage-meter"><div id="storageBar" style="width:0%"></div></div>
+      <div id="storageText">使用量を確認中…</div>
+    </div>
+    <div style="height:14px"></div>
+    <button id="restoreSafetyBtn" class="secondary-button" style="display:none;margin-bottom:10px" onclick="restoreSafetyBackup()">直前の復元前データに戻す</button>
+    <button class="danger-button" onclick="clearAllData()">全データを削除</button>
+  </div>
+</section>
+
+<section id="premiumSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>Premium</strong><span></span></div>
+  <div class="card">
+    <div class="notice">Premiumは現在準備中です。詳細入力・コース別分析・気象条件分析などを予定しています。</div>
+    <div style="height:12px"></div>
+    <button class="secondary-button" onclick="showPremiumInfo()">Premium機能を見る</button>
+  </div>
+</section>
+
+<section id="appInfoSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
+  <div class="card">
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC6</div>
+    <div style="height:12px"></div>
+    <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
+  </div>
+</section>
+
 
   <section id="infoPage" class="page">
     <div class="card">
@@ -1192,7 +1228,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC5</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC6</div>
     </div>
   </section>
 
@@ -2050,6 +2086,15 @@ OK：現在のデータに追加
 
 
 function showPage(id,navButton){
+  const settingsSubPages=["raceSettingsPage","inputSettingsPage","displaySettingsPage","dataSettingsPage","premiumSettingsPage","appInfoSettingsPage"];
+  if(id==="settingsPage" || settingsSubPages.includes(id)){
+    setTimeout(()=>{
+      loadAppSettings();
+      updateSettingsFavoriteSummary();
+      updateStorageStatus();
+      updateBackupStatus();
+    },0);
+  }
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
@@ -2116,9 +2161,7 @@ function loadAppSettings(){
   const dp=document.getElementById("defaultPlaceSetting");if(dp)dp.value=s.defaultPlace||"";
   autoReturnEnabled=s.autoReturn;updateSettingsFavoriteSummary();
 }
-function toggleSettingsPanel(id){
-  document.querySelectorAll(".settings-panel").forEach(p=>p.classList.toggle("show",p.id===id&&!p.classList.contains("show")));
-}
+
 function updateSettingsFavoriteSummary(){
   const fav=getFavoritePlaces(), text=fav.length?`${fav.length}場：${fav.slice(0,4).join("・")}${fav.length>4?"…":""}`:"未選択";
   const a=document.getElementById("settingsFavSummary"),b=document.getElementById("favoriteSummarySettings");
