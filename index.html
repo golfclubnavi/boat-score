@@ -930,7 +930,22 @@ header{
 
 </style>
 <style id="rc3styles">
-.analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style></head>
+.analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style><style id="rc8style">
+.odds-band-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0 12px}
+.odds-band-card{min-width:0;border:1px solid #e0e8f2;border-radius:14px;padding:10px 8px;background:#fff}
+.odds-band-card.favorite{background:linear-gradient(180deg,#f6fbff,#fff);border-color:#d7e8fb}
+.odds-band-card.middle{background:linear-gradient(180deg,#fffaf2,#fff);border-color:#f0e1c5}
+.odds-band-card.long{background:linear-gradient(180deg,#fff7f5,#fff);border-color:#f0dcd7}
+.odds-band-card small{display:block;font-size:10px;font-weight:900;color:#52647b}
+.odds-band-card strong{display:block;font-size:11px;margin:4px 0 9px;color:#17263d;white-space:nowrap}
+.odds-band-card span{display:block;font-size:11px;font-weight:900;color:#075fcf}
+.odds-band-card em{display:block;font-size:8px;font-style:normal;color:#7e8a9b;margin-top:4px;line-height:1.4}
+.premium-analysis.teaser{margin-top:12px;background:linear-gradient(135deg,#102f61,#0b4e9b)}
+@media(max-width:350px){
+  .odds-band-grid{grid-template-columns:1fr}
+  .odds-band-card{display:grid;grid-template-columns:70px 1fr;column-gap:8px;align-items:center}
+}
+</style></head>
 
 <body>
 
@@ -959,21 +974,7 @@ header{
       <div class="bs-best-card day"><span>🏆</span><small>最高日収支</small><strong id="bestDayProfit">0円</strong><em id="bestDaySub">記録なし</em></div>
     </div>
 
-    <div class="bs-section-head insight-title">
-      <div><small>MY PATTERN</small><strong>あなたの舟券傾向</strong></div>
-      <span class="bs-auto-badge">自動分析</span>
-    </div>
-    <div class="bs-pattern-grid">
-      <div class="bs-pattern-card good">
-        <div class="bs-pattern-icon">↗</div>
-        <div><small>得意パターン</small><strong id="homeStrongPattern">データ収集中</strong><em id="homeStrongSub">記録が増えると分析します</em></div>
       </div>
-      <div class="bs-pattern-card weak">
-        <div class="bs-pattern-icon">↘</div>
-        <div><small>苦手パターン</small><strong id="homeWeakPattern">データ収集中</strong><em id="homeWeakSub">記録が増えると分析します</em></div>
-      </div>
-    </div>
-  </div>
 
     <div id="firstGuide" class="first-guide">
       <strong>BOAT SCOREへようこそ</strong><br>「＋ 収支を入力」から記録すると、収支・回収率・分析が自動更新されます。
@@ -1130,15 +1131,50 @@ header{
 
   <section id="analysisPage" class="page">
   <div class="card bs-analysis-insight">
-    <div class="section-title"><span>自分の強み・弱み</span><b class="bs-auto-badge">自動分析</b></div>
+    <div class="section-title"><span>オッズ帯分析</span><b class="bs-auto-badge">自動分析</b></div>
+
+    <div class="odds-band-grid">
+      <div class="odds-band-card favorite">
+        <small>本命</small><strong>0〜29.9倍</strong>
+        <span id="oddsFavRate">回収率 0%</span>
+        <em id="oddsFavDetail">0戦 / 的中率 0%</em>
+      </div>
+      <div class="odds-band-card middle">
+        <small>中穴</small><strong>30〜79.9倍</strong>
+        <span id="oddsMidRate">回収率 0%</span>
+        <em id="oddsMidDetail">0戦 / 的中率 0%</em>
+      </div>
+      <div class="odds-band-card long">
+        <small>大穴</small><strong>80倍〜</strong>
+        <span id="oddsLongRate">回収率 0%</span>
+        <em id="oddsLongDetail">0戦 / 的中率 0%</em>
+      </div>
+    </div>
+
     <div class="bs-analysis-pattern good">
-      <span>↗</span><div><small>得意</small><strong id="analysisStrongPattern">データ収集中</strong><em id="analysisStrongSub">記録が増えると分析します</em></div>
+      <span>↗</span>
+      <div>
+        <small>得意なオッズ帯</small>
+        <strong id="analysisStrongPattern">データ収集中</strong>
+        <em id="analysisStrongSub">同じオッズ帯の記録が2件以上で分析</em>
+      </div>
     </div>
+
     <div class="bs-analysis-pattern weak">
-      <span>↘</span><div><small>苦手</small><strong id="analysisWeakPattern">データ収集中</strong><em id="analysisWeakSub">記録が増えると分析します</em></div>
+      <span>↘</span>
+      <div>
+        <small>苦手なオッズ帯</small>
+        <strong id="analysisWeakPattern">データ収集中</strong>
+        <em id="analysisWeakSub">同じオッズ帯の記録が2件以上で分析</em>
+      </div>
     </div>
-    <div class="helper bs-analysis-note">※ 収支記録からレース場・時間帯（1〜6R / 7〜12R）の傾向を自動集計します。</div>
+
+    <div class="premium-analysis teaser">
+      <strong>♛ Premium 詳細分析</strong>
+      <small>レース場 × R帯・コース・決まり手・舟券種・風などを組み合わせて、自分の勝ちパターンをさらに深掘り。</small>
+    </div>
   </div>
+
 <div class="analysis-upgrade card">
 <div class="analysis-period-tabs"><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
 <div class="section-title"><span>収支推移</span></div><div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
@@ -1273,7 +1309,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC7</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC8</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1298,7 +1334,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC7</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC8</div>
     </div>
   </section>
 
@@ -1326,7 +1362,7 @@ header{
 <div class="favorite-modal-card premium-sheet"><div class="favorite-modal-head"><strong>BOAT SCORE Premium</strong><button onclick="closePremiumModal()">×</button></div>
 <div class="premium-lead">詳細データを記録して、自分の得意パターンを分析できる予定です。</div>
 <div class="premium-grid"><span>🎟 舟券種</span><span>🔢 買い目</span><span>🧮 購入点数</span><span>🚤 進入</span><span>🏁 勝ったコース 1〜6</span><span>🏆 決まり手</span><span>⏱ 展示タイム</span><span>⚡ スタート展示</span><span>🏅 グレード</span><span>☀️ 天候</span><span>💨 風向・風速</span><span>🌊 波高</span></div>
-<div class="premium-analysis"><strong>Premium分析予定</strong><small>コース別・舟券種別・決まり手別・風速別・レース場×コース別の回収率や収支を分析</small></div>
+<div class="premium-analysis"><strong>Premium分析予定</strong><small>レース場×R帯・コース・舟券種・決まり手・風などを組み合わせた詳細分析</small></div>
 <button class="add-button" onclick="closePremiumModal()">確認しました</button></div></div>
 
 <div id="favoriteModal" class="favorite-modal" onclick="if(event.target===this)closeFavoriteModal()">
@@ -2202,32 +2238,18 @@ function refresh(){
 
 
 
-function bsGroupStats(records,keyFn){
-  const map=new Map();
-  records.forEach(r=>{
-    const key=keyFn(r);
-    if(!key) return;
-    if(!map.has(key)) map.set(key,[]);
-    map.get(key).push(r);
-  });
-  return [...map.entries()].map(([key,list])=>{
-    const s=calcStats(list);
-    return {key,count:list.length,...s};
-  });
+
+function bsOddsBand(r){
+  const o=Number(r.odds);
+  if(!Number.isFinite(o) || o<=0) return "";
+  if(o<30) return "本命";
+  if(o<80) return "中穴";
+  return "大穴";
 }
 
-function bsRaceBand(r){
-  const n=Number(r.race)||0;
-  if(!n) return "";
-  return n<=6 ? "1〜6R" : "7〜12R";
-}
-
-function bsPatternCandidates(records){
-  const candidates=[];
-  bsGroupStats(records,r=>r.place).forEach(x=>candidates.push({...x,type:"場"}));
-  bsGroupStats(records,r=>r.place&&r.race ? `${r.place} × ${bsRaceBand(r)}` : "").forEach(x=>candidates.push({...x,type:"場×時間帯"}));
-  bsGroupStats(records,r=>bsRaceBand(r)).forEach(x=>candidates.push({...x,type:"時間帯"}));
-  return candidates.filter(x=>x.count>=2 && x.bet>0);
+function bsBandStats(records,band){
+  const list=records.filter(r=>bsOddsBand(r)===band);
+  return {list,stats:calcStats(list)};
 }
 
 function renderPersonalInsights(){
@@ -2238,40 +2260,60 @@ function renderPersonalInsights(){
     return d.getFullYear()===y && d.getMonth()===m;
   });
 
-  const set=(id,text)=>{const e=document.getElementById(id);if(e)e.textContent=text};
+  const set=(id,text)=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=text;
+  };
+
+  // Home: monthly best only
   set("bestMonthLabel",`${m+1}月`);
 
   const payout=[...monthRecords].sort((a,b)=>Number(b.returnAmount)-Number(a.returnAmount))[0];
   set("bestPayout",payout&&Number(payout.returnAmount)>0?formatMoney(payout.returnAmount):"0円");
   set("bestPayoutSub",payout&&Number(payout.returnAmount)>0?`${payout.place||""} ${payout.race||""}R`:"記録なし");
 
-  const odds=[...monthRecords].filter(r=>Number(r.returnAmount)>0).sort((a,b)=>Number(b.odds||0)-Number(a.odds||0))[0];
-  set("bestOdds",odds&&Number(odds.odds)>0?`${Number(odds.odds).toFixed(1)}倍`:"0倍");
-  set("bestOddsSub",odds&&Number(odds.odds)>0?(Number(odds.odds)>=100?"⭐ 万舟":"的中記録"):"記録なし");
+  const maxOdds=[...monthRecords]
+    .filter(r=>Number(r.returnAmount)>0)
+    .sort((a,b)=>Number(b.odds||0)-Number(a.odds||0))[0];
+  set("bestOdds",maxOdds&&Number(maxOdds.odds)>0?`${Number(maxOdds.odds).toFixed(1)}倍`:"0倍");
+  set("bestOddsSub",maxOdds&&Number(maxOdds.odds)>0?(Number(maxOdds.odds)>=100?"⭐ 万舟":"的中記録"):"記録なし");
 
   const dayMap=new Map();
   monthRecords.forEach(r=>{
-    const v=Number(r.returnAmount)-Number(r.bet);
-    dayMap.set(r.date,(dayMap.get(r.date)||0)+v);
+    const profit=Number(r.returnAmount)-Number(r.bet);
+    dayMap.set(r.date,(dayMap.get(r.date)||0)+profit);
   });
   const bestDay=[...dayMap.entries()].sort((a,b)=>b[1]-a[1])[0];
   set("bestDayProfit",bestDay?signedMoney(bestDay[1]):"0円");
   set("bestDaySub",bestDay?`${Number(bestDay[0].split("-")[2])}日`:"記録なし");
 
-  // Use recent/all data for patterns. Require at least two records in a segment.
-  const cands=bsPatternCandidates(all);
-  const strong=[...cands].filter(x=>x.profit>0).sort((a,b)=>b.rate-a.rate || b.profit-a.profit)[0];
-  const weak=[...cands].filter(x=>x.profit<0).sort((a,b)=>a.rate-b.rate || a.profit-b.profit)[0];
+  // Free analysis: odds bands
+  const configs=[
+    {name:"本命",rateId:"oddsFavRate",detailId:"oddsFavDetail"},
+    {name:"中穴",rateId:"oddsMidRate",detailId:"oddsMidDetail"},
+    {name:"大穴",rateId:"oddsLongRate",detailId:"oddsLongDetail"}
+  ];
 
-  const strongName=strong?strong.key:"データ収集中";
-  const strongSub=strong?`回収率 ${strong.rate.toFixed(1)}% ・ ${strong.count}件`:"同じ条件の記録が2件以上で分析";
-  const weakName=weak?weak.key:"データ収集中";
-  const weakSub=weak?`回収率 ${weak.rate.toFixed(1)}% ・ ${weak.count}件`:"同じ条件の記録が2件以上で分析";
+  const bandRows=configs.map(c=>{
+    const data=bsBandStats(all,c.name);
+    return {...c,...data};
+  });
 
-  set("homeStrongPattern",strongName); set("homeStrongSub",strongSub);
-  set("homeWeakPattern",weakName); set("homeWeakSub",weakSub);
-  set("analysisStrongPattern",strongName); set("analysisStrongSub",strongSub);
-  set("analysisWeakPattern",weakName); set("analysisWeakSub",weakSub);
+  bandRows.forEach(b=>{
+    set(b.rateId,`回収率 ${b.stats.rate.toFixed(1)}%`);
+    set(b.detailId,`${b.list.length}戦 / 的中率 ${b.stats.hitRate.toFixed(1)}% / ${signedMoney(b.stats.profit)}`);
+  });
+
+  const eligible=bandRows.filter(b=>b.list.length>=2 && b.stats.bet>0);
+
+  const strong=[...eligible].sort((a,b)=>b.stats.rate-a.stats.rate || b.stats.profit-a.stats.profit)[0];
+  const weak=[...eligible].sort((a,b)=>a.stats.rate-b.stats.rate || a.stats.profit-b.stats.profit)[0];
+
+  set("analysisStrongPattern",strong?strong.name:"データ収集中");
+  set("analysisStrongSub",strong?`回収率 ${strong.stats.rate.toFixed(1)}% ・ ${strong.list.length}戦`:"同じオッズ帯の記録が2件以上で分析");
+
+  set("analysisWeakPattern",weak?weak.name:"データ収集中");
+  set("analysisWeakSub",weak?`回収率 ${weak.stats.rate.toFixed(1)}% ・ ${weak.list.length}戦`:"同じオッズ帯の記録が2件以上で分析");
 }
 
 const SETTINGS_KEY="boatScoreSettings";
