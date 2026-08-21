@@ -945,6 +945,16 @@ header{
   .odds-band-grid{grid-template-columns:1fr}
   .odds-band-card{display:grid;grid-template-columns:70px 1fr;column-gap:8px;align-items:center}
 }
+</style><style id="rc9guide">
+.guide-hero{background:linear-gradient(135deg,#073f91,#0871e8);color:#fff;border-radius:20px;padding:20px 17px;margin-bottom:12px;box-shadow:0 9px 24px rgba(7,74,159,.2)}
+.guide-hero small{font-size:9px;font-weight:900;letter-spacing:.15em;opacity:.75}.guide-hero strong{display:block;font-size:21px;line-height:1.35;margin-top:6px}.guide-hero p{font-size:10px;line-height:1.6;opacity:.83;margin:8px 0 0}
+.guide-card{background:#fff;border:1px solid #dfe7f1;border-radius:17px;padding:14px;margin-bottom:10px;box-shadow:0 5px 15px rgba(25,58,99,.05)}
+.guide-title{display:flex;align-items:center;gap:10px;margin-bottom:10px}.guide-title>span{width:34px;height:34px;border-radius:10px;background:#edf5ff;display:grid;place-items:center;font-size:16px}.guide-title small{display:block;font-size:8px;color:#7c8ba0;font-weight:900;letter-spacing:.08em}.guide-title strong{display:block;font-size:14px;color:#17263d;margin-top:2px}
+.guide-text,.guide-steps{font-size:11px;line-height:1.75;color:#526176}.guide-steps{padding-left:22px;margin:0}.guide-steps li{padding:3px 0}.guide-tip{background:#eef8f3;color:#27724c;border-radius:10px;padding:9px 10px;font-size:9px;line-height:1.5;margin-top:10px}
+.guide-warning{background:#fff8e9;border:1px solid #f0dfb4;color:#755c24;border-radius:11px;padding:10px;font-size:9px;line-height:1.55;margin-top:11px}.guide-warning.danger{background:#fff2ef;border-color:#efd2ca;color:#934737}
+.guide-odds{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.guide-odds span{background:#f6f9fd;border:1px solid #e2e8f0;border-radius:10px;padding:8px 5px;text-align:center;font-size:8px;color:#6d7989}.guide-odds b{display:block;font-size:10px;color:#1e334e;margin-bottom:3px}
+.guide-choice{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}.guide-choice div{border:1px solid #dce6f2;border-radius:11px;padding:9px}.guide-choice b{display:block;color:#075fcf;font-size:11px}.guide-choice small{display:block;color:#718096;font-size:8px;line-height:1.5;margin-top:4px}
+.premium-guide{background:linear-gradient(180deg,#fbfcff,#f6f9ff);border-color:#dce5f3}
 </style></head>
 
 <body>
@@ -1198,6 +1208,10 @@ header{
   <div class="card">
     <div class="section-title"><span>設定</span></div>
     <div class="settings-list">
+      <button class="settings-row" onclick="showPage('guidePage')">
+        <span class="sicon blue">?</span>
+        <span><strong>BOAT SCOREの使い方</strong><small>入力・分析・バックアップの説明</small></span><b>›</b>
+      </button>
       <button class="settings-row" onclick="showPage('raceSettingsPage')">
         <span class="sicon blue">★</span>
         <span><strong>レース設定</strong><small id="settingsFavSummary">お気に入り・初期表示</small></span><b>›</b>
@@ -1225,6 +1239,81 @@ header{
     </div>
   </div>
 </section>
+<section id="guidePage" class="page">
+  <div class="settings-page-head">
+    <button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button>
+    <strong>使い方</strong><span></span>
+  </div>
+
+  <div class="guide-hero">
+    <small>BOAT SCORE GUIDE</small>
+    <strong>自分の舟券データを<br>記録して、分析する。</strong>
+    <p>基本操作からバックアップまで、このページで確認できます。</p>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-title"><span>✍️</span><div><small>01</small><strong>収支を記録する</strong></div></div>
+    <ol class="guide-steps">
+      <li><b>収支入力</b>を開き、日付・レース場・Rを選択</li>
+      <li><b>総投資額</b>を入力</li>
+      <li>的中した場合は<b>的中投資額 → オッズ</b>を入力</li>
+      <li>払戻額を確認して<b>保存</b></li>
+    </ol>
+    <div class="guide-tip">✓ 「続けて入力」を使うと、同じ日の次レースを素早く記録できます。</div>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-title"><span>📅</span><div><small>02</small><strong>カレンダーで振り返る</strong></div></div>
+    <p class="guide-text">日ごとの収支を確認できます。日付をタップすると、その日に入力したレースの詳細を表示します。</p>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-title"><span>📈</span><div><small>03</small><strong>分析を見る</strong></div></div>
+    <p class="guide-text">月間・年間の収支推移に加えて、本命・中穴・大穴のオッズ帯ごとの回収率、的中率、収支を比較できます。</p>
+    <div class="guide-odds"><span><b>本命</b>0〜29.9倍</span><span><b>中穴</b>30〜79.9倍</span><span><b>大穴</b>80倍〜</span></div>
+    <div class="guide-tip">⭐ 100倍以上の的中は「万舟」として自動表示されます。</div>
+  </div>
+
+  <div class="guide-card premium-guide">
+    <div class="guide-title"><span>♛</span><div><small>PREMIUM</small><strong>詳細分析について</strong></div></div>
+    <p class="guide-text">Premiumでは、レース場×R帯・コース・舟券種・決まり手・風など、より細かな条件を組み合わせて分析できる予定です。</p>
+  </div>
+
+  <div class="guide-card backup-guide">
+    <div class="guide-title"><span>💾</span><div><small>04</small><strong>バックアップを取る</strong></div></div>
+    <ol class="guide-steps">
+      <li>設定から<b>データ管理</b>を開く</li>
+      <li><b>「バックアップを書き出す」</b>をタップ</li>
+      <li>作成されたJSONファイルを、iPhoneの<b>ファイル</b>など安全な場所へ保存</li>
+    </ol>
+    <div class="guide-warning"><strong>重要</strong><br>端末の故障・機種変更に備えて、定期的にバックアップを保存してください。</div>
+  </div>
+
+  <div class="guide-card restore-guide">
+    <div class="guide-title"><span>↻</span><div><small>05</small><strong>バックアップから復元する</strong></div></div>
+    <ol class="guide-steps">
+      <li>設定 → <b>データ管理</b>を開く</li>
+      <li><b>「バックアップから復元」</b>をタップ</li>
+      <li>保存してあるJSONファイルを選択</li>
+      <li><b>「追加」または「置き換え」</b>を選択</li>
+      <li>ホーム・カレンダーで記録が戻っているか確認</li>
+    </ol>
+    <div class="guide-choice"><div><b>追加</b><small>現在の記録を残したまま、バックアップの記録を追加</small></div><div><b>置き換え</b><small>現在の記録をバックアップ内容に置き換える</small></div></div>
+    <div class="guide-warning danger"><strong>⚠️ 「置き換え」に注意</strong><br>現在のデータが置き換わります。必要なら先に現在のバックアップを取ってください。</div>
+  </div>
+
+  <div class="guide-card">
+    <div class="guide-title"><span>📱</span><div><small>06</small><strong>機種変更するとき</strong></div></div>
+    <ol class="guide-steps">
+      <li>旧端末で最新のバックアップを書き出す</li>
+      <li>バックアップファイルを新端末へ移す</li>
+      <li>新端末でBOAT SCOREを開く</li>
+      <li>データ管理からバックアップを復元</li>
+      <li>記録件数やカレンダーを確認して完了</li>
+    </ol>
+  </div>
+</section>
+
 <section id="raceSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>レース設定</strong><span></span></div>
   <div class="card">
@@ -1309,7 +1398,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC8</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC9</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1334,7 +1423,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC8</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC9</div>
     </div>
   </section>
 
@@ -2192,7 +2281,7 @@ OK：現在のデータに追加
 
 
 function showPage(id,navButton){
-  const settingsSubPages=["raceSettingsPage","inputSettingsPage","displaySettingsPage","dataSettingsPage","premiumSettingsPage","appInfoSettingsPage"];
+  const settingsSubPages=["guidePage","raceSettingsPage","inputSettingsPage","displaySettingsPage","dataSettingsPage","premiumSettingsPage","appInfoSettingsPage"];
   if(id==="settingsPage" || settingsSubPages.includes(id)){
     setTimeout(()=>{
       loadAppSettings();
