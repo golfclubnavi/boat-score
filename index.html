@@ -807,7 +807,8 @@ header{
 }
 
 </style>
-</head>
+<style id="rc3styles">
+.analysis-period-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3fb;border-radius:12px;padding:3px;margin-bottom:16px}.analysis-period-tabs button{border:0;background:transparent;border-radius:10px;padding:10px;font-weight:800;color:#6a7890}.analysis-period-tabs button.active{background:#075bd2;color:#fff}.line-chart-wrap{height:210px;border:1px solid #e0e8f2;border-radius:14px;background:#f8fbff;padding:8px;margin-bottom:14px}.line-chart-wrap canvas{width:100%;height:100%}.analysis-kpi-grid,.analysis-variation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 18px}.analysis-kpi-grid>div,.analysis-variation-grid>div{background:#fff;border:1px solid #e0e8f2;border-radius:13px;padding:11px 8px}.analysis-kpi-grid small,.analysis-variation-grid small{display:block;color:#6c7a8d;font-size:10px}.analysis-kpi-grid strong,.analysis-variation-grid strong{display:block;font-size:16px;margin-top:7px}.analysis-variation-grid em{display:block;font-size:9px;font-style:normal;color:#78869a;margin-top:4px}.manshu-badge{display:inline-flex;background:#fff7d8;color:#8a6500;border:1px solid #f0d56a;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}.premium-lead{background:#edf5ff;border-radius:12px;padding:11px;font-size:12px;line-height:1.6;margin:10px 0}.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.premium-grid span{background:#fff;border:1px solid #dce6f2;border-radius:10px;padding:9px 7px;font-size:11px;font-weight:700}.premium-analysis{background:#092f68;color:#fff;border-radius:13px;padding:12px;margin:13px 0}.premium-analysis strong,.premium-analysis small{display:block}.premium-analysis small{opacity:.82;margin-top:5px}@media(max-width:390px){.analysis-kpi-grid,.analysis-variation-grid{grid-template-columns:repeat(2,1fr)}}</style></head>
 
 <body>
 
@@ -906,11 +907,6 @@ header{
       </div>
 
       <div class="form-group">
-        <label class="icon-label"><span class="field-icon blue">×</span>オッズ（倍）</label>
-        <input type="number" id="odds" inputmode="decimal" min="0" step="0.1" placeholder="例 6.6">
-      </div>
-
-      <div class="form-group">
         <label class="icon-label"><span class="field-icon green">￥</span>的中投資額</label>
         <input type="number" id="winningBet" inputmode="numeric" min="0" placeholder="例 4700">
         <div class="quick-money">
@@ -919,6 +915,11 @@ header{
           <button type="button" onclick="setMoney('winningBet',0);recalcReturnFromOdds()">0</button>
         </div>
         <div class="helper">的中した買い目に賭けた金額だけ入力します。的中投資額 × オッズで払戻を自動計算します。</div>
+      </div>
+
+      <div class="form-group">
+        <label class="icon-label"><span class="field-icon blue">×</span>オッズ（倍）</label>
+        <input type="number" id="odds" inputmode="decimal" min="0" step="0.1" placeholder="例 6.6">
       </div>
 
       <div class="form-group">
@@ -954,7 +955,7 @@ header{
       </div>
 
       <button type="button" class="premium-lock" onclick="showPremiumInfo()">
-        <span>🔒</span><div><strong>詳細入力（Premium）</strong><small>舟券種・買い目・進入・天候/風・グレード・決まり手</small></div><b>›</b>
+        <span>🔒</span><div><strong>詳細入力（Premium）</strong><small>舟券種・買い目・勝ったコース・決まり手・展示・気象条件など</small></div><b>›</b>
       </button>
       <button id="saveButton" class="add-button" onclick="saveRace(false)">保存する</button>
       <button id="continueButton" class="continue-button" onclick="saveRace(true)">続けて入力</button>
@@ -986,7 +987,11 @@ header{
   </section>
 
 
-  <section id="analysisPage" class="page">
+  <section id="analysisPage" class="page"><div class="analysis-upgrade card">
+<div class="analysis-period-tabs"><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
+<div class="section-title"><span>収支推移</span></div><div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
+<div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
+<div class="section-title"><span>分析バリエーション</span></div><div class="analysis-variation-grid"><div><small>得意な場</small><strong id="anaBestPlace">-</strong><em id="anaBestPlaceSub">記録なし</em></div><div><small>得意R</small><strong id="anaBestRace">-</strong><em id="anaBestRaceSub">記録なし</em></div><div><small>⭐ 万舟的中</small><strong id="anaManHits">0回</strong><em id="anaManReturn">総払戻 0円</em></div><div><small>曜日別BEST</small><strong id="anaBestWeekday">-</strong><em id="anaBestWeekdaySub">記録なし</em></div></div></div>
     <div class="card">
       <div class="section-title"><span>分析</span></div>
 
@@ -1034,7 +1039,7 @@ header{
       <div style="height:18px"></div>
 
       <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button><div style="height:18px"></div><div class="section-title"><span>BOAT SCORE</span></div>
-      <div class="helper">Version 1.0 RC2<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
+      <div class="helper">Version 1.0 RC3<br>収支・回収率・的中率を記録して、自分の傾向を分析するためのアプリです。</div>
     </div>
   </section>
 
@@ -1056,7 +1061,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC2</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC3</div>
     </div>
   </section>
 
@@ -1079,6 +1084,13 @@ header{
     <span class="nav-icon nav-svg"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.6v-.1A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.1 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2.3V9.6h.1A1.7 1.7 0 0 0 4.1 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.5 4.1a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V2.3h4.1v.1A1.7 1.7 0 0 0 15 4.1a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 8.5a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1V14h-.1a1.7 1.7 0 0 0-1.7 1Z"/></svg></span><span class="nav-label">設定</span>
   </button>
 </nav>
+
+<div id="premiumModal" class="favorite-modal" onclick="if(event.target===this)closePremiumModal()">
+<div class="favorite-modal-card premium-sheet"><div class="favorite-modal-head"><strong>BOAT SCORE Premium</strong><button onclick="closePremiumModal()">×</button></div>
+<div class="premium-lead">詳細データを記録して、自分の得意パターンを分析できる予定です。</div>
+<div class="premium-grid"><span>🎟 舟券種</span><span>🔢 買い目</span><span>🧮 購入点数</span><span>🚤 進入</span><span>🏁 勝ったコース 1〜6</span><span>🏆 決まり手</span><span>⏱ 展示タイム</span><span>⚡ スタート展示</span><span>🏅 グレード</span><span>☀️ 天候</span><span>💨 風向・風速</span><span>🌊 波高</span></div>
+<div class="premium-analysis"><strong>Premium分析予定</strong><small>コース別・舟券種別・決まり手別・風速別・レース場×コース別の回収率や収支を分析</small></div>
+<button class="add-button" onclick="closePremiumModal()">確認しました</button></div></div>
 
 <div id="favoriteModal" class="favorite-modal" onclick="if(event.target===this)closeFavoriteModal()">
   <div class="favorite-modal-card"><div class="favorite-modal-head"><strong>お気に入りのレース場</strong><button onclick="closeFavoriteModal()">×</button></div>
@@ -1615,7 +1627,7 @@ function renderDayDetailFull(){
   dateEl.textContent=formatDateJP(selectedCalendarDate);
   const list=getData().filter(r=>r.date===selectedCalendarDate).sort((a,b)=>a.race-b.race), s=calcStats(list);
   const cards=list.map(r=>{const p=Number(r.returnAmount)-Number(r.bet);return `<div class="day-record-card">
-    <div class="day-record-head"><span>${escapeHTML(r.place)}　投資 ${formatMoney(r.bet)}　払戻 ${formatMoney(r.returnAmount)}</span><span class="${profitClass(p)}">${signedMoney(p)}</span></div>
+    <div class="day-record-head"><span>${escapeHTML(r.place)}　投資 ${formatMoney(r.bet)}　払戻 ${formatMoney(r.returnAmount)} ${manshuBadge(r)}</span><span class="${profitClass(p)}">${signedMoney(p)}</span></div>
     <div class="day-record-tags"><span>${r.race}R</span>${Number(r.odds)>0?`<span>${Number(r.odds).toFixed(1)}倍</span>`:""}<span>${r.hit?"◎ 的中":"× 不的中"}</span></div>
     ${r.image?`<div class="day-record-images"><img src="${r.image}" onclick="openImageModal('${r.id}')"></div>`:""}
     ${r.memo?`<div class="race-detail">${escapeHTML(r.memo)}</div>`:""}
@@ -1632,7 +1644,7 @@ function moveSelectedDay(delta){
 function openSelectedDayInput(){
   const date=selectedCalendarDate;openNewInput(document.querySelector('[data-page="inputPage"]'));if(date)document.getElementById("date").value=date;
 }
-function showPremiumInfo(){alert("詳細入力は BOAT SCORE Premium で利用できる予定です。\\n\\n舟券種・買い目・進入・天候/風・グレード・決まり手などを記録し、より詳しい分析に使える機能です。");}
+
 
 function groupStats(keyFn){
   const map=new Map();
@@ -1895,6 +1907,7 @@ function showPage(id,navButton){
   }
   if(id==="analysisPage"){
     renderAnalysis();
+    renderAnalysisUpgrade();
     setTimeout(renderYearExtras,0);
   }
   if(id==="dayDetailPage") renderDayDetailFull();
@@ -1911,8 +1924,30 @@ function refresh(){
   renderAnalysis();
 }
 
+
+let analysisPeriod="month";
+function showPremiumInfo(){document.getElementById("premiumModal").classList.add("show")}
+function closePremiumModal(){document.getElementById("premiumModal").classList.remove("show")}
+function isManshu(r){return Number(r.odds)>=100&&Number(r.returnAmount)>0}
+function manshuBadge(r){return isManshu(r)?'<span class="manshu-badge">⭐ 万舟</span>':""}
+function setAnalysisPeriod(v){analysisPeriod=v;document.getElementById("analysisMonthBtn")?.classList.toggle("active",v==="month");document.getElementById("analysisYearBtn")?.classList.toggle("active",v==="year");renderAnalysisUpgrade()}
+function bestGroup(rs,fn){const m=new Map();rs.forEach(r=>{const k=fn(r);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return [...m].map(([key,list])=>({key,...calcStats(list)})).sort((a,b)=>b.rate-a.rate||b.profit-a.profit)[0]||null}
+function renderAnalysisUpgrade(){
+ const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),all=getData(),rs=all.filter(r=>{const d=parseLocalDate(r.date);return analysisPeriod==="month"?d.getFullYear()===y&&d.getMonth()===mo:d.getFullYear()===y}),s=calcStats(rs);
+ const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};set("anaProfit",signedMoney(s.profit));set("anaRate",s.rate.toFixed(1)+"%");set("anaHit",s.hitRate.toFixed(1)+"%");set("anaAvgBet",formatMoney(rs.length?Math.round(s.bet/rs.length):0));
+ const mr=[...rs].sort((a,b)=>+b.returnAmount-+a.returnAmount)[0],mx=[...rs].sort((a,b)=>+(b.odds||0)-+(a.odds||0))[0];set("anaMaxReturn",mr?formatMoney(mr.returnAmount):"0円");set("anaMaxOdds",mx&&+mx.odds?Number(mx.odds).toFixed(1)+"倍":"0倍");
+ const bp=bestGroup(rs,r=>r.place),br=bestGroup(rs,r=>r.race?`${r.race}R`:"");set("anaBestPlace",bp?bp.key:"-");set("anaBestPlaceSub",bp?`回収率 ${bp.rate.toFixed(1)}%`:"記録なし");set("anaBestRace",br?br.key:"-");set("anaBestRaceSub",br?`回収率 ${br.rate.toFixed(1)}%`:"記録なし");
+ const man=rs.filter(isManshu),ms=calcStats(man);set("anaManHits",man.length+"回");set("anaManReturn","総払戻 "+formatMoney(ms.ret));const wd=["日","月","火","水","木","金","土"],bw=bestGroup(rs,r=>wd[parseLocalDate(r.date).getDay()]+"曜");set("anaBestWeekday",bw?bw.key:"-");set("anaBestWeekdaySub",bw?`回収率 ${bw.rate.toFixed(1)}%`:"記録なし");drawTrendLine(rs,analysisPeriod,y,mo)
+}
+function drawTrendLine(rs,period,y,mo){
+ const c=document.getElementById("trendLineCanvas");if(!c)return;const r=c.getBoundingClientRect(),dpr=devicePixelRatio||1;c.width=Math.max(300,r.width*dpr);c.height=Math.max(180,r.height*dpr);const x=c.getContext("2d");x.scale(dpr,dpr);const W=r.width,H=r.height,p={l:35,r:10,t:12,b:25};let pts=[],cum=0;
+ if(period==="month"){const days=new Date(y,mo+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;rs.filter(a=>a.date===ds).forEach(a=>cum+=+a.returnAmount-+a.bet);pts.push({l:d,v:cum})}}else{for(let m=0;m<12;m++){rs.filter(a=>parseLocalDate(a.date).getMonth()===m).forEach(a=>cum+=+a.returnAmount-+a.bet);pts.push({l:m+1,v:cum})}}
+ const vs=pts.map(a=>a.v).concat([0]),mn=Math.min(...vs),mx=Math.max(...vs),rg=Math.max(1,mx-mn),xx=i=>p.l+(W-p.l-p.r)*i/(pts.length-1),yy=v=>p.t+(H-p.t-p.b)*(mx-v)/rg;x.clearRect(0,0,W,H);x.strokeStyle="#dce5f0";[0,.5,1].forEach(t=>{let q=p.t+(H-p.t-p.b)*t;x.beginPath();x.moveTo(p.l,q);x.lineTo(W-p.r,q);x.stroke()});x.setLineDash([4,4]);x.strokeStyle="#9aabc0";x.beginPath();x.moveTo(p.l,yy(0));x.lineTo(W-p.r,yy(0));x.stroke();x.setLineDash([]);x.strokeStyle="#0865df";x.lineWidth=2.5;x.beginPath();pts.forEach((a,i)=>i?x.lineTo(xx(i),yy(a.v)):x.moveTo(xx(i),yy(a.v)));x.stroke();x.fillStyle="#718096";x.font="9px sans-serif";x.textAlign="center";pts.forEach((a,i)=>{if(period==="year"||i===0||(i+1)%5===0||i===pts.length-1)x.fillText(a.l,xx(i),H-7)})
+}
+
 renderFavoritePlaces();
 refresh();
+renderAnalysisUpgrade();
 
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
