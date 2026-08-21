@@ -955,6 +955,18 @@ header{
 .guide-odds{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.guide-odds span{background:#f6f9fd;border:1px solid #e2e8f0;border-radius:10px;padding:8px 5px;text-align:center;font-size:8px;color:#6d7989}.guide-odds b{display:block;font-size:10px;color:#1e334e;margin-bottom:3px}
 .guide-choice{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}.guide-choice div{border:1px solid #dce6f2;border-radius:11px;padding:9px}.guide-choice b{display:block;color:#075fcf;font-size:11px}.guide-choice small{display:block;color:#718096;font-size:8px;line-height:1.5;margin-top:4px}
 .premium-guide{background:linear-gradient(180deg,#fbfcff,#f6f9ff);border-color:#dce5f3}
+</style><style id="rc10style">
+.compact-calendar .cal-number{font-size:14px!important;font-weight:800}
+.compact-calendar .cal-profit{font-size:10px!important;font-weight:800}
+.compact-calendar .cal-count{font-size:9px!important}
+.calendar-grid .weekday{font-size:11px!important;font-weight:800}
+.analysis-month-nav{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;margin:-2px 0 9px;background:#f4f8fd;border:1px solid #e0e9f4;border-radius:12px}
+.analysis-month-nav button{border:0;background:transparent;color:#075fcf;font-size:22px;padding:7px}.analysis-month-nav strong{text-align:center;font-size:12px;color:#263a56}
+.odds-band-card{font-family:inherit;text-align:left;cursor:pointer}.odds-band-card:active{transform:scale(.98)}
+.odds-history-item{border-bottom:1px solid #e8edf4;padding:12px 2px}.odds-history-item:last-child{border-bottom:0}
+.odds-history-head{display:flex;justify-content:space-between;gap:8px}.odds-history-head strong{font-size:12px;color:#17263d}.odds-history-head b{font-size:13px;color:#075fcf}
+.odds-history-sub{font-size:9px;color:#758297;margin-top:5px;line-height:1.5}
+@media(max-width:430px){.compact-calendar .cal-number{font-size:13px!important}.compact-calendar .cal-profit{font-size:9px!important}.compact-calendar .cal-count{font-size:8px!important}}
 </style></head>
 
 <body>
@@ -991,11 +1003,11 @@ header{
     </div>
 
     <div class="home-balance-grid">
-      <button class="home-balance-card" onclick="setHomePeriod('month')">
+      <button class="home-balance-card" onclick="openHomeSummary('month')">
         <span class="home-round-icon">￥</span>
         <span><small>今月の収支</small><strong id="monthProfitCard">0円</strong><em id="monthRateCard">回収率 0%</em></span><b>›</b>
       </button>
-      <button class="home-balance-card" onclick="setHomePeriod('year')">
+      <button class="home-balance-card" onclick="openHomeSummary('year')">
         <span class="home-round-icon">▣</span>
         <span><small>年間収支</small><strong id="yearProfitCard">0円</strong><em id="yearRateCard">回収率 0%</em></span><b>›</b>
       </button>
@@ -1144,21 +1156,21 @@ header{
     <div class="section-title"><span>オッズ帯分析</span><b class="bs-auto-badge">自動分析</b></div>
 
     <div class="odds-band-grid">
-      <div class="odds-band-card favorite">
+      <button class="odds-band-card favorite" onclick="openOddsHistory('本命')">
         <small>本命</small><strong>0〜29.9倍</strong>
         <span id="oddsFavRate">回収率 0%</span>
         <em id="oddsFavDetail">0戦 / 的中率 0%</em>
-      </div>
-      <div class="odds-band-card middle">
+      </button>
+      <button class="odds-band-card middle" onclick="openOddsHistory('中穴')">
         <small>中穴</small><strong>30〜79.9倍</strong>
         <span id="oddsMidRate">回収率 0%</span>
         <em id="oddsMidDetail">0戦 / 的中率 0%</em>
-      </div>
-      <div class="odds-band-card long">
+      </button>
+      <button class="odds-band-card long" onclick="openOddsHistory('大穴')">
         <small>大穴</small><strong>80倍〜</strong>
         <span id="oddsLongRate">回収率 0%</span>
         <em id="oddsLongDetail">0戦 / 的中率 0%</em>
-      </div>
+      </button>
     </div>
 
     <div class="bs-analysis-pattern good">
@@ -1187,7 +1199,11 @@ header{
 
 <div class="analysis-upgrade card">
 <div class="analysis-period-tabs"><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
-<div class="section-title"><span>収支推移</span></div><div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
+<div class="section-title analysis-trend-title"><span>収支推移</span></div>
+<div id="analysisMonthNav" class="analysis-month-nav">
+  <button onclick="moveAnalysisMonth(-1)">‹</button><strong id="analysisMonthLabel"></strong><button onclick="moveAnalysisMonth(1)">›</button>
+</div>
+<div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
 <div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
 <div class="section-title"><span>分析バリエーション</span></div><div class="analysis-variation-grid"><div><small>得意な場</small><strong id="anaBestPlace">-</strong><em id="anaBestPlaceSub">記録なし</em></div><div><small>得意R</small><strong id="anaBestRace">-</strong><em id="anaBestRaceSub">記録なし</em></div><div><small>⭐ 万舟的中</small><strong id="anaManHits">0回</strong><em id="anaManReturn">総払戻 0円</em></div><div><small>曜日別BEST</small><strong id="anaBestWeekday">-</strong><em id="anaBestWeekdaySub">記録なし</em></div></div></div>
     <div class="card">
@@ -1204,7 +1220,15 @@ header{
     </div>
   </section>
 
-  <section id="settingsPage" class="page">
+  <section id="oddsHistoryPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('analysisPage',document.querySelector('[data-page=analysisPage]'))">‹ 分析</button><strong id="oddsHistoryTitle">オッズ履歴</strong><span></span></div>
+  <div class="card">
+    <div id="oddsHistorySummary" class="day-full-summary"></div>
+    <div id="oddsHistoryList"></div>
+  </div>
+</section>
+
+<section id="settingsPage" class="page">
   <div class="card">
     <div class="section-title"><span>設定</span></div>
     <div class="settings-list">
@@ -1398,7 +1422,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC9</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC10</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1423,7 +1447,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC9</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC10</div>
     </div>
   </section>
 
@@ -1476,6 +1500,39 @@ const STORAGE_KEY = "boatScoreData";
 let selectedRace = 1;
 
 let homePeriod="month";
+
+
+function openHomeSummary(period){
+  if(period==="month"){
+    const n=new Date();
+    calendarDate=new Date(n.getFullYear(),n.getMonth(),1);
+    selectedCalendarDate="";
+    showPage("calendarPage",document.querySelector('[data-page="calendarPage"]'));
+  }else{
+    analysisPeriod="year";
+    setAnalysisPeriod("year");
+    showPage("analysisPage",document.querySelector('[data-page="analysisPage"]'));
+  }
+}
+
+let analysisViewDate=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+function moveAnalysisMonth(delta){
+  analysisViewDate=new Date(analysisViewDate.getFullYear(),analysisViewDate.getMonth()+delta,1);
+  renderAnalysisUpgrade();
+}
+function openOddsHistory(band){
+  const all=getData();
+  const list=all.filter(r=>bsOddsBand(r)===band && Number(r.returnAmount)>0)
+    .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || Number(b.race)-Number(a.race));
+  const stats=calcStats(list);
+  document.getElementById("oddsHistoryTitle").textContent=`${band}・的中履歴`;
+  document.getElementById("oddsHistorySummary").innerHTML=`<div><small>的中</small><strong>${list.length}件</strong></div><div><small>払戻</small><strong>${formatMoney(stats.ret)}</strong></div><div><small>収支</small><strong class="${profitClass(stats.profit)}">${signedMoney(stats.profit)}</strong></div>`;
+  document.getElementById("oddsHistoryList").innerHTML=list.length?list.map(r=>{
+    const profit=Number(r.returnAmount)-Number(r.bet);
+    return `<div class="odds-history-item"><div class="odds-history-head"><strong>${formatDateJP(r.date)}　${escapeHTML(r.place)} ${r.race}R</strong><b>${Number(r.odds).toFixed(1)}倍</b></div><div class="odds-history-sub">投資 ${formatMoney(r.bet)}　払戻 ${formatMoney(r.returnAmount)}　<span class="${profitClass(profit)}">${signedMoney(profit)}</span>${Number(r.odds)>=100?"　⭐ 万舟":""}</div></div>`;
+  }).join(""):'<div class="empty">このオッズ帯の的中履歴はまだありません。</div>';
+  showPage("oddsHistoryPage");
+}
 
 function setHomePeriod(period){
   homePeriod=period;
@@ -1835,7 +1892,7 @@ function saveRace(continueInput=false){
     document.getElementById("place").value=keepPlace;
     setSelectedRace(nextRace);
     showPage("inputPage",document.querySelector('[data-page="inputPage"]'));
-    window.scrollTo({top:0,behavior:"smooth"});
+    requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"smooth"})));
   }else{
     showPage("homePage",document.querySelector('[data-page="homePage"]'));
   }
@@ -1865,9 +1922,12 @@ function editRace(id){
 }
 
 function deleteRace(id){
-  if(!confirm("この記録を削除しますか？")) return;
+  if(!confirm("この記録を削除しますか？")) return false;
   saveData(getData().filter(r=>r.id!==id));
   refresh();
+  renderDayDetailFull();
+  showSaveToast("削除しました");
+  return true;
 }
 
 function recordHTML(r){
@@ -2018,7 +2078,7 @@ function renderDayDetailFull(){
     <div class="day-record-tags"><span>${r.race}R</span>${Number(r.odds)>0?`<span>${Number(r.odds).toFixed(1)}倍</span>`:""}<span>${r.hit?"◎ 的中":"× 不的中"}</span></div>
     ${r.image?`<div class="day-record-images"><img src="${r.image}" onclick="openImageModal('${r.id}')"></div>`:""}
     ${r.memo?`<div class="race-detail">${escapeHTML(r.memo)}</div>`:""}
-    <div class="race-actions"><button class="small-btn edit" onclick="editRace(${r.id})">編集</button><button class="small-btn delete" onclick="deleteRace(${r.id});renderDayDetailFull()">削除</button></div>
+    <div class="race-actions"><button class="small-btn edit" onclick="editRace(${r.id})">編集</button><button class="small-btn delete" onclick="deleteRace(${r.id})">削除</button></div>
   </div>`}).join("");
   box.innerHTML=`<div class="day-full-summary"><div><small>収支</small><strong class="${profitClass(s.profit)}">${signedMoney(s.profit)}</strong></div><div><small>回収率</small><strong>${s.rate.toFixed(1)}%</strong></div><div><small>的中回数</small><strong>${s.hits}回 / ${s.count}R</strong></div></div>
   <div style="padding:10px 0">${cards||'<div class="empty">この日の記録はありません</div>'}<button class="day-add" onclick="openSelectedDayInput()">⊕ この日にレースを追加</button>
@@ -2201,9 +2261,17 @@ function renderYearExtras(){
 function exportBackup(){
   const payload={
     app:"BOAT SCORE",
-    version:"0.9.2",
+    version:"1.0-rc10",
+    formatVersion:1,
     exportedAt:new Date().toISOString(),
-    data:getData()
+    data:getData().map(r=>({
+      ...r,
+      id:r.id ?? Date.now()+Math.random(),
+      bet:Number(r.bet)||0,
+      returnAmount:Number(r.returnAmount)||0,
+      winningBet:Number(r.winningBet)||0,
+      odds:Number(r.odds)||0
+    }))
   };
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
@@ -2224,15 +2292,25 @@ document.getElementById("restoreFile").addEventListener("change",function(){
   const reader=new FileReader();
   reader.onload=e=>{
     try{
-      const parsed=JSON.parse(e.target.result);
-      const incoming=Array.isArray(parsed)?parsed:parsed.data;
+      const raw=String(e.target.result||"").replace(/^\uFEFF/,"").trim();
+      const parsed=JSON.parse(raw);
+      const incoming=Array.isArray(parsed)?parsed:(Array.isArray(parsed.data)?parsed.data:(Array.isArray(parsed.records)?parsed.records:null));
       if(!Array.isArray(incoming)) throw new Error("invalid");
 
       const valid=incoming.filter(r =>
-        r && r.id!=null && r.date && r.place &&
-        Number.isFinite(Number(r.bet)) &&
-        Number.isFinite(Number(r.returnAmount))
-      );
+        r && r.date && r.place &&
+        Number.isFinite(Number(r.bet??0)) &&
+        Number.isFinite(Number(r.returnAmount??r.ret??0))
+      ).map((r,i)=>({
+        ...r,
+        id:r.id ?? (Date.now()+i),
+        bet:Number(r.bet)||0,
+        returnAmount:Number(r.returnAmount??r.ret)||0,
+        winningBet:Number(r.winningBet)||0,
+        odds:Number(r.odds)||0,
+        race:Number(r.race)||1,
+        hit:Number(r.returnAmount??r.ret)>0
+      }));
 
       if(!valid.length && incoming.length) throw new Error("invalid-records");
 
@@ -2269,13 +2347,16 @@ OK：現在のデータに追加
       }
 
       refresh();
+      renderCalendar();
+      renderDayDetailFull();
       updateStorageStatus();
-      alert(mode==="replace" ? "バックアップで置き換えました。" : "バックアップを追加しました。");
+      showSaveToast(mode==="replace" ? "バックアップを復元しました" : "バックアップを追加しました");
     }catch(err){
       alert("BOAT SCOREのバックアップファイルを読み込めませんでした。");
     }
   };
-  reader.readAsText(file);
+  reader.onerror=()=>alert("ファイルを読み込めませんでした。もう一度バックアップファイルを選択してください。");
+  reader.readAsText(file,"UTF-8");
   this.value="";
 });
 
@@ -2451,10 +2532,19 @@ function showPremiumInfo(){document.getElementById("premiumModal").classList.add
 function closePremiumModal(){document.getElementById("premiumModal").classList.remove("show")}
 function isManshu(r){return Number(r.odds)>=100&&Number(r.returnAmount)>0}
 function manshuBadge(r){return getAppSettings().showManshu && isManshu(r)?'<span class="manshu-badge">⭐ 万舟</span>':""}
-function setAnalysisPeriod(v){analysisPeriod=v;document.getElementById("analysisMonthBtn")?.classList.toggle("active",v==="month");document.getElementById("analysisYearBtn")?.classList.toggle("active",v==="year");renderAnalysisUpgrade()}
+function setAnalysisPeriod(v){
+  analysisPeriod=v;
+  if(v==="month" && !analysisViewDate) analysisViewDate=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+  document.getElementById("analysisMonthBtn")?.classList.toggle("active",v==="month");
+  document.getElementById("analysisYearBtn")?.classList.toggle("active",v==="year");
+  document.getElementById("analysisMonthNav")?.style.setProperty("display",v==="month"?"grid":"none");
+  renderAnalysisUpgrade();
+}
 function bestGroup(rs,fn){const m=new Map();rs.forEach(r=>{const k=fn(r);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return [...m].map(([key,list])=>({key,...calcStats(list)})).sort((a,b)=>b.rate-a.rate||b.profit-a.profit)[0]||null}
 function renderAnalysisUpgrade(){
- const n=new Date(),y=n.getFullYear(),mo=n.getMonth(),all=getData(),rs=all.filter(r=>{const d=parseLocalDate(r.date);return analysisPeriod==="month"?d.getFullYear()===y&&d.getMonth()===mo:d.getFullYear()===y}),s=calcStats(rs);
+ const n=analysisPeriod==="month"?analysisViewDate:new Date(),y=n.getFullYear(),mo=n.getMonth(),all=getData(),rs=all.filter(r=>{const d=parseLocalDate(r.date);return analysisPeriod==="month"?d.getFullYear()===y&&d.getMonth()===mo:d.getFullYear()===y}),s=calcStats(rs);
+ const monthLabel=document.getElementById("analysisMonthLabel");if(monthLabel)monthLabel.textContent=`${y}年${mo+1}月`;
+ const monthNav=document.getElementById("analysisMonthNav");if(monthNav)monthNav.style.display=analysisPeriod==="month"?"grid":"none";
  const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};set("anaProfit",signedMoney(s.profit));set("anaRate",s.rate.toFixed(1)+"%");set("anaHit",s.hitRate.toFixed(1)+"%");set("anaAvgBet",formatMoney(rs.length?Math.round(s.bet/rs.length):0));
  const mr=[...rs].sort((a,b)=>+b.returnAmount-+a.returnAmount)[0],mx=[...rs].sort((a,b)=>+(b.odds||0)-+(a.odds||0))[0];set("anaMaxReturn",mr?formatMoney(mr.returnAmount):"0円");set("anaMaxOdds",mx&&+mx.odds?Number(mx.odds).toFixed(1)+"倍":"0倍");
  const bp=bestGroup(rs,r=>r.place),br=bestGroup(rs,r=>r.race?`${r.race}R`:"");set("anaBestPlace",bp?bp.key:"-");set("anaBestPlaceSub",bp?`回収率 ${bp.rate.toFixed(1)}%`:"記録なし");set("anaBestRace",br?br.key:"-");set("anaBestRaceSub",br?`回収率 ${br.rate.toFixed(1)}%`:"記録なし");
