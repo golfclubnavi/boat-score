@@ -1469,7 +1469,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC14</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC15</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1494,7 +1494,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC14</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC15</div>
     </div>
   </section>
 
@@ -1564,7 +1564,11 @@ function openHomeSummary(period){
 
 let analysisViewDate=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 function moveAnalysisMonth(delta){
-  analysisViewDate=new Date(analysisViewDate.getFullYear(),analysisViewDate.getMonth()+delta,1);
+  const next=new Date(analysisViewDate.getFullYear(),analysisViewDate.getMonth()+delta,1);
+  const now=new Date();
+  const currentMonth=new Date(now.getFullYear(),now.getMonth(),1);
+  if(next>currentMonth) return;
+  analysisViewDate=next;
   renderAnalysisUpgrade();
 }
 function openOddsHistory(band){
@@ -1715,7 +1719,15 @@ function getData(){
 }
 
 function saveData(data){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  if(!Array.isArray(data)) return false;
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    return true;
+  }catch(err){
+    console.error("saveData error",err);
+    alert("データを保存できませんでした。ストレージ容量またはブラウザ設定を確認してください。");
+    return false;
+  }
 }
 
 function formatMoney(n){
@@ -1861,7 +1873,7 @@ function parseAmountValue(id){
   return Number.isFinite(n) ? n : 0;
 }
 
-function saveRace(continueInput=false){
+function saveRace(){
   const date=document.getElementById("date").value;
   const place=document.getElementById("place").value;
   const bet=parseAmountValue("bet");
@@ -1960,7 +1972,7 @@ function deleteRace(id,sourceButton=null){
   if(!confirm("この記録を削除しますか？")) return false;
 
   const nextData=getData().filter(r=>String(r.id)!==String(id));
-  saveData(nextData);
+  if(!saveData(nextData)) return false;
 
   // First remove the card the user is looking at, so deletion feels immediate.
   const visibleCard=sourceButton?.closest?.(".day-record-card,.race-item,.odds-history-item");
@@ -2404,7 +2416,7 @@ function exportBackup(){
       app:"BOAT SCORE",
       format:"boat-score-backup",
       formatVersion:4,
-      appVersion:"1.0-rc14",
+      appVersion:"1.0-rc15",
       exportedAt:now.toISOString(),
       recordCount:records.length,
       records
@@ -2466,16 +2478,17 @@ document.getElementById("restoreFile").addEventListener("change",function(){
         const ret=Number(r.returnAmount ?? r.ret ?? r.payout ?? 0);
         const date=String(r.date ?? "").trim();
         const place=String(r.place ?? r.venue ?? "").trim();
-        if(!date || !place || !Number.isFinite(bet) || !Number.isFinite(ret)) return null;
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || !place || !Number.isFinite(bet) || !Number.isFinite(ret) || bet<0 || ret<0) return null;
+        const raceNum=Math.min(12,Math.max(1,Number(r.race)||1));
         return {
           ...r,
-          id:r.id ?? (Date.now()+i),
+          id:r.id ?? `${Date.now()}-${i}-${Math.random().toString(36).slice(2,6)}`,
           date,place,
-          race:Number(r.race)||1,
+          race:raceNum,
           bet,
           returnAmount:ret,
-          winningBet:Number(r.winningBet)||0,
-          odds:Number(r.odds)||0,
+          winningBet:Math.max(0,Number(r.winningBet)||0),
+          odds:Math.max(0,Number(r.odds)||0),
           profit:ret-bet,
           hit:ret>0,
           memo:String(r.memo??""),
@@ -2500,15 +2513,20 @@ document.getElementById("restoreFile").addEventListener("change",function(){
 
       if(mode==="replace"){
         localStorage.setItem("boatScoreSafetyBackup",JSON.stringify({savedAt:new Date().toISOString(),data:current}));
-        saveData(valid);
+        if(!saveData(valid)) throw new Error("復元データを保存できませんでした");
       }else{
         const merged=[...current];
-        const fingerprints=new Set(current.map(r=>`${r.id}|${r.date}|${r.place}|${r.race}`));
+        const fingerprint=r=>[
+          r.date,r.place,Number(r.race)||1,Number(r.bet)||0,
+          Number(r.returnAmount)||0,Number(r.winningBet)||0,
+          Number(r.odds)||0,String(r.memo||"")
+        ].join("|");
+        const fingerprints=new Set(current.map(fingerprint));
         for(const r of valid){
-          const fp=`${r.id}|${r.date}|${r.place}|${r.race}`;
+          const fp=fingerprint(r);
           if(!fingerprints.has(fp)){ merged.push(r); fingerprints.add(fp); }
         }
-        saveData(merged);
+        if(!saveData(merged)) throw new Error("追加データを保存できませんでした");
       }
 
       refresh();
