@@ -1029,6 +1029,8 @@ header{
 .odds-history-head{display:flex;justify-content:space-between;gap:8px}.odds-history-head strong{font-size:12px;color:#17263d}.odds-history-head b{font-size:13px;color:#075fcf}
 .odds-history-sub{font-size:9px;color:#758297;margin-top:5px;line-height:1.5}
 @media(max-width:430px){.compact-calendar .cal-number{font-size:13px!important}.compact-calendar .cal-profit{font-size:9px!important}.compact-calendar .cal-count{font-size:8px!important}}
+</style><style id="rc16premium">
+.premium-fields{display:none;background:linear-gradient(180deg,#fbfdff,#f5f9ff);border:1px solid #cfdef1;border-radius:16px;padding:13px;margin:-5px 0 15px}.premium-fields.open{display:block}.premium-head{border-bottom:1px solid #dce6f2;padding-bottom:10px;margin-bottom:12px}.premium-head strong,.premium-head small{display:block}.premium-head strong{font-size:14px;color:#12386d}.premium-head small{font-size:9px;color:#748399;margin-top:3px}.premium-field{margin:13px 0}.premium-field>label,.premium-two label{display:block;font-size:11px;font-weight:800;color:#34465e;margin-bottom:7px}.premium-chips{display:flex;gap:6px;flex-wrap:wrap}.premium-chips button{border:1px solid #d5e0ee;background:#fff;border-radius:9px;padding:8px 10px;font-size:10px;font-weight:700;color:#52647b}.premium-chips button.selected{background:#075fcf;border-color:#075fcf;color:#fff}.premium-chips.six{display:grid;grid-template-columns:repeat(6,1fr);width:100%}.premium-chips.six button{padding:8px 2px}.course-row{display:grid;grid-template-columns:28px 1fr;gap:7px;align-items:center;margin-bottom:6px}.course-row>small{font-size:9px;font-weight:800;color:#718096}.premium-field input[list]{width:100%;box-sizing:border-box;border:1px solid #d5e0ee;border-radius:10px;padding:11px;background:#fff;font-size:12px}.women-toggle{margin-top:9px!important}.women-toggle small{font-size:8px;color:#8a96a5}.premium-two{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:13px 0}.unit-input{display:grid;grid-template-columns:1fr 32px;border:1px solid #d5e0ee;background:#fff;border-radius:10px;overflow:hidden}.unit-input input{border:0;padding:10px;width:100%;box-sizing:border-box}.unit-input span{display:grid;place-items:center;background:#f3f7fc;font-size:10px;color:#617087}
 </style></head>
 
 <body>
@@ -1180,9 +1182,22 @@ header{
         <textarea id="memo" rows="3" placeholder="例：向かい風が強かった"></textarea>
       </div>
 
-      <button type="button" class="premium-lock" onclick="showPremiumInfo()">
-        <span>🔒</span><div><strong>詳細入力（Premium）</strong><small>舟券種・買い目・勝ったコース・決まり手・展示・気象条件など</small></div><b>›</b>
-      </button>
+      <button type="button" class="premium-lock" onclick="togglePremiumFields()"><span>♛</span><div><strong>詳細入力（Premium）</strong><small>任意入力・ほぼタップだけで記録</small></div><b id="premiumChevron">＋</b></button>
+      <div id="premiumFields" class="premium-fields">
+        <div class="premium-head"><strong>♛ Premium 詳細データ</strong><small>入力した項目だけ分析に使用します</small></div>
+        <div class="premium-field"><label>舟券種</label><div class="premium-chips" data-premium="ticketType"><button>3連単</button><button>3連複</button><button>2連単</button><button>2連複</button><button>拡連複</button><button>単勝</button><button>複勝</button></div></div>
+        <div class="premium-field"><label>着順コース</label><div class="course-row"><small>1着</small><div class="premium-chips six" data-premium="firstCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div><div class="course-row"><small>2着</small><div class="premium-chips six" data-premium="secondCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div><div class="course-row"><small>3着</small><div class="premium-chips six" data-premium="thirdCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div></div>
+        <div class="premium-field"><label>1着選手名</label><input id="premiumWinner" list="winnerHistory" placeholder="選手名を入力"><datalist id="winnerHistory"></datalist></div>
+        <div class="premium-field"><label>1着艇の展示タイム順位</label><div class="premium-chips six" data-premium="exhibitionRank"><button>1位</button><button>2位</button><button>3位</button><button>4位</button><button>5位</button><button>6位</button></div></div>
+        <div class="premium-field"><label>決まり手</label><div class="premium-chips" data-premium="winningMove"><button>逃げ</button><button>差し</button><button>まくり</button><button>まくり差し</button><button>抜き</button><button>恵まれ</button></div></div>
+        <div class="premium-field"><label>進入</label><div class="premium-chips" data-premium="entry"><button>枠なり</button><button>進入変化あり</button></div></div>
+        <div class="premium-field"><label>レースグレード</label><div class="premium-chips" data-premium="grade"><button>SG</button><button>G1</button><button>G2</button><button>G3</button><button>一般</button></div><label class="women-toggle"><input id="premiumWomen" type="checkbox"> 女子戦 <small>※SGでは選択不可</small></label></div>
+        <div class="premium-field"><label>風向</label><div class="premium-chips" data-premium="windDirection"><button>無風</button><button>追い風</button><button>向かい風</button><button>横風</button></div></div>
+        <div class="premium-two"><div><label>風速</label><div class="unit-input"><input id="premiumWindSpeed" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"><span>m</span></div></div><div><label>波高</label><div class="unit-input"><input id="premiumWave" type="number" min="0" inputmode="numeric" placeholder="0"><span>cm</span></div></div></div>
+        <div class="premium-field"><label>天候</label><div class="premium-chips" data-premium="weather"><button>晴</button><button>曇</button><button>雨</button><button>雪</button></div></div>
+        <div class="premium-field"><label>自信度</label><div class="premium-chips" data-premium="confidence"><button>◎ 高い</button><button>○ 普通</button><button>△ 低い</button></div></div>
+        <div class="premium-field"><label>購入タイミング</label><div class="premium-chips" data-premium="purchaseTiming"><button>展示前</button><button>展示後</button></div></div>
+      </div>
       <button id="saveButton" class="add-button" onclick="saveRace(false)">保存する</button>
     </div>
   </section>
@@ -1469,7 +1484,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC15</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC16</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1494,7 +1509,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC15</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC16</div>
     </div>
   </section>
 
@@ -1827,7 +1842,16 @@ function removeSelectedImage(){
   document.getElementById("removeImageBtn").style.display="none";
 }
 
+const premiumState={};
+function togglePremiumFields(){const box=document.getElementById("premiumFields");if(!box)return;box.classList.toggle("open");const c=document.getElementById("premiumChevron");if(c)c.textContent=box.classList.contains("open")?"−":"＋";updateWinnerHistory()}
+function updateWinnerHistory(){const dl=document.getElementById("winnerHistory");if(!dl)return;const names=[...new Set(getData().map(r=>r.premium?.winnerName).filter(Boolean))].slice(-30).reverse();dl.innerHTML=names.map(n=>`<option value="${escapeHTML(n)}"></option>`).join("")}
+function getPremiumData(){const data={...premiumState};data.winnerName=(document.getElementById("premiumWinner")?.value||"").trim();data.womenRace=!!document.getElementById("premiumWomen")?.checked;data.windSpeed=Number(document.getElementById("premiumWindSpeed")?.value)||0;data.waveHeight=Number(document.getElementById("premiumWave")?.value)||0;if(data.grade==="SG")data.womenRace=false;return data}
+function resetPremiumFields(){Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
+function loadPremiumFields(data){resetPremiumFields();if(!data)return;Object.assign(premiumState,data);document.querySelectorAll(".premium-chips").forEach(g=>{const key=g.dataset.premium,val=data[key];[...g.querySelectorAll("button")].forEach(b=>{let cmp=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))cmp=parseInt(cmp,10);b.classList.toggle("selected",String(cmp)===String(val))})});const win=document.getElementById("premiumWinner");if(win)win.value=data.winnerName||"";const ws=document.getElementById("premiumWindSpeed");if(ws)ws.value=data.windSpeed||"";const wh=document.getElementById("premiumWave");if(wh)wh.value=data.waveHeight||"";const wr=document.getElementById("premiumWomen");if(wr){wr.checked=!!data.womenRace;wr.disabled=data.grade==="SG"}}
+document.addEventListener("click",e=>{const b=e.target.closest(".premium-chips button");if(!b)return;e.preventDefault();const g=b.closest(".premium-chips"),key=g?.dataset.premium;if(!key)return;g.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");let val=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))val=parseInt(val,10);premiumState[key]=val;if(key==="grade"){const w=document.getElementById("premiumWomen");if(w){w.disabled=val==="SG";if(val==="SG")w.checked=false}}});
+
 function resetForm(){
+  resetPremiumFields();
   editingId=null;
   document.getElementById("inputTitle").textContent="収支を入力";
   document.getElementById("editBanner").style.display="none";
@@ -1913,7 +1937,8 @@ function saveRace(){
       memo,
       odds,
       winningBet,
-      image:selectedImage
+      image:selectedImage,
+      premium:getPremiumData()
     };
   }else{
     data.push({
@@ -1925,7 +1950,8 @@ function saveRace(){
       memo,
       odds,
       winningBet,
-      image:selectedImage
+      image:selectedImage,
+      premium:getPremiumData()
     });
   }
 
@@ -1948,6 +1974,7 @@ function saveRace(){
 function editRace(id){
   const r=getData().find(x=>x.id===id);
   if(!r) return;
+  loadPremiumFields(r.premium);
   editingId=id;
   document.getElementById("inputTitle").textContent="収支を編集";
   document.getElementById("editBanner").style.display="block";
@@ -2416,7 +2443,7 @@ function exportBackup(){
       app:"BOAT SCORE",
       format:"boat-score-backup",
       formatVersion:4,
-      appVersion:"1.0-rc15",
+      appVersion:"1.0-rc16",
       exportedAt:now.toISOString(),
       recordCount:records.length,
       records
