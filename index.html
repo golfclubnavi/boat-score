@@ -1057,6 +1057,16 @@ header{
   .brand-racer{width:64px;height:46px}
   .brand-name{font-size:31px !important;letter-spacing:.7px !important}
 }
+</style>
+<style id="rc20premiumanalysis">
+.premium-live{margin-top:14px;background:linear-gradient(155deg,#082e66,#064eaa 68%,#0a67d5);color:#fff;border-radius:17px;padding:14px;box-shadow:0 10px 26px rgba(5,52,119,.2)}
+.premium-analysis-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.premium-analysis-head small{display:block;font-size:8px;font-weight:900;letter-spacing:.12em;opacity:.68}.premium-analysis-head strong{display:block;font-size:14px;margin-top:3px}.premium-analysis-head>span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 8px;font-size:9px;font-weight:800}
+.premium-diagnosis{margin-top:11px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.17);border-radius:13px;padding:11px}.premium-diagnosis small{display:block;font-size:8px;opacity:.7;font-weight:800}.premium-diagnosis strong{display:block;font-size:13px;line-height:1.45;margin-top:4px}.premium-diagnosis p{font-size:9px;line-height:1.5;opacity:.72;margin:5px 0 0}
+.premium-rank-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.premium-rank-column{background:#fff;color:#17263d;border-radius:13px;padding:9px;min-width:0}.premium-mini-title{font-size:10px;font-weight:900;color:#dbe9ff;margin:11px 0 6px}.premium-rank-column .premium-mini-title{margin:0 0 6px;color:#43536b}.premium-rank-column .premium-mini-title.good{color:#16824b}.premium-rank-column .premium-mini-title.weak{color:#c64e3d}
+.premium-pattern-list{display:grid;gap:5px}.premium-pattern-item{border:1px solid #e2e8f0;border-radius:9px;padding:7px;background:#f9fbfe}.premium-pattern-item strong{display:block;color:#17263d;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.premium-pattern-item span{display:block;color:#617087;font-size:8px;margin-top:3px;line-height:1.4}.premium-pattern-item em{font-style:normal;font-size:7px;font-weight:900;border-radius:999px;padding:2px 5px;display:inline-block;margin-top:4px;background:#eaf3ff;color:#0861ca}.premium-pattern-item.good em{background:#e9f7ef;color:#167a47}.premium-pattern-item.weak em{background:#fff0ed;color:#b94b3a}.premium-empty{font-size:9px;color:#8a96a6;padding:7px 0}
+.premium-breakdown{margin-top:10px}.premium-list-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}.premium-stat-chip{flex:0 0 auto;min-width:112px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.17);border-radius:11px;padding:8px}.premium-stat-chip strong{display:block;font-size:10px;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.premium-stat-chip span{display:block;font-size:8px;line-height:1.45;opacity:.76;margin-top:3px}.premium-stat-chip b{display:block;font-size:11px;margin-top:4px}.premium-stat-chip em{font-style:normal;font-size:7px;background:rgba(255,255,255,.14);padding:2px 5px;border-radius:999px;display:inline-block;margin-top:4px}
+.premium-note{font-size:8px;line-height:1.45;opacity:.65;margin-top:12px;border-top:1px solid rgba(255,255,255,.16);padding-top:8px}
+@media(max-width:370px){.premium-rank-wrap{grid-template-columns:1fr}}
 </style></head>
 
 <body>
@@ -1290,9 +1300,47 @@ header{
       </div>
     </div>
 
-    <div class="premium-analysis teaser">
-      <strong>♛ Premium 詳細分析</strong>
-      <small>レース場 × R帯・コース・決まり手・舟券種・風などを組み合わせて、自分の勝ちパターンをさらに深掘り。</small>
+    <div class="premium-analysis premium-live">
+      <div class="premium-analysis-head">
+        <div><small>PREMIUM ANALYSIS</small><strong>♛ 自分の勝ちパターンを深掘り</strong></div>
+        <span id="premiumRecordBadge">0件</span>
+      </div>
+
+      <div class="premium-diagnosis" id="premiumDiagnosis">
+        <small>総合診断</small>
+        <strong>Premium詳細データを入力すると分析が始まります</strong>
+        <p>入力した詳細項目だけを使って分析します。</p>
+      </div>
+
+      <div class="premium-rank-wrap">
+        <div class="premium-rank-column">
+          <div class="premium-mini-title good">↗ 得意パターン TOP3</div>
+          <div id="premiumBestPatterns" class="premium-pattern-list"><div class="premium-empty">データ収集中</div></div>
+        </div>
+        <div class="premium-rank-column">
+          <div class="premium-mini-title weak">↘ 苦手パターン TOP3</div>
+          <div id="premiumWorstPatterns" class="premium-pattern-list"><div class="premium-empty">データ収集中</div></div>
+        </div>
+      </div>
+
+      <div class="premium-breakdown">
+        <div class="premium-mini-title">相性のいい選手</div>
+        <div id="premiumPlayerAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+
+        <div class="premium-mini-title">グレード別</div>
+        <div id="premiumGradeAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+
+        <div class="premium-mini-title">展示タイム順位別</div>
+        <div id="premiumExhibitionAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+
+        <div class="premium-mini-title">自信度別</div>
+        <div id="premiumConfidenceAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+
+        <div class="premium-mini-title">購入タイミング別</div>
+        <div id="premiumTimingAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+      </div>
+
+      <div class="premium-note">2〜4件＝参考 / 5〜9件＝傾向あり / 10件以上＝信頼度高め</div>
     </div>
   </div>
 
@@ -1507,7 +1555,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC19</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC20</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1532,7 +1580,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC19</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC20</div>
     </div>
   </section>
 
@@ -2631,6 +2679,7 @@ function showPage(id,navButton){
     renderAnalysis();
     renderPersonalInsights();
     renderAnalysisUpgrade();
+    renderPremiumAnalysis();
 renderPersonalInsights();
     setTimeout(renderYearExtras,0);
   }
@@ -2648,6 +2697,8 @@ function refresh(){
   renderAnalysis();
 
   renderPersonalInsights();
+
+  renderPremiumAnalysis();
 }
 
 
@@ -2784,6 +2835,108 @@ function setAnalysisPeriod(v){
   renderAnalysisUpgrade();
 }
 function bestGroup(rs,fn){const m=new Map();rs.forEach(r=>{const k=fn(r);if(!k)return;if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return [...m].map(([key,list])=>({key,...calcStats(list)})).sort((a,b)=>b.rate-a.rate||b.profit-a.profit)[0]||null}
+
+function premiumConfidenceLabel(count){
+  if(count>=10) return "信頼度高め";
+  if(count>=5) return "傾向あり";
+  if(count>=2) return "参考";
+  return "データ不足";
+}
+function premiumGroup(records,keyFn,labelFn){
+  const m=new Map();
+  records.forEach(r=>{
+    const key=keyFn(r);
+    if(key===undefined||key===null||key==="") return;
+    const label=labelFn?labelFn(key,r):String(key);
+    if(!m.has(label))m.set(label,[]);
+    m.get(label).push(r);
+  });
+  return [...m.entries()].map(([key,list])=>({key,list,...calcStats(list),confidence:premiumConfidenceLabel(list.length)}));
+}
+function premiumPatternPool(records){
+  const pools=[];
+  const add=(type,arr)=>arr.forEach(x=>pools.push({...x,type}));
+  add("選手",premiumGroup(records,r=>r.premium?.winnerName));
+  add("グレード",premiumGroup(records,r=>{
+    const p=r.premium||{};
+    if(!p.grade)return "";
+    return p.grade+(p.womenRace?"（女子戦）":"");
+  }));
+  add("展示",premiumGroup(records,r=>r.premium?.exhibitionRank,r=>`${r}位`));
+  add("自信度",premiumGroup(records,r=>r.premium?.confidence));
+  add("購入",premiumGroup(records,r=>r.premium?.purchaseTiming));
+  add("舟券種",premiumGroup(records,r=>r.premium?.ticketType));
+  add("1着コース",premiumGroup(records,r=>r.premium?.firstCourse,r=>`${r}コース`));
+  add("決まり手",premiumGroup(records,r=>r.premium?.winningMove));
+  return pools.filter(x=>x.count>=2&&x.bet>0);
+}
+function premiumPatternHTML(item,kind){
+  if(!item)return '<div class="premium-empty">データ収集中</div>';
+  const cls=kind==="good"?"good":"weak";
+  return `<div class="premium-pattern-item ${cls}">
+    <strong>${escapeHTML(item.type)}：${escapeHTML(item.key)}</strong>
+    <span>${item.count}戦 / 的中率 ${item.hitRate.toFixed(1)}% / 収支 ${signedMoney(item.profit)}</span>
+    <span>回収率 ${item.rate.toFixed(1)}%</span>
+    <em>${item.confidence}</em>
+  </div>`;
+}
+function premiumStatChips(items,limit=5){
+  if(!items.length)return '<span style="font-size:9px;opacity:.7">データ収集中</span>';
+  return items.slice(0,limit).map(x=>`<div class="premium-stat-chip">
+    <strong>${escapeHTML(x.key)}</strong>
+    <b>回収率 ${x.rate.toFixed(1)}%</b>
+    <span>${x.count}戦 / 的中率 ${x.hitRate.toFixed(1)}%</span>
+    <span>収支 ${signedMoney(x.profit)}</span>
+    <em>${x.confidence}</em>
+  </div>`).join("");
+}
+function renderPremiumAnalysis(){
+  const all=getData();
+  const premiumRecords=all.filter(r=>{
+    const p=r.premium;
+    if(!p)return false;
+    return Object.entries(p).some(([k,v])=>v!==""&&v!==0&&v!==false&&v!==null&&v!==undefined);
+  });
+  const badge=document.getElementById("premiumRecordBadge");
+  if(badge)badge.textContent=`${premiumRecords.length}件`;
+
+  const diag=document.getElementById("premiumDiagnosis");
+  const bestBox=document.getElementById("premiumBestPatterns");
+  const worstBox=document.getElementById("premiumWorstPatterns");
+
+  const pool=premiumPatternPool(premiumRecords);
+  const eligible=pool.filter(x=>x.count>=2);
+  const best=[...eligible].filter(x=>x.profit>0).sort((a,b)=>b.rate-a.rate||b.profit-a.profit).slice(0,3);
+  const worst=[...eligible].filter(x=>x.profit<0).sort((a,b)=>a.rate-b.rate||a.profit-b.profit).slice(0,3);
+
+  if(diag){
+    if(!premiumRecords.length){
+      diag.innerHTML='<small>総合診断</small><strong>Premium詳細データを入力すると分析が始まります</strong><p>入力した項目だけを使って分析します。</p>';
+    }else if(!eligible.length){
+      diag.innerHTML=`<small>総合診断</small><strong>${premiumRecords.length}件のPremiumデータを記録中</strong><p>同じ条件が2件以上たまると、得意・苦手パターンを判定します。</p>`;
+    }else{
+      const top=best[0]||eligible.sort((a,b)=>b.rate-a.rate)[0];
+      const conf=top?top.confidence:"参考";
+      diag.innerHTML=`<small>総合診断</small><strong>${top?`${escapeHTML(top.type)}「${escapeHTML(top.key)}」が現在もっとも好成績`:"分析中"}</strong><p>${top?`回収率 ${top.rate.toFixed(1)}% / ${top.count}戦 / ${conf}`:"データを蓄積しています。"}</p>`;
+    }
+  }
+  if(bestBox)bestBox.innerHTML=best.length?best.map(x=>premiumPatternHTML(x,"good")).join(""):'<div class="premium-empty">プラス傾向のデータを収集中</div>';
+  if(worstBox)worstBox.innerHTML=worst.length?worst.map(x=>premiumPatternHTML(x,"weak")).join(""):'<div class="premium-empty">マイナス傾向のデータを収集中</div>';
+
+  const player=premiumGroup(premiumRecords,r=>r.premium?.winnerName).filter(x=>x.count>=1).sort((a,b)=>b.rate-a.rate||b.profit-a.profit);
+  const grade=premiumGroup(premiumRecords,r=>{const p=r.premium||{};return p.grade?p.grade+(p.womenRace?"（女子戦）":""):""}).sort((a,b)=>b.count-a.count||b.rate-a.rate);
+  const exhibit=premiumGroup(premiumRecords,r=>r.premium?.exhibitionRank,r=>`${r}位`).sort((a,b)=>Number(a.key.replace("位",""))-Number(b.key.replace("位","")));
+  const confidence=premiumGroup(premiumRecords,r=>r.premium?.confidence).sort((a,b)=>b.count-a.count);
+  const timing=premiumGroup(premiumRecords,r=>r.premium?.purchaseTiming).sort((a,b)=>b.count-a.count);
+
+  const set=(id,html)=>{const e=document.getElementById(id);if(e)e.innerHTML=html};
+  set("premiumPlayerAnalysis",premiumStatChips(player));
+  set("premiumGradeAnalysis",premiumStatChips(grade));
+  set("premiumExhibitionAnalysis",premiumStatChips(exhibit,6));
+  set("premiumConfidenceAnalysis",premiumStatChips(confidence,3));
+  set("premiumTimingAnalysis",premiumStatChips(timing,2));
+}
+
 function renderAnalysisUpgrade(){
  const n=analysisPeriod==="month"?analysisViewDate:new Date(),y=n.getFullYear(),mo=n.getMonth(),all=getData(),rs=all.filter(r=>{const d=parseLocalDate(r.date);return analysisPeriod==="month"?d.getFullYear()===y&&d.getMonth()===mo:d.getFullYear()===y}),s=calcStats(rs);
  const monthLabel=document.getElementById("analysisMonthLabel");if(monthLabel)monthLabel.textContent=`${y}年${mo+1}月`;
