@@ -1150,6 +1150,23 @@ header{
 </style>
 <style id="rc27cleanup">
 .premium-exhibition-table{display:grid;gap:5px}.premium-ex-row{display:grid;grid-template-columns:36px 1fr 1fr;gap:6px;align-items:center;background:#fff;border:1px solid #dce5ef;border-radius:9px;padding:7px}.premium-ex-row b{font-size:9px}.premium-ex-row span{font-size:9px;color:#52657d;text-align:center}.premium-auto-empty{font-size:9px;color:#7a8899;background:#f6f9fc;border-radius:9px;padding:10px;text-align:center}.premium-result-auto{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#eef6ff;border:1px solid #d2e4f8;border-radius:11px;padding:8px 9px;margin:-2px 0 10px}.premium-result-auto span{font-size:8px;color:#60738b;line-height:1.4}.premium-result-auto button{border:0;background:#0967d8;color:#fff;border-radius:8px;padding:6px 8px;font-size:8px;font-weight:900;white-space:nowrap}
+</style>
+<style id="rc28tables">
+.bs-race-table-wrap{margin-top:10px;background:#fff;border:1px solid #dbe5f0;border-radius:12px;overflow:hidden}
+.bs-race-table-title{background:linear-gradient(135deg,#0d77b8,#1496c4);color:#fff;font-size:11px;font-weight:900;padding:9px 10px;text-align:center}
+.bs-race-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.bs-race-table th{background:#eaf5fa;color:#315873;font-size:8px;padding:6px 3px;border-bottom:1px solid #cfe0ea}
+.bs-race-table td{font-size:9px;padding:7px 3px;border-bottom:1px solid #e8edf3;text-align:center;color:#182a42}
+.bs-race-table tr:last-child td{border-bottom:0}
+.bs-race-table td.name{text-align:left;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bs-lane-dot{width:20px;height:20px;border-radius:5px;display:inline-grid;place-items:center;font-size:8px;font-weight:900}
+.bs-lane-dot.l1{background:#fff;color:#222;border:1px solid #ccd6e2}.bs-lane-dot.l2{background:#222;color:#fff}.bs-lane-dot.l3{background:#e33434;color:#fff}.bs-lane-dot.l4{background:#176bd1;color:#fff}.bs-lane-dot.l5{background:#f2c329;color:#332b0b}.bs-lane-dot.l6{background:#159447;color:#fff}
+.bs-female-heart{color:#ff5a96;font-size:10px;margin-left:3px}
+.bs-start-board{display:grid;grid-template-columns:34px 1fr 52px}
+.bs-start-board>div{padding:7px 6px;border-bottom:1px solid #e6edf4;font-size:9px}
+.bs-start-board .head{background:#eaf5fa;font-weight:900;color:#315873;text-align:center}
+.bs-start-board .lane{text-align:center;font-weight:900}.bs-start-board .course{font-weight:800}.bs-start-board .st{text-align:center;font-variant-numeric:tabular-nums}
+.bs-no-result{padding:10px;font-size:9px;color:#77879a;text-align:center}
 </style></head>
 
 <body>
@@ -1310,11 +1327,6 @@ header{
       <div id="premiumFields" class="premium-fields">
         <div class="premium-head"><strong>♛ Premium 詳細データ</strong><small>入力した項目だけ分析に使用します</small></div>
         <div class="premium-field"><label>舟券種</label><div class="premium-chips" data-premium="ticketType"><button>3連単</button><button>3連複</button><button>2連単</button><button>2連複</button><button>拡連複</button><button>単勝</button><button>複勝</button></div></div>
-        <div class="premium-field"><label>着順（進入コース）</label><div class="course-row"><small>1着</small><div class="premium-chips six" data-premium="firstCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div><div class="course-row"><small>2着</small><div class="premium-chips six" data-premium="secondCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div><div class="course-row"><small>3着</small><div class="premium-chips six" data-premium="thirdCourse"><button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button></div></div></div>
-        <div class="premium-result-auto">
-          <span id="premiumResultStatus">結果反映後、着順・進入コース・本番STを自動取得できます</span>
-          <button type="button" onclick="fetchRaceRoster(true)">結果を再取得</button>
-        </div>
         <div class="premium-field">
           <label>出走選手 <small>（日付・場・Rから自動取得）</small></label>
           <div class="race-roster-box">
@@ -1325,6 +1337,10 @@ header{
             <div id="raceRosterGrid" class="race-roster-grid"></div>
             <div class="race-roster-note">選手をタップすると「1着選手名」に入ります。取得できない場合は下の欄へ手入力できます。</div>
           </div>
+        </div>
+        <div class="premium-result-auto">
+          <span id="premiumResultStatus">結果反映後、着順・進入・本番STを自動取得します</span>
+          <button type="button" onclick="fetchRaceRoster(true)">結果を再取得</button>
         </div>
         <div class="premium-field"><label>1着選手名</label><input id="premiumWinner" list="winnerHistory" placeholder="選手名を入力"><datalist id="winnerHistory"></datalist></div>
         <div class="premium-field"><label>1着艇の展示タイム順位</label><div class="premium-chips six" data-premium="exhibitionRank"><button>1位</button><button>2位</button><button>3位</button><button>4位</button><button>5位</button><button>6位</button></div></div>
@@ -1678,7 +1694,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC27</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC28</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1703,7 +1719,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC27</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC28</div>
     </div>
   </section>
 
@@ -2124,12 +2140,10 @@ function applyRaceResultData(){
     if(status)status.textContent="結果未反映です。着順・本番STは手動入力できます";
     return;
   }
-  [1,2,3].forEach(place=>{
-    const r=resultRacers.find(x=>Number(x.resultPlace)===place);
-    if(!r)return;
-    const key=place===1?"firstCourse":place===2?"secondCourse":"thirdCourse";
-    if(r.resultCourse)selectPremiumChipValue(key,Number(r.resultCourse));
-  });
+  premiumState.resultOrder=resultRacers
+    .filter(r=>r.resultPlace!==null&&r.resultPlace!==undefined)
+    .map(r=>({lane:Number(r.lane),place:Number(r.resultPlace),course:Number(r.resultCourse)||null}))
+    .sort((a,b)=>a.place-b.place);
   resultRacers.forEach(r=>{
     const el=document.getElementById(`premiumST${r.lane}`);
     if(el&&r.resultStartTiming!==null&&r.resultStartTiming!==undefined)el.value=Number(r.resultStartTiming).toFixed(2);
@@ -2141,7 +2155,7 @@ function applyRaceResultData(){
     const er=exhibitionRankForLane(winner.lane);
     if(er)selectPremiumChipValue("exhibitionRank",er);
   }
-  if(status)status.textContent="結果から着順・進入コース・本番STを自動反映しました";
+  if(status)status.textContent="結果から着順・進入・本番STを自動反映しました";
 }
 
 function applyAutomaticRaceData(){
@@ -2296,7 +2310,7 @@ const premiumState={};
 function togglePremiumFields(){const box=document.getElementById("premiumFields");if(!box)return;box.classList.toggle("open");const c=document.getElementById("premiumChevron");if(c)c.textContent=box.classList.contains("open")?"−":"＋";updateWinnerHistory();if(box.classList.contains("open"))scheduleRaceRosterFetch()}
 function updateWinnerHistory(){const dl=document.getElementById("winnerHistory");if(!dl)return;const names=[...new Set(getData().map(r=>r.premium?.winnerName).filter(Boolean))].slice(-30).reverse();dl.innerHTML=names.map(n=>`<option value="${escapeHTML(n)}"></option>`).join("")}
 function getPremiumData(){const data={...premiumState};data.winnerName=(document.getElementById("premiumWinner")?.value||"").trim();data.womenRace=!!document.getElementById("premiumWomen")?.checked;data.windSpeed=Number(document.getElementById("premiumWindSpeed")?.value)||0;data.waveHeight=Number(document.getElementById("premiumWave")?.value)||0;data.startTimes=[1,2,3,4,5,6].map(n=>{const v=document.getElementById(`premiumST${n}`)?.value;return v===""||v===undefined?null:Number(v)});data.exhibitionTimes=loadedRaceRacers.map(r=>r.exhibitionTime??null);data.raceRacers=loadedRaceRacers.map(r=>({...r}));if(data.grade==="SG")data.womenRace=false;return data}
-function resetPremiumFields(){loadedRaceRacers=[];const rg=document.getElementById("raceRosterGrid");if(rg)rg.innerHTML="";const ex=document.getElementById("premiumExhibitionTable");if(ex)ex.innerHTML='<div class="premium-auto-empty">直前情報が公開されると自動表示します</div>';const resultStatus=document.getElementById("premiumResultStatus");if(resultStatus)resultStatus.textContent="結果反映後、着順・進入コース・本番STを自動取得できます";const rs=document.getElementById("raceRosterStatus");if(rs)rs.textContent="日付・レース場・Rを選ぶと自動取得します";Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave","premiumST1","premiumST2","premiumST3","premiumST4","premiumST5","premiumST6"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
+function resetPremiumFields(){loadedRaceRacers=[];const rg=document.getElementById("raceRosterGrid");if(rg)rg.innerHTML="";const ex=document.getElementById("premiumExhibitionTable");if(ex)ex.innerHTML='<div class="premium-auto-empty">直前情報が公開されると自動表示します</div>';const resultStatus=document.getElementById("premiumResultStatus");if(resultStatus)resultStatus.textContent="結果反映後、着順・進入・本番STを自動取得します";const rs=document.getElementById("raceRosterStatus");if(rs)rs.textContent="日付・レース場・Rを選ぶと自動取得します";Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave","premiumST1","premiumST2","premiumST3","premiumST4","premiumST5","premiumST6"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
 function loadPremiumFields(data){resetPremiumFields();if(!data)return;Object.assign(premiumState,data);loadedRaceRacers=Array.isArray(data.raceRacers)?data.raceRacers.map(r=>({...r,previewStartTiming:r.previewStartTiming??r.startTiming??null})):[];if(loadedRaceRacers.length)renderRaceRoster(loadedRaceRacers,"保存済みの出走選手");document.querySelectorAll(".premium-chips").forEach(g=>{const key=g.dataset.premium,val=data[key];[...g.querySelectorAll("button")].forEach(b=>{let cmp=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))cmp=parseInt(cmp,10);b.classList.toggle("selected",String(cmp)===String(val))})});const win=document.getElementById("premiumWinner");if(win)win.value=data.winnerName||"";const ws=document.getElementById("premiumWindSpeed");if(ws)ws.value=data.windSpeed||"";const wh=document.getElementById("premiumWave");if(wh)wh.value=data.waveHeight||"";(data.startTimes||[]).forEach((v,i)=>{const e=document.getElementById(`premiumST${i+1}`);if(e)e.value=v===null||v===undefined?"":v});const wr=document.getElementById("premiumWomen");if(wr){wr.checked=!!data.womenRace;wr.disabled=data.grade==="SG"}}
 document.addEventListener("click",e=>{const b=e.target.closest(".premium-chips button");if(!b)return;e.preventDefault();const g=b.closest(".premium-chips"),key=g?.dataset.premium;if(!key)return;g.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");let val=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))val=parseInt(val,10);premiumState[key]=val;if(key==="grade"){const w=document.getElementById("premiumWomen");if(w){w.disabled=val==="SG";if(val==="SG")w.checked=false}}});
 
@@ -2433,6 +2447,55 @@ function premiumDisplayValue(v){
   if(v===false) return "なし";
   return String(v);
 }
+
+function femaleHeartHTML(p){
+  // Current API does not expose racer sex. Mark all racers only when the race itself
+  // is explicitly stored as a women's race; never infer sex from a name.
+  return p?.womenRace ? '<span class="bs-female-heart">♥</span>' : '';
+}
+function raceResultTableHTML(r){
+  const p=r?.premium||{};
+  const racers=Array.isArray(p.raceRacers)?p.raceRacers:[];
+  const results=racers.filter(x=>x.resultPlace!==null&&x.resultPlace!==undefined).sort((a,b)=>Number(a.resultPlace)-Number(b.resultPlace));
+  if(!results.length){
+    return `<div class="bs-race-table-wrap"><div class="bs-race-table-title">レース結果</div><div class="bs-no-result">結果反映待ちです。「結果を再取得」で更新できます。</div></div>`;
+  }
+  return `<div class="bs-race-table-wrap"><div class="bs-race-table-title">レース結果</div>
+    <table class="bs-race-table"><thead><tr><th style="width:11%">着</th><th style="width:12%">枠</th><th style="width:12%">進入</th><th>選手</th><th style="width:18%">本番ST</th></tr></thead>
+    <tbody>${results.map(x=>{
+      const rank=racerRankLabel(x);
+      return `<tr>
+        <td><b>${Number(x.resultPlace)||"-"}</b></td>
+        <td><span class="bs-lane-dot l${Number(x.lane)||0}">${Number(x.lane)||"-"}</span></td>
+        <td>${Number(x.resultCourse)||"-"}</td>
+        <td class="name">${escapeHTML(x.name||"不明")}${femaleHeartHTML(p)}${rank?` <span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</td>
+        <td>${formatRaceST(x.resultStartTiming)}</td>
+      </tr>`;
+    }).join("")}</tbody></table></div>`;
+}
+function startBoardHTML(r){
+  const p=r?.premium||{};
+  const racers=Array.isArray(p.raceRacers)?p.raceRacers:[];
+  const hasResult=racers.some(x=>x.resultStartTiming!==null&&x.resultStartTiming!==undefined);
+  const source=hasResult
+    ? racers.filter(x=>x.resultCourse).sort((a,b)=>Number(a.resultCourse)-Number(b.resultCourse))
+    : racers.filter(x=>x.previewStartTiming!==null&&x.previewStartTiming!==undefined).sort((a,b)=>Number(a.courseNumber||a.lane)-Number(b.courseNumber||b.lane));
+  if(!source.length){
+    return `<div class="bs-race-table-wrap"><div class="bs-race-table-title">スタート情報</div><div class="bs-no-result">スタート情報はまだありません。</div></div>`;
+  }
+  return `<div class="bs-race-table-wrap"><div class="bs-race-table-title">スタート情報</div>
+    <div class="bs-start-board">
+      <div class="head">枠</div><div class="head">並び・選手</div><div class="head">ST</div>
+      ${source.map(x=>{
+        const course=Number(x.resultCourse||x.courseNumber||x.lane)||x.lane;
+        const st=hasResult?x.resultStartTiming:x.previewStartTiming;
+        return `<div class="lane"><span class="bs-lane-dot l${Number(x.lane)||0}">${Number(x.lane)||"-"}</span></div>
+          <div class="course">${course}コース　${escapeHTML(x.name||"")}${femaleHeartHTML(p)}</div>
+          <div class="st">${formatRaceST(st)}</div>`;
+      }).join("")}
+    </div></div>`;
+}
+
 function openPremiumDetail(id){
   const r=getData().find(x=>String(x.id)===String(id));
   if(!r) return;
@@ -2454,7 +2517,7 @@ function openPremiumDetail(id){
 
   const sections=[
     ["投票・結果",[
-      ["舟券種",p.ticketType],["着順（進入コース）",course],["1着選手名",p.winnerName],
+      ["舟券種",p.ticketType],["着順・進入",course],["1着選手名",p.winnerName],
       ["1着艇 展示タイム順位",p.exhibitionRank?`${p.exhibitionRank}位`:""],["6艇 展示タイム",(p.raceRacers||[]).map(x=>`${x.lane}号艇 ${formatExhibition(x.exhibitionTime)}`).join(" / ")],["6艇 本番ST",(p.startTimes||[]).map((v,i)=>v===null||v===undefined?`${i+1}号艇 -`:`${i+1}号艇 ${Number(v).toFixed(2)}`).join(" / ")],["決まり手",p.winningMove],["進入",p.entry]
     ]],
     ["レース条件",[
@@ -2465,7 +2528,7 @@ function openPremiumDetail(id){
       ["自信度",p.confidence],["購入タイミング",p.purchaseTiming]
     ]]
   ];
-  body.innerHTML=sections.map(([title,items])=>`
+  body.innerHTML=raceResultTableHTML(r)+startBoardHTML(r)+sections.map(([title,items])=>`
     <div class="premium-detail-section"><strong>${title}</strong><div class="premium-detail-grid">
       ${items.map(([label,val])=>`<div class="premium-detail-item"><small>${label}</small><b>${escapeHTML(premiumDisplayValue(val))}</b></div>`).join("")}
     </div></div>`).join("");
@@ -2693,7 +2756,7 @@ function dayRaceRacersHTML(r){
       return `<div class="day-racer-chip" data-lane="${Number(x.lane)||0}">
         <span class="day-racer-lane">${Number(x.lane)||"-"}</span>
         <span class="day-racer-info">
-          <span class="day-racer-name-line"><span class="day-racer-name">${escapeHTML(x.name||"不明")}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</span>
+          <span class="day-racer-name-line"><span class="day-racer-name">${escapeHTML(x.name||"不明")}${r?.premium?.womenRace?'<span class="bs-female-heart">♥</span>':""}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</span>
 
         </span>
       </div>`;
@@ -3327,7 +3390,6 @@ function premiumPatternPool(records){
   add("自信度",premiumGroup(records,r=>r.premium?.confidence));
   add("購入",premiumGroup(records,r=>r.premium?.purchaseTiming));
   add("舟券種",premiumGroup(records,r=>r.premium?.ticketType));
-  add("1着コース",premiumGroup(records,r=>r.premium?.firstCourse,r=>`${r}コース`));
   add("決まり手",premiumGroup(records,r=>r.premium?.winningMove));
   add("安定板",premiumGroup(records,r=>r.premium?.stabilizer));
   add("周回短縮",premiumGroup(records,r=>r.premium?.shortenedLaps));
