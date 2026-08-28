@@ -1118,6 +1118,35 @@ header{
 .race-roster-note{font-size:8px;color:#7a8797;line-height:1.5;margin-top:8px}
 .race-roster-loading{grid-column:1/-1;text-align:center;color:#6f7d90;font-size:9px;padding:12px}
 @media(max-width:360px){.race-roster-grid{grid-template-columns:1fr}}
+</style>
+<style id="rc25dayracers">
+.day-racer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0 4px}
+.day-racer-chip{display:grid;grid-template-columns:20px 1fr;gap:5px;align-items:center;background:#f7f9fc;border:1px solid #e1e7ef;border-radius:8px;padding:6px;min-width:0}
+.day-racer-lane{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:8px;font-weight:900}
+.day-racer-chip[data-lane="1"] .day-racer-lane{background:#fff;color:#222;border:1px solid #cfd8e4}
+.day-racer-chip[data-lane="2"] .day-racer-lane{background:#30343b;color:#fff}
+.day-racer-chip[data-lane="3"] .day-racer-lane{background:#e33b3b;color:#fff}
+.day-racer-chip[data-lane="4"] .day-racer-lane{background:#2674db;color:#fff}
+.day-racer-chip[data-lane="5"] .day-racer-lane{background:#f2c23b;color:#3f3410}
+.day-racer-chip[data-lane="6"] .day-racer-lane{background:#37a55c;color:#fff}
+.day-racer-name{font-size:8px;font-weight:800;color:#24364f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-racer-title{font-size:9px;font-weight:800;color:#64758b;margin-top:8px}
+@media(max-width:360px){.day-racer-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+<style id="rc26racerdata">
+.race-roster-info strong{display:flex;align-items:center;gap:5px;min-width:0}
+.racer-name-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.racer-grade{flex:0 0 auto;border-radius:999px;padding:2px 5px;font-size:7px;font-weight:950;background:#eaf3ff;color:#075fcf;border:1px solid #cfe1f7}
+.racer-grade.a1{background:#fff0ed;color:#bc4837;border-color:#f0d3cc}
+.racer-grade.a2{background:#fff7e8;color:#9a6814;border-color:#efdfb6}
+.racer-grade.b1{background:#edf7f1;color:#197246;border-color:#cee8d9}
+.racer-grade.b2{background:#f1f3f7;color:#667387;border-color:#dde2e9}
+.race-roster-data{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
+.race-roster-data em{font-style:normal;font-size:7px;background:#f3f7fc;color:#65758a;border-radius:6px;padding:2px 4px}
+.day-racer-info{min-width:0}
+.day-racer-name-line{display:flex;align-items:center;gap:4px;min-width:0}
+.day-racer-name-line .day-racer-name{flex:1}
+.day-racer-meta{font-size:7px;color:#748399;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style></head>
 
 <body>
@@ -1638,7 +1667,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC24</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC26</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1663,7 +1692,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC24</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC26</div>
     </div>
   </section>
 
@@ -2037,6 +2066,53 @@ function scheduleRaceRosterFetch(){
   raceRosterTimer=setTimeout(()=>fetchRaceRoster(false),180);
 }
 
+
+function racerRankLabel(r){
+  const source=String(r?.rankSource||r?.rank_number_source||"").trim();
+  if(source) return source;
+  const map={1:"A1",2:"A2",3:"B1",4:"B2"};
+  return map[Number(r?.rankNumber)]||"";
+}
+function racerGradeClass(label){
+  return String(label||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+function formatRaceST(v){
+  if(v===null||v===undefined||v==="") return "-";
+  const n=Number(v);
+  if(!Number.isFinite(n)) return "-";
+  return n.toFixed(2);
+}
+function formatExhibition(v){
+  if(v===null||v===undefined||v==="") return "-";
+  const n=Number(v);
+  return Number.isFinite(n)?n.toFixed(2):"-";
+}
+function exhibitionRankForLane(lane){
+  const valid=loadedRaceRacers
+    .filter(r=>Number.isFinite(Number(r.exhibitionTime)))
+    .sort((a,b)=>Number(a.exhibitionTime)-Number(b.exhibitionTime));
+  const idx=valid.findIndex(r=>Number(r.lane)===Number(lane));
+  return idx>=0?idx+1:null;
+}
+function applyAutomaticRaceData(){
+  loadedRaceRacers.forEach(r=>{
+    const el=document.getElementById(`premiumST${r.lane}`);
+    if(el && r.startTiming!==null && r.startTiming!==undefined && Number.isFinite(Number(r.startTiming))){
+      el.value=Number(r.startTiming).toFixed(2);
+    }
+  });
+}
+function selectPremiumChipValue(key,value){
+  const group=document.querySelector(`.premium-chips[data-premium="${key}"]`);
+  if(!group)return;
+  group.querySelectorAll("button").forEach(btn=>{
+    let cmp=btn.textContent.trim();
+    if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))cmp=parseInt(cmp,10);
+    btn.classList.toggle("selected",String(cmp)===String(value));
+  });
+  premiumState[key]=value;
+}
+
 function renderRaceRoster(racers,statusText=""){
   const grid=document.getElementById("raceRosterGrid");
   const status=document.getElementById("raceRosterStatus");
@@ -2046,14 +2122,22 @@ function renderRaceRoster(racers,statusText=""){
     grid.innerHTML="";
     return;
   }
-  grid.innerHTML=racers.map(r=>`
-    <button type="button" class="race-roster-card" data-lane="${r.lane}" onclick="selectWinnerFromRoster(${r.lane})">
+  grid.innerHTML=racers.map(r=>{
+    const rank=racerRankLabel(r);
+    const exhibit=formatExhibition(r.exhibitionTime);
+    const st=formatRaceST(r.startTiming);
+    return `<button type="button" class="race-roster-card" data-lane="${r.lane}" onclick="selectWinnerFromRoster(${r.lane})">
       <span class="race-roster-lane">${r.lane}</span>
-      <span class="race-roster-info"><strong>${escapeHTML(r.name||"不明")}</strong><small>${r.number?`登録 ${r.number}`:""}</small></span>
-    </button>`).join("");
+      <span class="race-roster-info">
+        <strong><span class="racer-name-text">${escapeHTML(r.name||"不明")}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</strong>
+        <small>${r.number?`登録 ${r.number}`:""}</small>
+        <span class="race-roster-data">${exhibit!=="-"?`<em>展示 ${exhibit}</em>`:""}${st!=="-"?`<em>ST ${st}</em>`:""}</span>
+      </span>
+    </button>`;
+  }).join("");
+  applyAutomaticRaceData();
   syncRosterWinnerSelection();
 }
-
 function syncRosterWinnerSelection(){
   const winner=(document.getElementById("premiumWinner")?.value||"").trim();
   document.querySelectorAll(".race-roster-card").forEach(btn=>{
@@ -2071,6 +2155,8 @@ function selectWinnerFromRoster(lane){
     input.value=racer.name||"";
     input.dispatchEvent(new Event("input",{bubbles:true}));
   }
+  const rank=exhibitionRankForLane(lane);
+  if(rank) selectPremiumChipValue("exhibitionRank",rank);
   syncRosterWinnerSelection();
 }
 
@@ -2123,16 +2209,33 @@ async function fetchRaceRoster(force=false){
     const races=stadium?.races||{};
     const raceData=races[String(race)]||races[String(race).padStart(2,"0")];
     const racersObj=raceData?.racers||{};
+    const previewRacers=raceData?.preview?.racers||{};
+    const resultRacers=raceData?.result?.racers||{};
     const racers=[1,2,3,4,5,6].map(lane=>{
-      const r=racersObj[String(lane)]||racersObj[String(lane).padStart(2,"0")];
+      const key=String(lane), padded=key.padStart(2,"0");
+      const r=racersObj[key]||racersObj[padded];
+      const pr=previewRacers[key]||previewRacers[padded]||{};
+      const rr=resultRacers[key]||resultRacers[padded]||{};
       if(!r) return null;
-      return {lane,name:String(r.name||"").trim(),number:r.number||null,rankNumber:r.rank_number||null};
+      const st=pr.start_timing ?? rr.start_timing ?? null;
+      const exhibition=pr.exhibition_time ?? null;
+      return {
+        lane,
+        name:String(r.name||"").trim(),
+        number:r.number||null,
+        rankNumber:r.rank_number||null,
+        rankSource:r.rank_number_source||"",
+        averageStartTiming:r.average_start_timing??null,
+        exhibitionTime:exhibition===null?null:Number(exhibition),
+        startTiming:st===null?null:Number(st),
+        courseNumber:pr.course_number??rr.course_number??null
+      };
     }).filter(r=>r&&r.name);
 
     if(racers.length!==6) throw new Error(`6艇分の選手情報がありません（${racers.length}艇）`);
     loadedRaceRacers=racers;
     raceRosterCache.set(cacheKey,racers);
-    renderRaceRoster(racers,`${place} ${race}R・6艇を自動取得`);
+    renderRaceRoster(racers,`${place} ${race}R・選手/級別${racers.some(r=>r.exhibitionTime!==null)?"・展示":""}${racers.some(r=>r.startTiming!==null)?"・ST":""}を自動取得`);
   }catch(err){
     console.warn("race roster fetch error",err);
     loadedRaceRacers=[];
@@ -2144,7 +2247,7 @@ async function fetchRaceRoster(force=false){
 const premiumState={};
 function togglePremiumFields(){const box=document.getElementById("premiumFields");if(!box)return;box.classList.toggle("open");const c=document.getElementById("premiumChevron");if(c)c.textContent=box.classList.contains("open")?"−":"＋";updateWinnerHistory();if(box.classList.contains("open"))scheduleRaceRosterFetch()}
 function updateWinnerHistory(){const dl=document.getElementById("winnerHistory");if(!dl)return;const names=[...new Set(getData().map(r=>r.premium?.winnerName).filter(Boolean))].slice(-30).reverse();dl.innerHTML=names.map(n=>`<option value="${escapeHTML(n)}"></option>`).join("")}
-function getPremiumData(){const data={...premiumState};data.winnerName=(document.getElementById("premiumWinner")?.value||"").trim();data.womenRace=!!document.getElementById("premiumWomen")?.checked;data.windSpeed=Number(document.getElementById("premiumWindSpeed")?.value)||0;data.waveHeight=Number(document.getElementById("premiumWave")?.value)||0;data.startTimes=[1,2,3,4,5,6].map(n=>{const v=document.getElementById(`premiumST${n}`)?.value;return v===""||v===undefined?null:Number(v)});data.raceRacers=loadedRaceRacers.map(r=>({...r}));if(data.grade==="SG")data.womenRace=false;return data}
+function getPremiumData(){const data={...premiumState};data.winnerName=(document.getElementById("premiumWinner")?.value||"").trim();data.womenRace=!!document.getElementById("premiumWomen")?.checked;data.windSpeed=Number(document.getElementById("premiumWindSpeed")?.value)||0;data.waveHeight=Number(document.getElementById("premiumWave")?.value)||0;data.startTimes=[1,2,3,4,5,6].map(n=>{const v=document.getElementById(`premiumST${n}`)?.value;return v===""||v===undefined?null:Number(v)});data.exhibitionTimes=loadedRaceRacers.map(r=>r.exhibitionTime??null);data.raceRacers=loadedRaceRacers.map(r=>({...r}));if(data.grade==="SG")data.womenRace=false;return data}
 function resetPremiumFields(){loadedRaceRacers=[];const rg=document.getElementById("raceRosterGrid");if(rg)rg.innerHTML="";const rs=document.getElementById("raceRosterStatus");if(rs)rs.textContent="日付・レース場・Rを選ぶと自動取得します";Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave","premiumST1","premiumST2","premiumST3","premiumST4","premiumST5","premiumST6"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
 function loadPremiumFields(data){resetPremiumFields();if(!data)return;Object.assign(premiumState,data);loadedRaceRacers=Array.isArray(data.raceRacers)?data.raceRacers.map(r=>({...r})):[];if(loadedRaceRacers.length)renderRaceRoster(loadedRaceRacers,"保存済みの出走選手");document.querySelectorAll(".premium-chips").forEach(g=>{const key=g.dataset.premium,val=data[key];[...g.querySelectorAll("button")].forEach(b=>{let cmp=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))cmp=parseInt(cmp,10);b.classList.toggle("selected",String(cmp)===String(val))})});const win=document.getElementById("premiumWinner");if(win)win.value=data.winnerName||"";const ws=document.getElementById("premiumWindSpeed");if(ws)ws.value=data.windSpeed||"";const wh=document.getElementById("premiumWave");if(wh)wh.value=data.waveHeight||"";(data.startTimes||[]).forEach((v,i)=>{const e=document.getElementById(`premiumST${i+1}`);if(e)e.value=v===null||v===undefined?"":v});const wr=document.getElementById("premiumWomen");if(wr){wr.checked=!!data.womenRace;wr.disabled=data.grade==="SG"}}
 document.addEventListener("click",e=>{const b=e.target.closest(".premium-chips button");if(!b)return;e.preventDefault();const g=b.closest(".premium-chips"),key=g?.dataset.premium;if(!key)return;g.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");let val=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))val=parseInt(val,10);premiumState[key]=val;if(key==="grade"){const w=document.getElementById("premiumWomen");if(w){w.disabled=val==="SG";if(val==="SG")w.checked=false}}});
@@ -2304,7 +2407,7 @@ function openPremiumDetail(id){
   const sections=[
     ["投票・結果",[
       ["舟券種",p.ticketType],["着順（進入コース）",course],["1着選手名",p.winnerName],
-      ["1着艇 展示タイム順位",p.exhibitionRank?`${p.exhibitionRank}位`:""],["6艇ST",(p.startTimes||[]).map((v,i)=>v===null||v===undefined?`${i+1}号艇 -`:`${i+1}号艇 ${Number(v).toFixed(2)}`).join(" / ")],["決まり手",p.winningMove],["進入",p.entry]
+      ["1着艇 展示タイム順位",p.exhibitionRank?`${p.exhibitionRank}位`:""],["6艇 展示タイム",(p.raceRacers||[]).map(x=>`${x.lane}号艇 ${formatExhibition(x.exhibitionTime)}`).join(" / ")],["6艇ST",(p.startTimes||[]).map((v,i)=>v===null||v===undefined?`${i+1}号艇 -`:`${i+1}号艇 ${Number(v).toFixed(2)}`).join(" / ")],["決まり手",p.winningMove],["進入",p.entry]
     ]],
     ["レース条件",[
       ["レースグレード",grade],["安定板",p.stabilizer],["周回短縮",p.shortenedLaps],
@@ -2529,6 +2632,26 @@ function renderDayDetail(){
   const list=getData().filter(r=>r.date===selectedCalendarDate), s=calcStats(list);
   box.innerHTML=list.length?`<div class="day-summary"><div><div class="label">収支</div><div class="value ${profitClass(s.profit)}">${signedMoney(s.profit)}</div></div><div><div class="label">回収率</div><div class="value">${s.rate.toFixed(1)}%</div></div><div><div class="label">的中</div><div class="value">${s.hits}/${s.count}</div></div></div>`:'<div class="empty">この日の記録はありません</div>';
 }
+
+function dayRaceRacersHTML(r){
+  const racers=r?.premium?.raceRacers;
+  if(!Array.isArray(racers) || !racers.length) return "";
+  const ordered=[...racers].sort((a,b)=>Number(a.lane)-Number(b.lane));
+  return `<div class="day-racer-title">出走選手</div><div class="day-racer-grid">${
+    ordered.map(x=>{
+      const rank=racerRankLabel(x);
+      const ex=formatExhibition(x.exhibitionTime);
+      const st=formatRaceST(x.startTiming);
+      return `<div class="day-racer-chip" data-lane="${Number(x.lane)||0}">
+        <span class="day-racer-lane">${Number(x.lane)||"-"}</span>
+        <span class="day-racer-info">
+          <span class="day-racer-name-line"><span class="day-racer-name">${escapeHTML(x.name||"不明")}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</span>
+          <span class="day-racer-meta">${ex!=="-"?`展示 ${ex}`:"展示 -"} / ${st!=="-"?`ST ${st}`:"ST -"}</span>
+        </span>
+      </div>`;
+    }).join("")
+  }</div>`;
+}
 function renderDayDetailFull(){
   const dateEl=document.getElementById("dayDetailDate"), box=document.getElementById("dayDetailFull");
   if(!dateEl||!box||!selectedCalendarDate) return;
@@ -2537,6 +2660,7 @@ function renderDayDetailFull(){
   const cards=list.map(r=>{const p=Number(r.returnAmount)-Number(r.bet);return `<div class="day-record-card">
     <div class="day-record-head"><span>${escapeHTML(r.place)}　投資 ${formatMoney(r.bet)}　払戻 ${formatMoney(r.returnAmount)} ${manshuBadge(r)}</span><span class="${profitClass(p)}">${signedMoney(p)}</span></div>
     <div class="day-record-tags"><span>${r.race}R</span>${Number(r.odds)>0?`<span>${Number(r.odds).toFixed(1)}倍</span>`:""}<span>${r.hit?"◎ 的中":"× 不的中"}</span></div>
+    ${dayRaceRacersHTML(r)}
     ${r.image?`<div class="day-record-images"><img src="${r.image}" onclick="openImageModal('${r.id}')"></div>`:""}
     ${r.memo?`<div class="race-detail">${escapeHTML(r.memo)}</div>`:""}
     <div class="race-actions">${hasPremiumDetail(r)?`<button class="small-btn detail" onclick="openPremiumDetail('${r.id}')">詳細</button>`:""}<button class="small-btn edit" onclick="editRace(${r.id})">編集</button><button class="small-btn delete" onclick="deleteRace(${r.id},this)">削除</button></div>
