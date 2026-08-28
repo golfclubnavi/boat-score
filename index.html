@@ -1167,6 +1167,10 @@ header{
 .bs-start-board .head{background:#eaf5fa;font-weight:900;color:#315873;text-align:center}
 .bs-start-board .lane{text-align:center;font-weight:900}.bs-start-board .course{font-weight:800}.bs-start-board .st{text-align:center;font-variant-numeric:tabular-nums}
 .bs-no-result{padding:10px;font-size:9px;color:#77879a;text-align:center}
+</style>
+<style id="rc29fixes">
+.premium-detail-loading{padding:18px;text-align:center;font-size:10px;color:#6f7e92;background:#fff;border:1px solid #dfe7f1;border-radius:12px}
+.premium-detail-updated{font-size:8px;color:#698099;margin:6px 0 0}
 </style></head>
 
 <body>
@@ -1694,7 +1698,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC28</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC29</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1719,7 +1723,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC28</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC29</div>
     </div>
   </section>
 
@@ -2267,6 +2271,11 @@ async function fetchRaceRoster(force=false){
     const stadium=stadiums[String(Number(code))]||stadiums[code]||stadiums[code.padStart(2,"0")];
     const races=stadium?.races||{};
     const raceData=races[String(race)]||races[String(race).padStart(2,"0")];
+    const autoWomenRace=isWomensRaceTitle([raceData?.title,raceData?.subtitle].filter(Boolean).join(" "));
+    if(autoWomenRace){
+      const w=document.getElementById("premiumWomen");
+      if(w && !w.disabled) w.checked=true;
+    }
     const racersObj=raceData?.racers||{};
     const previewRacers=raceData?.preview?.racers||{};
     const resultRacers=raceData?.result?.racers||{};
@@ -2449,8 +2458,6 @@ function premiumDisplayValue(v){
 }
 
 function femaleHeartHTML(p){
-  // Current API does not expose racer sex. Mark all racers only when the race itself
-  // is explicitly stored as a women's race; never infer sex from a name.
   return p?.womenRace ? '<span class="bs-female-heart">♥</span>' : '';
 }
 function raceResultTableHTML(r){
@@ -2496,29 +2503,126 @@ function startBoardHTML(r){
     </div></div>`;
 }
 
-function openPremiumDetail(id){
-  const r=getData().find(x=>String(x.id)===String(id));
+
+function isWomensRaceTitle(title=""){
+  const t=String(title||"");
+  return /女子|レディース|ヴィーナス|オールレディース|Wクイーンズ|クイーンズ/.test(t);
+}
+function latestRaceFromApi(data,place,race){
+  const code=BOATRACE_STADIUM_CODES[place];
+  if(!code) return null;
+  const stadiums=data?.programs?.stadiums||{};
+  const stadium=stadiums[String(Number(code))]||stadiums[code]||stadiums[String(code).padStart(2,"0")];
+  const races=stadium?.races||{};
+  return races[String(Number(race))]||races[String(Number(race)).padStart(2,"0")]||null;
+}
+function normalizeLatestRaceRacers(raceData){
+  const racersObj=raceData?.racers||{};
+  const previewRacers=raceData?.preview?.racers||{};
+  const resultRacers=raceData?.result?.racers||{};
+  return [1,2,3,4,5,6].map(lane=>{
+    const key=String(lane),padded=key.padStart(2,"0");
+    const r=racersObj[key]||racersObj[padded];
+    const pr=previewRacers[key]||previewRacers[padded]||{};
+    const rr=resultRacers[key]||resultRacers[padded]||{};
+    if(!r)return null;
+    const previewST=pr.start_timing ?? null;
+    const resultST=rr.start_timing ?? null;
+    const exhibition=pr.exhibition_time ?? null;
+    return {
+      lane,
+      name:String(r.name||"").trim(),
+      number:r.number||null,
+      rankNumber:r.rank_number||null,
+      rankSource:r.rank_number_source||"",
+      averageStartTiming:r.average_start_timing??null,
+      exhibitionTime:exhibition===null?null:Number(exhibition),
+      previewStartTiming:previewST===null?null:Number(previewST),
+      courseNumber:pr.course_number??null,
+      resultStartTiming:resultST===null?null:Number(resultST),
+      resultPlace:rr.place_number??null,
+      resultCourse:rr.course_number??null
+    };
+  }).filter(Boolean);
+}
+async function refreshStoredRaceData(record){
+  if(!record?.date||!record?.place||!record?.race)return record;
+  const ymd=String(record.date).replaceAll("-","");
+  const year=String(record.date).slice(0,4);
+  try{
+    const res=await fetch(`https://boatraceopenapi.github.io/api/v1/${year}/${ymd}.json`,{cache:"no-store"});
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    const raceData=latestRaceFromApi(data,record.place,record.race);
+    if(!raceData)throw new Error("race not found");
+    const racers=normalizeLatestRaceRacers(raceData);
+    if(racers.length!==6)throw new Error("6 racers not found");
+
+    record.premium=record.premium||{};
+    record.premium.raceRacers=racers;
+    record.premium.exhibitionTimes=racers.map(r=>r.exhibitionTime??null);
+    record.premium.startTimes=racers.map(r=>r.resultStartTiming??null);
+
+    const title=[raceData.title,raceData.subtitle].filter(Boolean).join(" ");
+    if(isWomensRaceTitle(title)) record.premium.womenRace=true;
+
+    const winner=racers.find(r=>Number(r.resultPlace)===1);
+    if(winner){
+      record.premium.winnerName=winner.name||record.premium.winnerName||"";
+      const valid=[...racers].filter(r=>Number.isFinite(Number(r.exhibitionTime))).sort((a,b)=>Number(a.exhibitionTime)-Number(b.exhibitionTime));
+      const er=valid.findIndex(r=>Number(r.lane)===Number(winner.lane));
+      if(er>=0)record.premium.exhibitionRank=er+1;
+    }
+
+    record.premium.resultOrder=racers
+      .filter(r=>r.resultPlace!==null&&r.resultPlace!==undefined)
+      .map(r=>({lane:Number(r.lane),place:Number(r.resultPlace),course:Number(r.resultCourse)||null}))
+      .sort((a,b)=>a.place-b.place);
+
+    const all=getData();
+    const i=all.findIndex(x=>String(x.id)===String(record.id));
+    if(i>=0){
+      all[i]=record;
+      saveData(all);
+    }
+    return record;
+  }catch(err){
+    console.warn("latest race refresh failed",err);
+    return record;
+  }
+}
+
+async function openPremiumDetail(id){
+  let r=getData().find(x=>String(x.id)===String(id));
   if(!r) return;
-  const p=r.premium||{};
   const modal=document.getElementById("premiumDetailModal");
   const summary=document.getElementById("premiumDetailSummary");
   const body=document.getElementById("premiumDetailBody");
   if(!modal||!summary||!body) return;
 
+  modal.classList.add("show");
+  summary.innerHTML="";
+  body.innerHTML='<div class="premium-detail-loading">最新のレース情報を確認しています…</div>';
+
+  r=await refreshStoredRaceData(r);
+  const p=r.premium||{};
   const profit=Number(r.returnAmount||0)-Number(r.bet||0);
+
   summary.innerHTML=`
     <div><small>レース</small><strong>${escapeHTML(r.place||"")} ${Number(r.race)||1}R</strong></div>
     <div><small>収支</small><strong>${signedMoney(profit)}</strong></div>
     <div><small>回収率</small><strong>${Number(r.bet)>0?((Number(r.returnAmount||0)/Number(r.bet))*100).toFixed(1):"0.0"}%</strong></div>`;
 
-  const course=[p.firstCourse,p.secondCourse,p.thirdCourse].map(v=>v?`${v}コース`:"-").join(" - ");
-  const grade=p.grade ? `${p.grade}${p.womenRace?"（女子戦）":""}` : "未入力";
+  const grade=p.grade ? `${p.grade}${p.womenRace?"（女子戦）":""}` : (p.womenRace?"女子戦":"未入力");
   const wind=p.windDirection ? `${p.windDirection}${Number(p.windSpeed)>0?` ${p.windSpeed}m`:""}` : (Number(p.windSpeed)>0?`${p.windSpeed}m`:"未入力");
 
   const sections=[
     ["投票・結果",[
-      ["舟券種",p.ticketType],["着順・進入",course],["1着選手名",p.winnerName],
-      ["1着艇 展示タイム順位",p.exhibitionRank?`${p.exhibitionRank}位`:""],["6艇 展示タイム",(p.raceRacers||[]).map(x=>`${x.lane}号艇 ${formatExhibition(x.exhibitionTime)}`).join(" / ")],["6艇 本番ST",(p.startTimes||[]).map((v,i)=>v===null||v===undefined?`${i+1}号艇 -`:`${i+1}号艇 ${Number(v).toFixed(2)}`).join(" / ")],["決まり手",p.winningMove],["進入",p.entry]
+      ["舟券種",p.ticketType],["1着選手名",p.winnerName],
+      ["1着艇 展示タイム順位",p.exhibitionRank?`${p.exhibitionRank}位`:""],
+      ["6艇 展示タイム",(p.raceRacers||[]).map(x=>`${x.lane}号艇 ${formatExhibition(x.exhibitionTime)}`).join(" / ")],
+      ["6艇 本番ST",(p.startTimes||[]).map((v,i)=>v===null||v===undefined?`${i+1}号艇 -`:`${i+1}号艇 ${Number(v).toFixed(2)}`).join(" / ")],
+      ["決まり手",p.winningMove],["進入",p.entry]
     ]],
     ["レース条件",[
       ["レースグレード",grade],["安定板",p.stabilizer],["周回短縮",p.shortenedLaps],
@@ -2528,12 +2632,15 @@ function openPremiumDetail(id){
       ["自信度",p.confidence],["購入タイミング",p.purchaseTiming]
     ]]
   ];
-  body.innerHTML=raceResultTableHTML(r)+startBoardHTML(r)+sections.map(([title,items])=>`
-    <div class="premium-detail-section"><strong>${title}</strong><div class="premium-detail-grid">
-      ${items.map(([label,val])=>`<div class="premium-detail-item"><small>${label}</small><b>${escapeHTML(premiumDisplayValue(val))}</b></div>`).join("")}
-    </div></div>`).join("");
 
-  modal.classList.add("show");
+  body.innerHTML=
+    raceResultTableHTML(r)+
+    startBoardHTML(r)+
+    '<div class="premium-detail-updated">※ 詳細を開くたびに最新の直前情報・結果を確認します</div>'+
+    sections.map(([title,items])=>`
+      <div class="premium-detail-section"><strong>${title}</strong><div class="premium-detail-grid">
+        ${items.map(([label,val])=>`<div class="premium-detail-item"><small>${label}</small><b>${escapeHTML(premiumDisplayValue(val))}</b></div>`).join("")}
+      </div></div>`).join("");
 }
 function closePremiumDetail(event){
   if(event && event.target!==document.getElementById("premiumDetailModal")) return;
@@ -2772,6 +2879,7 @@ function renderDayDetailFull(){
     <div class="day-record-head"><span>${escapeHTML(r.place)}　投資 ${formatMoney(r.bet)}　払戻 ${formatMoney(r.returnAmount)} ${manshuBadge(r)}</span><span class="${profitClass(p)}">${signedMoney(p)}</span></div>
     <div class="day-record-tags"><span>${r.race}R</span>${Number(r.odds)>0?`<span>${Number(r.odds).toFixed(1)}倍</span>`:""}<span>${r.hit?"◎ 的中":"× 不的中"}</span></div>
     ${dayRaceRacersHTML(r)}
+    ${hasPremiumDetail(r)?raceResultTableHTML(r)+startBoardHTML(r):""}
     ${r.image?`<div class="day-record-images"><img src="${r.image}" onclick="openImageModal('${r.id}')"></div>`:""}
     ${r.memo?`<div class="race-detail">${escapeHTML(r.memo)}</div>`:""}
     <div class="race-actions">${hasPremiumDetail(r)?`<button class="small-btn detail" onclick="openPremiumDetail('${r.id}')">詳細</button>`:""}<button class="small-btn edit" onclick="editRace(${r.id})">編集</button><button class="small-btn delete" onclick="deleteRace(${r.id},this)">削除</button></div>
