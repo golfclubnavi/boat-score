@@ -1179,6 +1179,18 @@ header{
 </style>
 <style id="rc32analysis">
 .odds-band-setting{background:#f6f9fd;border:1px solid #dce6f2;border-radius:13px;padding:10px;margin-bottom:10px}.odds-band-setting>div:first-child strong{display:block;font-size:11px;color:#1b3659}.odds-band-setting>div:first-child small{display:block;font-size:8px;color:#7a899b;margin-top:2px}.odds-band-inputs{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;align-items:end;margin-top:8px}.odds-band-inputs label{font-size:8px;color:#66768a;font-weight:800}.odds-band-inputs label input{width:100%;box-sizing:border-box;border:1px solid #d3deec;border-radius:8px;padding:8px 24px 8px 7px;margin-top:4px;background:#fff;font-size:11px}.odds-band-inputs label{position:relative}.odds-band-inputs label span{position:absolute;right:7px;bottom:8px;font-size:8px;color:#738198}.odds-band-inputs button{border:0;background:#0764d4;color:#fff;border-radius:9px;padding:9px 10px;font-size:9px;font-weight:900}.analysis-period-tabs{display:grid!important;grid-template-columns:repeat(3,1fr)!important}.analysis-variation-grid{grid-template-columns:repeat(3,1fr)!important}@media(max-width:380px){.odds-band-inputs{grid-template-columns:1fr 1fr}.odds-band-inputs button{grid-column:1/-1}.analysis-variation-grid{grid-template-columns:1fr 1fr!important}}
+</style><style id="rc33premiumtabs">
+.premium-input-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#edf4fc;border-radius:11px;padding:4px;margin:0 0 12px;position:sticky;top:0;z-index:5}
+.premium-input-tabs button{border:0;background:transparent;border-radius:8px;padding:8px 3px;font-size:8px;font-weight:900;color:#65768c;white-space:nowrap}.premium-input-tabs button.active{background:#0968dc;color:#fff;box-shadow:0 3px 10px rgba(9,104,220,.2)}
+.premium-tab-panel{display:none}.premium-tab-panel.active{display:block}
+.premium-tab-panel .bs-race-table-wrap{margin-top:0}
+</style><style id="rc33analysissettings">
+.settings-odds-box{display:grid;gap:10px}.settings-odds-box>label{display:grid;grid-template-columns:1fr 120px auto;align-items:center;gap:8px;font-size:12px;font-weight:800;color:#263b58}.settings-odds-box input{width:100%;box-sizing:border-box;border:1px solid #d6e0ec;border-radius:9px;padding:10px;font-size:13px}.settings-odds-box label span{font-size:9px;color:#76869a}.settings-odds-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.settings-odds-preview div{background:#f5f8fc;border:1px solid #dce5ef;border-radius:10px;padding:9px;text-align:center}.settings-odds-preview small{display:block;font-size:8px;color:#7a8999}.settings-odds-preview strong{display:block;font-size:10px;margin-top:3px}
+</style><style id="rc33analysiscompact">
+.analysis-compact-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;background:#edf4fc;border:1px solid #dbe5f1;border-radius:14px;padding:5px;margin-bottom:10px;position:sticky;top:0;z-index:20}.analysis-compact-nav button{border:0;background:transparent;border-radius:9px;padding:9px 2px;font-size:8px;font-weight:900;color:#64758a}.analysis-compact-nav button.active{background:#0870e6;color:#fff;box-shadow:0 4px 12px rgba(8,112,230,.2)}
+.analysis-view-section{display:none!important}.analysis-view-section.active{display:block!important}
+.premium-analysis-toggle{width:100%;border:1px solid #c9d8ed;background:linear-gradient(135deg,#fbfdff,#eef5ff);color:#153963;border-radius:14px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:900;margin:10px 0}.premium-analysis-toggle b{font-size:20px;color:#0866d7}.premium-analysis-collapsible{display:none}.premium-analysis-collapsible.open{display:block}
+@media(max-width:370px){.analysis-compact-nav{grid-template-columns:repeat(5,1fr)}.analysis-compact-nav button{font-size:7px}}
 </style></head>
 
 <body>
@@ -1233,7 +1245,7 @@ header{
     <div class="home-section-head"><strong>▮ 今月の傾向</strong><button onclick="showPage('analysisPage',document.querySelector('[data-page=analysisPage]'))">詳細を見る ›</button></div>
     <div class="home-trend-grid">
       <div class="home-trend-card"><small>● 得意な場</small><strong id="homeBestPlace">-</strong><em id="homeBestPlaceSub">記録なし</em></div>
-      <div class="home-trend-card"><small>⚑ 得意R</small><strong id="homeBestRace">-</strong><em id="homeBestRaceSub">記録なし</em></div>
+      <div class="home-trend-card"><small>◎ 得意オッズ帯</small><strong id="homeBestOddsBand">-</strong><em id="homeBestOddsBandSub">記録なし</em></div>
       <div class="home-trend-card"><small>♛ 最高払戻</small><strong id="homeMaxReturn">0円</strong><em id="homeMaxReturnSub">-</em></div>
       <div class="home-trend-card"><small>◎ 的中率</small><strong id="homeHitRate">0%</strong><em id="homeHitRateSub">0 / 0 レース</em></div>
     </div>
@@ -1337,54 +1349,61 @@ header{
 
       <button type="button" class="premium-lock" onclick="togglePremiumFields()"><span>♛</span><div><strong>詳細入力（Premium）</strong><small>任意入力・ほぼタップだけで記録</small></div><b id="premiumChevron">＋</b></button>
       <div id="premiumFields" class="premium-fields">
-        <div class="premium-head"><strong>♛ Premium 詳細データ</strong><small>入力した項目だけ分析に使用します</small></div>
-        <div class="premium-field"><label>舟券種</label><div class="premium-chips" data-premium="ticketType"><button>3連単</button><button>3連複</button><button>2連単</button><button>2連複</button><button>拡連複</button><button>単勝</button><button>複勝</button></div></div>
-        <div class="premium-field">
-          <label>出走選手 <small>（日付・場・Rから自動取得）</small></label>
-          <div class="race-roster-box">
-            <div class="race-roster-head">
-              <span id="raceRosterStatus">日付・レース場・Rを選ぶと自動取得します</span>
-              <button type="button" onclick="fetchRaceRoster(true)">再取得</button>
+        <div class="premium-head"><strong>♛ Premium 詳細入力</strong><small>必要な情報だけタブで入力・確認できます</small></div>
+        <div class="premium-input-tabs">
+          <button type="button" class="active" data-premium-tab="race" onclick="setPremiumInputTab('race',this)">レース情報</button>
+          <button type="button" data-premium-tab="prediction" onclick="setPremiumInputTab('prediction',this)">予想・購入</button>
+          <button type="button" data-premium-tab="result" onclick="setPremiumInputTab('result',this)">結果</button>
+          <button type="button" data-premium-tab="start" onclick="setPremiumInputTab('start',this)">スタート</button>
+        </div>
+
+        <div class="premium-tab-panel active" data-premium-panel="race">
+          <div class="premium-field">
+            <label>出走6艇 <small>（日付・場・Rから自動取得）</small></label>
+            <div class="race-roster-box">
+              <div class="race-roster-head"><span id="raceRosterStatus">日付・レース場・Rを選ぶと自動取得します</span><button type="button" onclick="fetchRaceRoster(true)">再取得</button></div>
+              <div id="raceRosterGrid" class="race-roster-grid"></div>
+              <div class="race-roster-note">選手名・級別を自動表示します。</div>
             </div>
-            <div id="raceRosterGrid" class="race-roster-grid"></div>
-            <div class="race-roster-note">選手をタップすると「1着選手名」に入ります。取得できない場合は下の欄へ手入力できます。</div>
           </div>
+          <div class="premium-field"><label>6艇の展示データ <small>（自動取得）</small></label><div id="premiumExhibitionTable" class="premium-exhibition-table"><div class="premium-auto-empty">直前情報が公開されると自動表示します</div></div></div>
+          <div class="premium-field"><label>レースグレード</label><div class="premium-chips" data-premium="grade"><button>SG</button><button>G1</button><button>G2</button><button>G3</button><button>一般</button></div><label class="women-toggle"><input id="premiumWomen" type="checkbox"> 女子戦 <small>※SGでは選択不可</small></label></div>
+          <div class="premium-field"><label>安定板</label><div class="premium-chips" data-premium="stabilizer"><button>なし</button><button>あり</button></div></div>
+          <div class="premium-field"><label>周回短縮</label><div class="premium-chips" data-premium="shortenedLaps"><button>なし</button><button>あり</button></div></div>
+          <div class="premium-field"><label>風向</label><div class="premium-chips" data-premium="windDirection"><button>無風</button><button>追い風</button><button>向かい風</button><button>横風</button></div></div>
+          <div class="premium-two"><div><label>風速</label><div class="unit-input"><input id="premiumWindSpeed" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"><span>m</span></div></div><div><label>波高</label><div class="unit-input"><input id="premiumWave" type="number" min="0" inputmode="numeric" placeholder="0"><span>cm</span></div></div></div>
+          <div class="premium-field"><label>天候</label><div class="premium-chips" data-premium="weather"><button>晴</button><button>曇</button><button>雨</button><button>雪</button></div></div>
         </div>
-        <div class="premium-result-auto">
-          <span id="premiumResultStatus">結果反映後、着順・進入・本番STを自動取得します</span>
-          <button type="button" onclick="fetchRaceRoster(true)">結果を再取得</button>
+
+        <div class="premium-tab-panel" data-premium-panel="prediction">
+          <div class="premium-field"><label>舟券種</label><div class="premium-chips" data-premium="ticketType"><button>3連単</button><button>3連複</button><button>2連単</button><button>2連複</button><button>拡連複</button><button>単勝</button><button>複勝</button></div></div>
+          <div class="premium-field"><label>自信度</label><div class="premium-chips" data-premium="confidence"><button>◎ 高い</button><button>○ 普通</button><button>△ 低い</button></div></div>
+          <div class="premium-field"><label>購入タイミング</label><div class="premium-chips" data-premium="purchaseTiming"><button>展示前</button><button>展示後</button></div></div>
         </div>
-        <div id="premiumLiveResultWrap" class="premium-live-result-wrap">
+
+        <div class="premium-tab-panel" data-premium-panel="result">
+          <div class="premium-result-auto"><span id="premiumResultStatus">結果反映後、着順・進入・本番STを自動取得します</span><button type="button" onclick="fetchRaceRoster(true)">結果を再取得</button></div>
           <div id="premiumLiveResult"></div>
+          <div class="premium-field"><label>1着選手名</label><input id="premiumWinner" list="winnerHistory" placeholder="選手名を入力"><datalist id="winnerHistory"></datalist></div>
+          <div class="premium-field"><label>1着艇の展示タイム順位</label><div class="premium-chips six" data-premium="exhibitionRank"><button>1位</button><button>2位</button><button>3位</button><button>4位</button><button>5位</button><button>6位</button></div></div>
+          <div class="premium-field"><label>決まり手</label><div class="premium-chips" data-premium="winningMove"><button>逃げ</button><button>差し</button><button>まくり</button><button>まくり差し</button><button>抜き</button><button>恵まれ</button></div></div>
+          <div class="premium-field"><label>進入</label><div class="premium-chips" data-premium="entry"><button>枠なり</button><button>進入変化あり</button></div></div>
+        </div>
+
+        <div class="premium-tab-panel" data-premium-panel="start">
           <div id="premiumLiveStart"></div>
-        </div>
-        <div class="premium-field"><label>1着選手名</label><input id="premiumWinner" list="winnerHistory" placeholder="選手名を入力"><datalist id="winnerHistory"></datalist></div>
-        <div class="premium-field"><label>1着艇の展示タイム順位</label><div class="premium-chips six" data-premium="exhibitionRank"><button>1位</button><button>2位</button><button>3位</button><button>4位</button><button>5位</button><button>6位</button></div></div>
-        <div class="premium-field">
-          <label>6艇の展示データ <small>（自動取得）</small></label>
-          <div id="premiumExhibitionTable" class="premium-exhibition-table"><div class="premium-auto-empty">直前情報が公開されると自動表示します</div></div>
-        </div>
-        <div class="premium-field"><label>6艇の本番ST <small>（結果反映後は自動入力 / 手動修正可）</small></label>
-          <div class="premium-st-grid">
-            <label><span>1号艇</span><input id="premiumST1" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
-            <label><span>2号艇</span><input id="premiumST2" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
-            <label><span>3号艇</span><input id="premiumST3" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
-            <label><span>4号艇</span><input id="premiumST4" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
-            <label><span>5号艇</span><input id="premiumST5" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
-            <label><span>6号艇</span><input id="premiumST6" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+          <div class="premium-field"><label>6艇の本番ST <small>（結果反映後は自動入力 / 手動修正可）</small></label>
+            <div class="premium-st-grid">
+              <label><span>1号艇</span><input id="premiumST1" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+              <label><span>2号艇</span><input id="premiumST2" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+              <label><span>3号艇</span><input id="premiumST3" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+              <label><span>4号艇</span><input id="premiumST4" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+              <label><span>5号艇</span><input id="premiumST5" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+              <label><span>6号艇</span><input id="premiumST6" type="number" step="0.01" inputmode="decimal" placeholder="0.15"></label>
+            </div>
+            <small class="premium-st-note">例：0.15　フライングは -0.01</small>
           </div>
-          <small class="premium-st-note">例：0.15　フライングは -0.01 のように入力</small>
         </div>
-        <div class="premium-field"><label>決まり手</label><div class="premium-chips" data-premium="winningMove"><button>逃げ</button><button>差し</button><button>まくり</button><button>まくり差し</button><button>抜き</button><button>恵まれ</button></div></div>
-        <div class="premium-field"><label>進入</label><div class="premium-chips" data-premium="entry"><button>枠なり</button><button>進入変化あり</button></div></div>
-        <div class="premium-field"><label>安定板</label><div class="premium-chips" data-premium="stabilizer"><button>なし</button><button>あり</button></div></div>
-        <div class="premium-field"><label>周回短縮</label><div class="premium-chips" data-premium="shortenedLaps"><button>なし</button><button>あり</button></div></div>
-        <div class="premium-field"><label>レースグレード</label><div class="premium-chips" data-premium="grade"><button>SG</button><button>G1</button><button>G2</button><button>G3</button><button>一般</button></div><label class="women-toggle"><input id="premiumWomen" type="checkbox"> 女子戦 <small>※SGでは選択不可</small></label></div>
-        <div class="premium-field"><label>風向</label><div class="premium-chips" data-premium="windDirection"><button>無風</button><button>追い風</button><button>向かい風</button><button>横風</button></div></div>
-        <div class="premium-two"><div><label>風速</label><div class="unit-input"><input id="premiumWindSpeed" type="number" min="0" step="0.1" inputmode="decimal" placeholder="0"><span>m</span></div></div><div><label>波高</label><div class="unit-input"><input id="premiumWave" type="number" min="0" inputmode="numeric" placeholder="0"><span>cm</span></div></div></div>
-        <div class="premium-field"><label>天候</label><div class="premium-chips" data-premium="weather"><button>晴</button><button>曇</button><button>雨</button><button>雪</button></div></div>
-        <div class="premium-field"><label>自信度</label><div class="premium-chips" data-premium="confidence"><button>◎ 高い</button><button>○ 普通</button><button>△ 低い</button></div></div>
-        <div class="premium-field"><label>購入タイミング</label><div class="premium-chips" data-premium="purchaseTiming"><button>展示前</button><button>展示後</button></div></div>
       </div>
       <button id="saveButton" class="add-button" onclick="saveRace(false)">保存する</button>
     </div>
@@ -1416,19 +1435,16 @@ header{
 
 
   <section id="analysisPage" class="page">
-  <div class="card bs-analysis-insight">
+  <div class="analysis-compact-nav">
+    <button class="active" data-analysis-view="summary" onclick="setAnalysisView('summary',this)">サマリー</button>
+    <button data-analysis-view="trend" onclick="setAnalysisView('trend',this)">収支推移</button>
+    <button data-analysis-view="place" onclick="setAnalysisView('place',this)">レース場</button>
+    <button data-analysis-view="odds" onclick="setAnalysisView('odds',this)">オッズ</button>
+    <button data-analysis-view="winningMove" onclick="setAnalysisView('winningMove',this)">決まり手</button>
+  </div>
+  <div id="analysisOddsSection" class="card bs-analysis-insight analysis-view-section">
     <div class="section-title"><span>オッズ帯分析</span><b class="bs-auto-badge">自動分析</b></div>
-
-    <div class="odds-band-setting">
-      <div><strong>オッズ帯を自分で設定</strong><small>本命と中穴の上限を変更できます</small></div>
-      <div class="odds-band-inputs">
-        <label>本命 上限<input id="oddsFavMaxInput" type="number" min="1" step="0.1" inputmode="decimal" value="30"><span>倍</span></label>
-        <label>中穴 上限<input id="oddsMidMaxInput" type="number" min="2" step="0.1" inputmode="decimal" value="80"><span>倍</span></label>
-        <button type="button" onclick="saveOddsBandSettings()">反映</button>
-      </div>
-    </div>
-
-    <div class="odds-band-grid">
+<div class="odds-band-grid">
       <button class="odds-band-card favorite" onclick="openOddsHistory('本命')">
         <small>本命</small><strong id="oddsFavRange">0〜29.9倍</strong>
         <span id="oddsFavRate">回収率 0%</span>
@@ -1463,6 +1479,28 @@ header{
         <em id="analysisWeakSub">同じオッズ帯の記録が2件以上で分析</em>
       </div>
     </div>
+  </div>
+
+<div id="analysisTrendSection" class="analysis-upgrade card analysis-view-section">
+<div class="analysis-period-tabs"><button id="analysisTodayBtn" onclick="setAnalysisPeriod('today')">本日</button><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
+<div class="section-title analysis-trend-title"><span>収支推移</span></div>
+<div id="analysisMonthNav" class="analysis-month-nav">
+  <button onclick="moveAnalysisMonth(-1)">‹</button><strong id="analysisMonthLabel"></strong><button onclick="moveAnalysisMonth(1)">›</button>
+</div>
+<div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
+<div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
+<div class="section-title"><span>分析バリエーション</span></div><div class="analysis-variation-grid"><div><small>得意なレース場</small><strong id="anaBestPlaceRace">-</strong><em id="anaBestPlaceRaceSub">記録なし</em></div><div><small>⭐ 万舟的中</small><strong id="anaManHits">0回</strong><em id="anaManReturn">総払戻 0円</em></div><div><small>曜日別BEST</small><strong id="anaBestWeekday">-</strong><em id="anaBestWeekdaySub">記録なし</em></div></div></div>
+    <div id="analysisDataSection" class="card analysis-view-section active">
+      <div class="section-title"><span>分析</span></div>
+
+
+      <div id="analysisContent"></div>
+    </div>
+      <button id="premiumAnalysisToggle" class="premium-analysis-toggle" type="button" onclick="togglePremiumAnalysisSection()">
+      <span>♛ Premium詳細分析</span><b>＋</b>
+    </button>
+    <div id="premiumAnalysisSection" class="premium-analysis-collapsible">
+
 
     <div class="premium-analysis premium-live">
       <div class="premium-analysis-head">
@@ -1495,8 +1533,8 @@ header{
       </div>
 
       <div class="premium-breakdown">
-        <div class="premium-mini-title">レース場 × R別</div>
-        <div id="premiumPlaceRaceAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+        <div class="premium-mini-title">レース場別</div>
+        <div id="premiumPlaceAnalysis" class="premium-list-row"><span>データ収集中</span></div>
 
         <div class="premium-mini-title">相性のいい選手</div>
         <div id="premiumPlayerAnalysis" class="premium-list-row"><span>データ収集中</span></div>
@@ -1505,6 +1543,8 @@ header{
         <div id="premiumGradeAnalysis" class="premium-list-row"><span>データ収集中</span></div>
         <div class="premium-mini-title">決まり手別</div>
         <div id="premiumWinningMoveAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+        <div class="premium-mini-title">コース × 決まり手</div>
+        <div id="premiumCourseMoveAnalysis" class="premium-list-row"><span>データ収集中</span></div>
 
         <div class="premium-mini-title">展示タイム順位別</div>
         <div id="premiumExhibitionAnalysis" class="premium-list-row"><span>データ収集中</span></div>
@@ -1520,29 +1560,8 @@ header{
         <div id="premiumConditionAnalysis" class="premium-list-row"><span>データ収集中</span></div>
       <div class="premium-note">2〜4件＝参考 / 5〜9件＝傾向あり / 10件以上＝信頼度高め</div>
     </div>
-  </div>
-
-<div class="analysis-upgrade card">
-<div class="analysis-period-tabs"><button id="analysisTodayBtn" onclick="setAnalysisPeriod('today')">本日</button><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
-<div class="section-title analysis-trend-title"><span>収支推移</span></div>
-<div id="analysisMonthNav" class="analysis-month-nav">
-  <button onclick="moveAnalysisMonth(-1)">‹</button><strong id="analysisMonthLabel"></strong><button onclick="moveAnalysisMonth(1)">›</button>
-</div>
-<div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
-<div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
-<div class="section-title"><span>分析バリエーション</span></div><div class="analysis-variation-grid"><div><small>得意な場 × R</small><strong id="anaBestPlaceRace">-</strong><em id="anaBestPlaceRaceSub">記録なし</em></div><div><small>⭐ 万舟的中</small><strong id="anaManHits">0回</strong><em id="anaManReturn">総払戻 0円</em></div><div><small>曜日別BEST</small><strong id="anaBestWeekday">-</strong><em id="anaBestWeekdaySub">記録なし</em></div></div></div>
-    <div class="card">
-      <div class="section-title"><span>分析</span></div>
-
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="summary" onclick="setAnalysisTab('summary',this)">サマリー</button>
-        <button class="tab-btn" data-tab="placeRace" onclick="setAnalysisTab('placeRace',this)">場 × R</button>
-        <button class="tab-btn" data-tab="odds" onclick="setAnalysisTab('odds',this)">オッズ別</button>
-      </div>
-
-      <div id="analysisContent"></div>
     </div>
-  </section>
+</section>
 
   <section id="oddsHistoryPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('analysisPage',document.querySelector('[data-page=analysisPage]'))">‹ 分析</button><strong id="oddsHistoryTitle">オッズ履歴</strong><span></span></div>
@@ -1571,6 +1590,10 @@ header{
       <button class="settings-row" onclick="showPage('displaySettingsPage')">
         <span class="sicon purple">◈</span>
         <span><strong>表示設定</strong><small>万舟表示・金額表示</small></span><b>›</b>
+      </button>
+      <button class="settings-row" onclick="showPage('analysisSettingsPage')">
+        <span class="sicon blue">％</span>
+        <span><strong>分析設定</strong><small>本命・中穴・大穴のオッズ帯</small></span><b>›</b>
       </button>
       <button class="settings-row" onclick="showPage('dataSettingsPage')">
         <span class="sicon orange">▣</span>
@@ -1623,7 +1646,7 @@ header{
 
   <div class="guide-card premium-guide">
     <div class="guide-title"><span>♛</span><div><small>PREMIUM</small><strong>詳細分析について</strong></div></div>
-    <p class="guide-text">Premiumでは、レース場×R帯・コース・舟券種・決まり手・風など、より細かな条件を組み合わせて分析できる予定です。</p>
+    <p class="guide-text">Premiumでは、レース場・コース×決まり手・舟券種・展示・自信度・購入タイミングなど、より細かな条件を分析できます。</p>
   </div>
 
   <div class="guide-card backup-guide">
@@ -1698,6 +1721,24 @@ header{
   </div>
 </section>
 
+<section id="analysisSettingsPage" class="page">
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>分析設定</strong><span></span></div>
+  <div class="card">
+    <div class="section-title"><span>オッズ帯設定</span></div>
+    <p class="helper" style="margin-bottom:12px">自分の舟券スタイルに合わせて、本命・中穴・大穴の境界を変更できます。</p>
+    <div class="settings-odds-box">
+      <label>本命の上限<input id="oddsFavMaxInput" type="number" min="1" step="0.1" inputmode="decimal" value="30"><span>倍未満</span></label>
+      <label>中穴の上限<input id="oddsMidMaxInput" type="number" min="2" step="0.1" inputmode="decimal" value="80"><span>倍未満</span></label>
+      <div class="settings-odds-preview">
+        <div><small>本命</small><strong id="oddsFavRangeSetting">0〜29.9倍</strong></div>
+        <div><small>中穴</small><strong id="oddsMidRangeSetting">30〜79.9倍</strong></div>
+        <div><small>大穴</small><strong id="oddsLongRangeSetting">80倍〜</strong></div>
+      </div>
+      <button class="primary-button" type="button" onclick="saveOddsBandSettings()">この設定を反映</button>
+    </div>
+  </div>
+</section>
+
 <section id="dataSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>データ管理</strong><span></span></div>
   <div class="card">
@@ -1732,7 +1773,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC32</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC33</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1757,7 +1798,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC32</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC33</div>
     </div>
   </section>
 
@@ -2371,10 +2412,16 @@ async function fetchRaceRoster(force=false){
 }
 
 const premiumState={};
-function togglePremiumFields(){const box=document.getElementById("premiumFields");if(!box)return;box.classList.toggle("open");const c=document.getElementById("premiumChevron");if(c)c.textContent=box.classList.contains("open")?"−":"＋";updateWinnerHistory();if(box.classList.contains("open")){renderPremiumLiveResult();scheduleRaceRosterFetch()}}
+function setPremiumInputTab(name,btn){
+  document.querySelectorAll(".premium-tab-panel").forEach(p=>p.classList.toggle("active",p.dataset.premiumPanel===name));
+  document.querySelectorAll(".premium-input-tabs button").forEach(b=>b.classList.toggle("active",b.dataset.premiumTab===name));
+  if(name==="race") scheduleRaceRosterFetch();
+  if(name==="result"||name==="start") renderPremiumLiveResult();
+}
+function togglePremiumFields(){const box=document.getElementById("premiumFields");if(!box)return;box.classList.toggle("open");const c=document.getElementById("premiumChevron");if(c)c.textContent=box.classList.contains("open")?"−":"＋";updateWinnerHistory();if(box.classList.contains("open")){setPremiumInputTab("race",document.querySelector('[data-premium-tab="race"]'));renderPremiumLiveResult();scheduleRaceRosterFetch()}}
 function updateWinnerHistory(){const dl=document.getElementById("winnerHistory");if(!dl)return;const names=[...new Set(getData().map(r=>r.premium?.winnerName).filter(Boolean))].slice(-30).reverse();dl.innerHTML=names.map(n=>`<option value="${escapeHTML(n)}"></option>`).join("")}
 function getPremiumData(){const data={...premiumState};data.winnerName=(document.getElementById("premiumWinner")?.value||"").trim();data.womenRace=!!document.getElementById("premiumWomen")?.checked;data.windSpeed=Number(document.getElementById("premiumWindSpeed")?.value)||0;data.waveHeight=Number(document.getElementById("premiumWave")?.value)||0;data.startTimes=[1,2,3,4,5,6].map(n=>{const v=document.getElementById(`premiumST${n}`)?.value;return v===""||v===undefined?null:Number(v)});data.exhibitionTimes=loadedRaceRacers.map(r=>r.exhibitionTime??null);data.raceRacers=loadedRaceRacers.map(r=>({...r}));if(data.grade==="SG")data.womenRace=false;return data}
-function resetPremiumFields(){loadedRaceRacers=[];const liveR=document.getElementById("premiumLiveResult");if(liveR)liveR.innerHTML="";const liveS=document.getElementById("premiumLiveStart");if(liveS)liveS.innerHTML="";const rg=document.getElementById("raceRosterGrid");if(rg)rg.innerHTML="";const ex=document.getElementById("premiumExhibitionTable");if(ex)ex.innerHTML='<div class="premium-auto-empty">直前情報が公開されると自動表示します</div>';const resultStatus=document.getElementById("premiumResultStatus");if(resultStatus)resultStatus.textContent="結果反映後、着順・進入・本番STを自動取得します";const rs=document.getElementById("raceRosterStatus");if(rs)rs.textContent="日付・レース場・Rを選ぶと自動取得します";Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave","premiumST1","premiumST2","premiumST3","premiumST4","premiumST5","premiumST6"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
+function resetPremiumFields(){setPremiumInputTab("race",document.querySelector('[data-premium-tab="race"]'));loadedRaceRacers=[];const liveR=document.getElementById("premiumLiveResult");if(liveR)liveR.innerHTML="";const liveS=document.getElementById("premiumLiveStart");if(liveS)liveS.innerHTML="";const rg=document.getElementById("raceRosterGrid");if(rg)rg.innerHTML="";const ex=document.getElementById("premiumExhibitionTable");if(ex)ex.innerHTML='<div class="premium-auto-empty">直前情報が公開されると自動表示します</div>';const resultStatus=document.getElementById("premiumResultStatus");if(resultStatus)resultStatus.textContent="結果反映後、着順・進入・本番STを自動取得します";const rs=document.getElementById("raceRosterStatus");if(rs)rs.textContent="日付・レース場・Rを選ぶと自動取得します";Object.keys(premiumState).forEach(k=>delete premiumState[k]);document.querySelectorAll(".premium-chips button.selected").forEach(b=>b.classList.remove("selected"));["premiumWinner","premiumWindSpeed","premiumWave","premiumST1","premiumST2","premiumST3","premiumST4","premiumST5","premiumST6"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});const w=document.getElementById("premiumWomen");if(w){w.checked=false;w.disabled=false}document.getElementById("premiumFields")?.classList.remove("open");const c=document.getElementById("premiumChevron");if(c)c.textContent="＋"}
 function loadPremiumFields(data){resetPremiumFields();if(!data)return;Object.assign(premiumState,data);loadedRaceRacers=Array.isArray(data.raceRacers)?data.raceRacers.map(r=>({...r,previewStartTiming:r.previewStartTiming??r.startTiming??null})):[];if(loadedRaceRacers.length){renderRaceRoster(loadedRaceRacers,"保存済みの出走選手");renderPremiumLiveResult();}document.querySelectorAll(".premium-chips").forEach(g=>{const key=g.dataset.premium,val=data[key];[...g.querySelectorAll("button")].forEach(b=>{let cmp=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))cmp=parseInt(cmp,10);b.classList.toggle("selected",String(cmp)===String(val))})});const win=document.getElementById("premiumWinner");if(win)win.value=data.winnerName||"";const ws=document.getElementById("premiumWindSpeed");if(ws)ws.value=data.windSpeed||"";const wh=document.getElementById("premiumWave");if(wh)wh.value=data.waveHeight||"";(data.startTimes||[]).forEach((v,i)=>{const e=document.getElementById(`premiumST${i+1}`);if(e)e.value=v===null||v===undefined?"":v});const wr=document.getElementById("premiumWomen");if(wr){wr.checked=!!data.womenRace;wr.disabled=data.grade==="SG"}}
 document.addEventListener("click",e=>{const b=e.target.closest(".premium-chips button");if(!b)return;e.preventDefault();const g=b.closest(".premium-chips"),key=g?.dataset.premium;if(!key)return;g.querySelectorAll("button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");let val=b.textContent.trim();if(key==="exhibitionRank"||["firstCourse","secondCourse","thirdCourse"].includes(key))val=parseInt(val,10);premiumState[key]=val;if(key==="grade"){const w=document.getElementById("premiumWomen");if(w){w.disabled=val==="SG";if(val==="SG")w.checked=false}}});
 
@@ -2791,11 +2838,12 @@ function refreshHome(){
   document.getElementById("yearRateCard").textContent=`回収率 ${ys.rate.toFixed(1)}%`;
 
   const mapBest=(list,keyFn)=>{const map=new Map();list.forEach(r=>{const k=keyFn(r);if(!map.has(k))map.set(k,[]);map.get(k).push(r)});return [...map.entries()].map(([key,v])=>({key,...calcStats(v)})).sort((a,b)=>b.rate-a.rate)[0]||null};
-  const bp=mapBest(monthData,r=>r.place), br=mapBest(monthData,r=>`${r.race}R`);
+  const bp=mapBest(monthData,r=>r.place), bo=mapBest(monthData,r=>bsOddsBand(r)||"");
   document.getElementById("homeBestPlace").textContent=bp?bp.key:"-";
   document.getElementById("homeBestPlaceSub").textContent=bp?`回収率 ${bp.rate.toFixed(1)}%`:"記録なし";
-  document.getElementById("homeBestRace").textContent=br?br.key:"-";
-  document.getElementById("homeBestRaceSub").textContent=br?`回収率 ${br.rate.toFixed(1)}%`:"記録なし";
+  const hob=document.getElementById("homeBestOddsBand"),hobs=document.getElementById("homeBestOddsBandSub");
+  if(hob)hob.textContent=bo&&bo.key?bo.key:"-";
+  if(hobs)hobs.textContent=bo&&bo.key?`回収率 ${bo.rate.toFixed(1)}%`:"記録なし";
   const max=[...monthData].sort((a,b)=>Number(b.returnAmount)-Number(a.returnAmount))[0];
   document.getElementById("homeMaxReturn").textContent=max?formatMoney(max.returnAmount):"0円";
   document.getElementById("homeMaxReturnSub").textContent=max?`${max.date.slice(5).replace("-","/")} ${max.place} ${max.race}R`:"-";
@@ -2962,6 +3010,30 @@ function groupStats(keyFn){
   return [...map.entries()].map(([key,list])=>({key,...calcStats(list)}));
 }
 
+function setAnalysisView(view,btn){
+  document.querySelectorAll(".analysis-compact-nav button").forEach(b=>b.classList.toggle("active",b.dataset.analysisView===view));
+  document.querySelectorAll(".analysis-view-section").forEach(s=>s.classList.remove("active"));
+  if(view==="trend"){
+    document.getElementById("analysisTrendSection")?.classList.add("active");
+    renderAnalysisUpgrade();
+  }else if(view==="odds"){
+    document.getElementById("analysisOddsSection")?.classList.add("active");
+    renderPersonalInsights();
+  }else{
+    document.getElementById("analysisDataSection")?.classList.add("active");
+    analysisTab=view==="place"?"place":view==="winningMove"?"winningMove":"summary";
+    renderAnalysis();
+  }
+}
+function togglePremiumAnalysisSection(){
+  const box=document.getElementById("premiumAnalysisSection");
+  const btn=document.getElementById("premiumAnalysisToggle");
+  if(!box)return;
+  box.classList.toggle("open");
+  const b=btn?.querySelector("b");
+  if(b)b.textContent=box.classList.contains("open")?"−":"＋";
+  if(box.classList.contains("open"))renderPremiumAnalysis();
+}
 function setAnalysisTab(tab,btn){
   analysisTab=tab;
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
@@ -2979,10 +3051,10 @@ function renderAnalysis(){
 
   if(analysisTab==="summary"){
     const s=calcStats(data);
-    const placeRaces=groupStats(r=>`${r.place} ${r.race}R`);
-    const profitablePlaceRaces=placeRaces.filter(x=>x.bet>0).sort((a,b)=>b.rate-a.rate);
-    const bestPlaceRace=profitablePlaceRaces[0];
-    const worstPlaceRace=[...profitablePlaceRaces].sort((a,b)=>a.rate-b.rate)[0];
+    const places=groupStats(r=>r.place);
+    const profitablePlaces=places.filter(x=>x.bet>0).sort((a,b)=>b.rate-a.rate);
+    const bestPlace=profitablePlaces[0];
+    const worstPlace=[...profitablePlaces].sort((a,b)=>a.rate-b.rate)[0];
 
     box.innerHTML=`
       <div class="analysis-grid">
@@ -2994,14 +3066,14 @@ function renderAnalysis(){
       <div style="height:12px"></div>
       <div class="analysis-grid">
         <div class="analysis-card">
-          <div class="label">得意な場 × R</div>
-          <div class="big">${bestPlaceRace ? escapeHTML(bestPlaceRace.key) : "-"}</div>
-          <div class="helper">${bestPlaceRace ? `回収率 ${bestPlaceRace.rate.toFixed(1)}%` : ""}</div>
+          <div class="label">得意なレース場</div>
+          <div class="big">${bestPlace ? escapeHTML(bestPlace.key) : "-"}</div>
+          <div class="helper">${bestPlace ? `回収率 ${bestPlace.rate.toFixed(1)}%` : ""}</div>
         </div>
         <div class="analysis-card">
-          <div class="label">苦手な場 × R</div>
-          <div class="big">${worstPlaceRace ? escapeHTML(worstPlaceRace.key) : "-"}</div>
-          <div class="helper">${worstPlaceRace ? `回収率 ${worstPlaceRace.rate.toFixed(1)}%` : ""}</div>
+          <div class="label">苦手なレース場</div>
+          <div class="big">${worstPlace ? escapeHTML(worstPlace.key) : "-"}</div>
+          <div class="helper">${worstPlace ? `回収率 ${worstPlace.rate.toFixed(1)}%` : ""}</div>
         </div>
         <div class="analysis-card">
           <div class="label">平均投資額</div>
@@ -3026,21 +3098,23 @@ function renderAnalysis(){
   }
 
   let groups;
-  if(analysisTab==="placeRace"){
-    groups=groupStats(r=>`${r.place} ${r.race}R`);
+  if(analysisTab==="place"){
+    groups=groupStats(r=>r.place);
+  }else if(analysisTab==="winningMove"){
+    groups=groupStats(r=>r.premium?.winningMove||"未入力");
   }else{
     groups=groupStats(r=>bsOddsBand(r)||"未入力");
     const order={"本命":1,"中穴":2,"大穴":3,"未入力":4};
     groups.sort((a,b)=>(order[a.key]||99)-(order[b.key]||99));
   }
 
-  if(analysisTab==="placeRace") groups.sort((a,b)=>b.rate-a.rate);
+  if(analysisTab==="place"||analysisTab==="winningMove") groups.sort((a,b)=>b.rate-a.rate);
 
   box.innerHTML=`
     <table class="rank-table">
       <thead>
         <tr>
-          <th>${analysisTab==="placeRace"?"レース場 × R":"オッズ帯"}</th>
+          <th>${analysisTab==="place"?"レース場":analysisTab==="winningMove"?"決まり手":"オッズ帯"}</th>
           <th>回収率</th>
           <th>収支</th>
           <th>的中</th>
@@ -3358,9 +3432,11 @@ function showPage(id,navButton){
     renderPersonalInsights();
     renderAnalysisUpgrade();
     renderPremiumAnalysis();
+    setAnalysisView("summary",document.querySelector('[data-analysis-view="summary"]'));
 renderPersonalInsights();
     setTimeout(renderYearExtras,0);
   }
+  if(id==="analysisSettingsPage") updateOddsBandLabels();
   if(id==="dayDetailPage") renderDayDetailFull();
   window.scrollTo(0,0);
 }
@@ -3414,6 +3490,10 @@ function updateOddsBandLabels(){
   if(favRange)favRange.textContent=`0〜${formatOddsCut(favEnd)}倍`;
   if(midRange)midRange.textContent=`${formatOddsCut(s.favoriteMax)}〜${formatOddsCut(midEnd)}倍`;
   if(longRange)longRange.textContent=`${formatOddsCut(s.middleMax)}倍〜`;
+  const sf=document.getElementById("oddsFavRangeSetting"),sm=document.getElementById("oddsMidRangeSetting"),sl=document.getElementById("oddsLongRangeSetting");
+  if(sf)sf.textContent=`0〜${formatOddsCut(favEnd)}倍`;
+  if(sm)sm.textContent=`${formatOddsCut(s.favoriteMax)}〜${formatOddsCut(midEnd)}倍`;
+  if(sl)sl.textContent=`${formatOddsCut(s.middleMax)}倍〜`;
 }
 function saveOddsBandSettings(){
   const favoriteMax=Number(document.getElementById("oddsFavMaxInput")?.value);
@@ -3586,7 +3666,7 @@ function premiumGroup(records,keyFn,labelFn){
 function premiumPatternPool(records){
   const pools=[];
   const add=(type,arr)=>arr.forEach(x=>pools.push({...x,type}));
-  add("場×R",premiumGroup(records,r=>r.place&&r.race?`${r.place} ${r.race}R`:""));
+  add("レース場",premiumGroup(records,r=>r.place));
   add("選手",premiumGroup(records,r=>r.premium?.winnerName));
   add("グレード",premiumGroup(records,r=>{
     const p=r.premium||{};
@@ -3598,6 +3678,12 @@ function premiumPatternPool(records){
   add("購入",premiumGroup(records,r=>r.premium?.purchaseTiming));
   add("舟券種",premiumGroup(records,r=>r.premium?.ticketType));
   add("決まり手",premiumGroup(records,r=>r.premium?.winningMove));
+  add("コース×決まり手",premiumGroup(records,r=>{
+    const p=r.premium||{};
+    const winner=(p.resultOrder||[]).find(x=>Number(x.place)===1);
+    const course=winner?.course || (p.raceRacers||[]).find(x=>Number(x.resultPlace)===1)?.resultCourse;
+    return course&&p.winningMove?`${course}コース × ${p.winningMove}`:"";
+  }));
   add("安定板",premiumGroup(records,r=>r.premium?.stabilizer));
   add("周回短縮",premiumGroup(records,r=>r.premium?.shortenedLaps));
   add("女子戦",premiumGroup(records,r=>r.premium?.womenRace?"女子戦":"通常戦"));
@@ -3664,10 +3750,16 @@ function renderPremiumAnalysis(){
   if(bestBox)bestBox.innerHTML=best.length?best.map(x=>premiumPatternHTML(x,"good")).join(""):'<div class="premium-empty">プラス傾向のデータを収集中</div>';
   if(worstBox)worstBox.innerHTML=worst.length?worst.map(x=>premiumPatternHTML(x,"weak")).join(""):'<div class="premium-empty">マイナス傾向のデータを収集中</div>';
 
-  const placeRace=premiumGroup(premiumRecords,r=>r.place&&r.race?`${r.place} ${r.race}R`:"").sort((a,b)=>b.count-a.count||b.rate-a.rate);
+  const place=premiumGroup(premiumRecords,r=>r.place).sort((a,b)=>b.count-a.count||b.rate-a.rate);
   const player=premiumGroup(premiumRecords,r=>r.premium?.winnerName).filter(x=>x.count>=1).sort((a,b)=>b.rate-a.rate||b.profit-a.profit);
   const grade=premiumGroup(premiumRecords,r=>{const p=r.premium||{};return p.grade?p.grade+(p.womenRace?"（女子戦）":""):""}).sort((a,b)=>b.count-a.count||b.rate-a.rate);
   const winningMove=premiumGroup(premiumRecords,r=>r.premium?.winningMove).sort((a,b)=>b.count-a.count||b.rate-a.rate);
+  const courseMove=premiumGroup(premiumRecords,r=>{
+    const p=r.premium||{};
+    const winner=(p.resultOrder||[]).find(x=>Number(x.place)===1);
+    const course=winner?.course || (p.raceRacers||[]).find(x=>Number(x.resultPlace)===1)?.resultCourse;
+    return course&&p.winningMove?`${course}コース × ${p.winningMove}`:"";
+  }).sort((a,b)=>b.count-a.count||b.rate-a.rate);
   const exhibit=premiumGroup(premiumRecords,r=>r.premium?.exhibitionRank,r=>`${r}位`).sort((a,b)=>Number(a.key.replace("位",""))-Number(b.key.replace("位","")));
   const confidence=premiumGroup(premiumRecords,r=>r.premium?.confidence).sort((a,b)=>b.count-a.count);
   const timing=premiumGroup(premiumRecords,r=>r.premium?.purchaseTiming).sort((a,b)=>b.count-a.count);
@@ -3678,10 +3770,11 @@ function renderPremiumAnalysis(){
   ].sort((a,b)=>b.count-a.count||b.rate-a.rate);
 
   const set=(id,html)=>{const e=document.getElementById(id);if(e)e.innerHTML=html};
-  set("premiumPlaceRaceAnalysis",premiumStatChips(placeRace,12));
+  set("premiumPlaceAnalysis",premiumStatChips(place,24));
   set("premiumPlayerAnalysis",premiumStatChips(player));
   set("premiumGradeAnalysis",premiumStatChips(grade));
   set("premiumWinningMoveAnalysis",premiumStatChips(winningMove,6));
+  set("premiumCourseMoveAnalysis",premiumStatChips(courseMove,12));
   set("premiumExhibitionAnalysis",premiumStatChips(exhibit,6));
   set("premiumConfidenceAnalysis",premiumStatChips(confidence,3));
   set("premiumTimingAnalysis",premiumStatChips(timing,3));
@@ -3704,8 +3797,8 @@ function renderAnalysisUpgrade(){
  set("anaProfit",signedMoney(s.profit));set("anaRate",s.rate.toFixed(1)+"%");set("anaHit",s.hitRate.toFixed(1)+"%");set("anaAvgBet",formatMoney(rs.length?Math.round(s.bet/rs.length):0));
  const mr=[...rs].sort((a,b)=>+b.returnAmount-+a.returnAmount)[0],mx=[...rs].sort((a,b)=>+(b.odds||0)-+(a.odds||0))[0];
  set("anaMaxReturn",mr?formatMoney(mr.returnAmount):"0円");set("anaMaxOdds",mx&&+mx.odds?Number(mx.odds).toFixed(1)+"倍":"0倍");
- const bpr=bestGroup(rs,r=>r.place&&r.race?`${r.place} ${r.race}R`:"");
- set("anaBestPlaceRace",bpr?bpr.key:"-");set("anaBestPlaceRaceSub",bpr?`回収率 ${bpr.rate.toFixed(1)}%`:"記録なし");
+ const bp=bestGroup(rs,r=>r.place);
+ set("anaBestPlaceRace",bp?bp.key:"-");set("anaBestPlaceRaceSub",bp?`回収率 ${bp.rate.toFixed(1)}%`:"記録なし");
  const man=rs.filter(isManshu),ms=calcStats(man);set("anaManHits",man.length+"回");set("anaManReturn","総払戻 "+formatMoney(ms.ret));
  const wd=["日","月","火","水","木","金","土"],bw=bestGroup(rs,r=>wd[parseLocalDate(r.date).getDay()]+"曜");
  set("anaBestWeekday",bw?bw.key:"-");set("anaBestWeekdaySub",bw?`回収率 ${bw.rate.toFixed(1)}%`:"記録なし");
