@@ -1194,6 +1194,11 @@ header{
 </style><style id="rc34premium">
 .manual-racer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.manual-racer-grid label{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:6px;background:#f7f9fc;border:1px solid #dde6f0;border-radius:9px;padding:6px}.manual-racer-grid span{font-size:8px;font-weight:900;color:#51657e}.manual-racer-grid input{min-width:0;border:0;background:#fff;border-radius:6px;padding:7px;font-size:10px}.premium-input-tabs{grid-template-columns:repeat(4,1fr)!important}
 @media(max-width:360px){.manual-racer-grid{grid-template-columns:1fr}}
+</style><style id="rc35trend">
+.line-chart-wrap{height:270px!important;padding:12px 8px 8px!important;background:linear-gradient(180deg,#ffffff 0%,#f6faff 100%)!important;border:1px solid #dbe7f4!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 22px rgba(18,71,143,.07)!important}
+.line-chart-wrap:before{content:"累計収支 / 累計投資"!important}
+.analysis-kpi-grid{grid-template-columns:repeat(2,1fr)!important}
+.trend-legend{display:flex;gap:12px;align-items:center;justify-content:flex-end;margin:-6px 2px 8px;font-size:8px;color:#6d7d91}.trend-legend span{display:inline-flex;align-items:center;gap:4px}.trend-legend i{width:16px;height:3px;border-radius:999px;display:inline-block}.trend-legend .profit i{background:#0867df}.trend-legend .bet i{background:#8c98aa}
 </style></head>
 
 <body>
@@ -1498,12 +1503,12 @@ header{
 
 <div id="analysisTrendSection" class="analysis-upgrade card analysis-view-section">
 <div class="analysis-period-tabs"><button id="analysisTodayBtn" onclick="setAnalysisPeriod('today')">本日</button><button id="analysisMonthBtn" class="active" onclick="setAnalysisPeriod('month')">月間</button><button id="analysisYearBtn" onclick="setAnalysisPeriod('year')">年間</button></div>
-<div class="section-title analysis-trend-title"><span>収支推移</span></div>
+<div class="section-title analysis-trend-title"><span>収支・投資推移</span></div>
 <div id="analysisMonthNav" class="analysis-month-nav">
   <button onclick="moveAnalysisMonth(-1)">‹</button><strong id="analysisMonthLabel"></strong><button onclick="moveAnalysisMonth(1)">›</button>
 </div>
-<div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div>
-<div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
+<div class="line-chart-wrap"><canvas id="trendLineCanvas"></canvas></div><div class="trend-legend"><span class="profit"><i></i>累計収支</span><span class="bet"><i></i>累計投資</span></div>
+<div class="analysis-kpi-grid"><div><small>収支</small><strong id="anaProfit">0円</strong></div><div><small>総投資額</small><strong id="anaTotalBet">0円</strong></div><div><small>回収率</small><strong id="anaRate">0%</strong></div><div><small>的中率</small><strong id="anaHit">0%</strong></div><div><small>平均投資</small><strong id="anaAvgBet">0円</strong></div><div><small>最高払戻</small><strong id="anaMaxReturn">0円</strong></div><div><small>最高オッズ</small><strong id="anaMaxOdds">0倍</strong></div></div>
 <div class="section-title"><span>分析バリエーション</span></div><div class="analysis-variation-grid"><div><small>得意なレース場</small><strong id="anaBestPlaceRace">-</strong><em id="anaBestPlaceRaceSub">記録なし</em></div><div><small>⭐ 万舟的中</small><strong id="anaManHits">0回</strong><em id="anaManReturn">総払戻 0円</em></div><div><small>曜日別BEST</small><strong id="anaBestWeekday">-</strong><em id="anaBestWeekdaySub">記録なし</em></div></div></div>
     <div id="analysisDataSection" class="card analysis-view-section active">
       <div class="section-title"><span>分析</span></div>
@@ -1785,7 +1790,7 @@ header{
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC34</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC35</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1810,7 +1815,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC34</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC35</div>
     </div>
   </section>
 
@@ -3134,11 +3139,6 @@ function renderAnalysis(){
         <div id="yearStats"></div>
       </div>
       <div style="height:12px"></div>
-      <div class="analysis-card">
-        <div class="section-title"><span>月別収支推移</span></div>
-        <div id="profitChart" style="display:flex;align-items:flex-end;gap:5px;height:150px;padding-top:12px"></div>
-      </div>
-      <div style="height:12px"></div>
       <div class="notice">※まだ記録数が少ない場合、「得意・苦手」は参考値です。データが増えるほど傾向が見えやすくなります。</div>
     `;
     setTimeout(renderYearExtras,0);
@@ -3811,8 +3811,18 @@ function renderPremiumAnalysis(){
   const exhibit=premiumGroup(premiumRecords,r=>r.premium?.exhibitionRank,r=>`${r}位`).sort((a,b)=>Number(a.key.replace("位",""))-Number(b.key.replace("位","")));
   const confidence=premiumGroup(premiumRecords,r=>r.premium?.confidence).sort((a,b)=>b.count-a.count);
   const timing=premiumGroup(premiumRecords,r=>r.premium?.purchaseTiming).sort((a,b)=>b.count-a.count);
+  const raceTypes=premiumGroup(premiumRecords,r=>{
+    const p=r.premium||{};
+    if(p.womenRace) return "女子戦";
+    if(p.grade==="SG") return "SG";
+    if(p.grade==="G1") return "G1";
+    if(p.grade==="G2") return "G2";
+    if(p.grade==="G3") return "G3";
+    if(p.grade==="一般") return "一般戦";
+    return "";
+  });
   const conditions=[
-    ...premiumGroup(premiumRecords,r=>r.premium?.womenRace?"女子戦":"通常戦").map(x=>({...x,key:`戦種：${x.key}`})),
+    ...raceTypes,
     ...premiumGroup(premiumRecords,r=>r.premium?.stabilizer).map(x=>({...x,key:`安定板：${x.key}`})),
     ...premiumGroup(premiumRecords,r=>r.premium?.shortenedLaps).map(x=>({...x,key:`周回短縮：${x.key}`}))
   ].sort((a,b)=>b.count-a.count||b.rate-a.rate);
@@ -3842,7 +3852,7 @@ function renderAnalysisUpgrade(){
  const monthLabel=document.getElementById("analysisMonthLabel");if(monthLabel)monthLabel.textContent=`${y}年${mo+1}月`;
  const monthNav=document.getElementById("analysisMonthNav");if(monthNav)monthNav.style.display=analysisPeriod==="month"?"grid":"none";
  const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};
- set("anaProfit",signedMoney(s.profit));set("anaRate",s.rate.toFixed(1)+"%");set("anaHit",s.hitRate.toFixed(1)+"%");set("anaAvgBet",formatMoney(rs.length?Math.round(s.bet/rs.length):0));
+ set("anaProfit",signedMoney(s.profit));set("anaTotalBet",formatMoney(s.bet));set("anaRate",s.rate.toFixed(1)+"%");set("anaHit",s.hitRate.toFixed(1)+"%");set("anaAvgBet",formatMoney(rs.length?Math.round(s.bet/rs.length):0));
  const mr=[...rs].sort((a,b)=>+b.returnAmount-+a.returnAmount)[0],mx=[...rs].sort((a,b)=>+(b.odds||0)-+(a.odds||0))[0];
  set("anaMaxReturn",mr?formatMoney(mr.returnAmount):"0円");set("anaMaxOdds",mx&&+mx.odds?Number(mx.odds).toFixed(1)+"倍":"0倍");
  const bp=bestGroup(rs,r=>r.place);
@@ -3858,7 +3868,7 @@ function drawTrendLine(rs,period,y,mo){
 
   const rect=c.getBoundingClientRect();
   const dpr=window.devicePixelRatio||1;
-  const W=Math.max(300,rect.width), H=Math.max(180,rect.height);
+  const W=Math.max(310,rect.width), H=Math.max(230,rect.height);
   c.width=Math.floor(W*dpr);
   c.height=Math.floor(H*dpr);
 
@@ -3866,126 +3876,168 @@ function drawTrendLine(rs,period,y,mo){
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,W,H);
 
-  const pad={l:42,r:14,t:28,b:28};
-  let points=[], cumulative=0;
+  const pad={l:58,r:18,t:36,b:34};
+  let points=[], cumulativeProfit=0, cumulativeBet=0;
+
+  const addPoint=(label,list)=>{
+    list.forEach(a=>{
+      cumulativeProfit+=Number(a.returnAmount)-Number(a.bet);
+      cumulativeBet+=Number(a.bet);
+    });
+    points.push({label,profit:cumulativeProfit,bet:cumulativeBet});
+  };
 
   if(period==="today"){
     for(let race=1;race<=12;race++){
-      rs.filter(a=>Number(a.race)===race).forEach(a=>cumulative+=Number(a.returnAmount)-Number(a.bet));
-      points.push({label:`${race}R`,value:cumulative});
+      addPoint(`${race}R`,rs.filter(a=>Number(a.race)===race));
     }
   }else if(period==="month"){
     const days=new Date(y,mo+1,0).getDate();
     for(let day=1;day<=days;day++){
       const ds=`${y}-${String(mo+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-      rs.filter(a=>a.date===ds).forEach(a=>cumulative+=Number(a.returnAmount)-Number(a.bet));
-      points.push({label:String(day),value:cumulative});
+      addPoint(String(day),rs.filter(a=>a.date===ds));
     }
   }else{
     for(let m=0;m<12;m++){
-      rs.filter(a=>parseLocalDate(a.date).getMonth()===m)
-        .forEach(a=>cumulative+=Number(a.returnAmount)-Number(a.bet));
-      points.push({label:String(m+1),value:cumulative});
+      addPoint(`${m+1}月`,rs.filter(a=>parseLocalDate(a.date).getMonth()===m));
     }
   }
 
-  const values=points.map(p=>p.value).concat([0]);
-  let min=Math.min(...values), max=Math.max(...values);
+  if(!points.length) return;
+
+  const vals=[0,...points.flatMap(p=>[p.profit,p.bet])];
+  let min=Math.min(...vals), max=Math.max(...vals);
   if(min===max){min-=1;max+=1;}
+  const margin=Math.max(1,(max-min)*.08);
+  min-=margin; max+=margin;
   const range=max-min;
 
   const x=i=>pad.l+(W-pad.l-pad.r)*(points.length<=1?0:i/(points.length-1));
   const yv=v=>pad.t+(H-pad.t-pad.b)*(max-v)/range;
+  const moneyLabel=v=>{
+    const n=Math.round(v);
+    if(Math.abs(n)>=1000000)return `${(n/1000000).toFixed(1)}M`;
+    if(Math.abs(n)>=10000)return `${Math.round(n/1000)}k`;
+    return n.toLocaleString();
+  };
 
-  // Soft horizontal grid.
-  ctx.lineWidth=1;
-  ctx.strokeStyle="rgba(139,157,180,.18)";
-  ctx.setLineDash([]);
-  for(let n=0;n<4;n++){
-    const yy=pad.t+(H-pad.t-pad.b)*(n/3);
+  // Grid + Y labels.
+  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";
+  ctx.textAlign="right";
+  ctx.textBaseline="middle";
+  for(let i=0;i<5;i++){
+    const value=max-(range*i/4);
+    const yy=pad.t+(H-pad.t-pad.b)*(i/4);
+    ctx.strokeStyle="rgba(129,149,174,.18)";
+    ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();
+    ctx.fillStyle="#7d8b9e";
+    ctx.fillText(`${moneyLabel(value)}円`,pad.l-7,yy);
   }
 
-  // Zero baseline.
-  if(min<=0 && max>=0){
-    ctx.strokeStyle="rgba(74,93,118,.42)";
-    ctx.setLineDash([5,5]);
+  // Zero line.
+  if(min<0&&max>0){
+    ctx.strokeStyle="rgba(78,95,118,.48)";
+    ctx.setLineDash([4,4]);
     ctx.beginPath();ctx.moveTo(pad.l,yv(0));ctx.lineTo(W-pad.r,yv(0));ctx.stroke();
     ctx.setLineDash([]);
   }
 
-  // Build smooth path using quadratic midpoints.
-  const buildPath=()=>{
+  const buildLine=(key)=>{
     ctx.beginPath();
-    if(!points.length) return;
-    ctx.moveTo(x(0),yv(points[0].value));
+    ctx.moveTo(x(0),yv(points[0][key]));
     for(let i=1;i<points.length;i++){
-      const x0=x(i-1), y0=yv(points[i-1].value);
-      const x1=x(i), y1=yv(points[i].value);
-      const mx=(x0+x1)/2, my=(y0+y1)/2;
-      ctx.quadraticCurveTo(x0,y0,mx,my);
-      if(i===points.length-1) ctx.quadraticCurveTo(mx,my,x1,y1);
+      const x0=x(i-1), y0=yv(points[i-1][key]);
+      const x1=x(i), y1=yv(points[i][key]);
+      const mx=(x0+x1)/2;
+      ctx.bezierCurveTo(mx,y0,mx,y1,x1,y1);
     }
   };
 
-  // Area fill.
+  // Profit area fill.
   const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
-  grad.addColorStop(0,"rgba(8,103,223,.24)");
-  grad.addColorStop(.72,"rgba(8,103,223,.06)");
+  grad.addColorStop(0,"rgba(8,103,223,.20)");
   grad.addColorStop(1,"rgba(8,103,223,0)");
-  buildPath();
+  buildLine("profit");
   ctx.lineTo(x(points.length-1),H-pad.b);
   ctx.lineTo(x(0),H-pad.b);
   ctx.closePath();
   ctx.fillStyle=grad;
   ctx.fill();
 
-  // Main line with soft glow.
+  // Investment line.
+  ctx.strokeStyle="#8c98aa";
+  ctx.lineWidth=2;
+  ctx.setLineDash([6,4]);
+  buildLine("bet");
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Profit line.
   ctx.save();
-  ctx.shadowColor="rgba(8,103,223,.28)";
-  ctx.shadowBlur=9;
+  ctx.shadowColor="rgba(8,103,223,.24)";
+  ctx.shadowBlur=8;
   ctx.strokeStyle="#0867df";
   ctx.lineWidth=3;
-  ctx.lineJoin="round";
   ctx.lineCap="round";
-  buildPath();
+  ctx.lineJoin="round";
+  buildLine("profit");
   ctx.stroke();
   ctx.restore();
 
-  // Points: only meaningful ticks, last point emphasized.
+  // X labels and selected point labels.
+  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="alphabetic";
+  const labelEvery=period==="month"?5:1;
   points.forEach((p,i)=>{
-    const show=period==="year" || i===0 || i===points.length-1 || (period==="month" && (i+1)%5===0);
-    if(!show) return;
-    const px=x(i), py=yv(p.value);
-    ctx.beginPath();ctx.arc(px,py,i===points.length-1?4.5:3,0,Math.PI*2);
-    ctx.fillStyle="#fff";ctx.fill();
-    ctx.lineWidth=2;ctx.strokeStyle="#0867df";ctx.stroke();
+    const show=period!=="month" || i===0 || i===points.length-1 || (i+1)%labelEvery===0;
+    if(show){
+      ctx.fillStyle="#7b8798";
+      ctx.fillText(p.label,x(i),H-10);
+    }
+
+    const pointShow=period==="year" || i===points.length-1 || (period==="today"&&i%3===2) || (period==="month"&&(i+1)%5===0);
+    if(pointShow){
+      const px=x(i),py=yv(p.profit);
+      ctx.beginPath();ctx.arc(px,py,3.5,0,Math.PI*2);
+      ctx.fillStyle="#fff";ctx.fill();
+      ctx.strokeStyle="#0867df";ctx.lineWidth=2;ctx.stroke();
+
+      const txt=(p.profit>0?"+":"")+Math.round(p.profit).toLocaleString()+"円";
+      ctx.font="700 8px -apple-system,BlinkMacSystemFont,sans-serif";
+      const tw=ctx.measureText(txt).width+10;
+      let bx=px-tw/2;
+      bx=Math.max(pad.l,Math.min(W-pad.r-tw,bx));
+      let by=py-24;
+      if(by<pad.t+2)by=py+8;
+      ctx.fillStyle="rgba(255,255,255,.94)";
+      ctx.strokeStyle="rgba(8,103,223,.18)";
+      ctx.lineWidth=1;
+      roundRect(ctx,bx,by,tw,18,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle=p.profit>=0?"#0867df":"#e33434";
+      ctx.textAlign="center";
+      ctx.fillText(txt,bx+tw/2,by+12);
+    }
   });
 
-  // Axis labels.
-  ctx.fillStyle="#7a8798";
-  ctx.font="10px -apple-system,BlinkMacSystemFont,sans-serif";
-  ctx.textAlign="center";
-  points.forEach((p,i)=>{
-    const show=period==="year" || i===0 || i===points.length-1 || (period==="month" && (i+1)%5===0);
-    if(show) ctx.fillText(p.label,x(i),H-8);
-  });
+  // Current values header pills.
+  const last=points[points.length-1];
+  const profitText=`収支 ${(last.profit>0?"+":"")}${Math.round(last.profit).toLocaleString()}円`;
+  const betText=`総投資 ${Math.round(last.bet).toLocaleString()}円`;
+  ctx.font="700 10px -apple-system,BlinkMacSystemFont,sans-serif";
+  const pW=ctx.measureText(profitText).width+16;
+  const bW=ctx.measureText(betText).width+16;
 
-  // Current total pill.
-  const last=points[points.length-1]?.value||0;
-  const label=(last>0?"+":"")+Math.round(last).toLocaleString()+"円";
-  ctx.font="700 11px -apple-system,BlinkMacSystemFont,sans-serif";
-  const tw=ctx.measureText(label).width+18;
-  const tx=Math.min(W-pad.r-tw,Math.max(pad.l,x(points.length-1)-tw/2));
-  const ty=8;
-  ctx.fillStyle=last>=0?"#0867df":"#e33434";
-  roundRect(ctx,tx,ty,tw,24,12);
-  ctx.fill();
-  ctx.fillStyle="#fff";
-  ctx.textAlign="center";
-  ctx.fillText(label,tx+tw/2,ty+16);
+  ctx.fillStyle=last.profit>=0?"#0867df":"#e33434";
+  roundRect(ctx,pad.l,7,pW,22,11);ctx.fill();
+  ctx.fillStyle="#fff";ctx.textAlign="center";ctx.fillText(profitText,pad.l+pW/2,21);
+
+  const bx=Math.min(W-pad.r-bW,pad.l+pW+7);
+  ctx.fillStyle="#eef2f7";
+  roundRect(ctx,bx,7,bW,22,11);ctx.fill();
+  ctx.fillStyle="#5f6f82";ctx.fillText(betText,bx+bW/2,21);
 }
-
 function roundRect(ctx,x,y,w,h,r){
   const rr=Math.min(r,w/2,h/2);
   ctx.beginPath();
