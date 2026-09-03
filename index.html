@@ -1196,9 +1196,11 @@ header{
 @media(max-width:360px){.manual-racer-grid{grid-template-columns:1fr}}
 </style><style id="rc35trend">
 .line-chart-wrap{height:270px!important;padding:12px 8px 8px!important;background:linear-gradient(180deg,#ffffff 0%,#f6faff 100%)!important;border:1px solid #dbe7f4!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 22px rgba(18,71,143,.07)!important}
-.line-chart-wrap:before{content:"累計収支 / 累計投資"!important}
+.line-chart-wrap:before{content:"収支 / 投資"!important}
 .analysis-kpi-grid{grid-template-columns:repeat(2,1fr)!important}
 .trend-legend{display:flex;gap:12px;align-items:center;justify-content:flex-end;margin:-6px 2px 8px;font-size:8px;color:#6d7d91}.trend-legend span{display:inline-flex;align-items:center;gap:4px}.trend-legend i{width:16px;height:3px;border-radius:999px;display:inline-block}.trend-legend .profit i{background:#0867df}.trend-legend .bet i{background:#8c98aa}
+</style><style id="rc37premium">
+.premium-combo-toggle{width:100%;margin:12px 0 4px;border:1px solid #cfe0f4;background:#f5f9ff;border-radius:12px;padding:12px 13px;display:flex;justify-content:space-between;align-items:center;color:#123b6d;font-weight:900;font-size:10px}.premium-combo-toggle b{font-size:16px}.premium-combo-panel{display:none;padding:2px 0 8px}.premium-combo-panel.open{display:block}.premium-mini-title small{font-size:7px;color:#8a98aa;margin-left:5px}.setting-switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid #edf1f6}.setting-switch-row span{display:flex;flex-direction:column;gap:4px}.setting-switch-row strong{font-size:11px;color:#10243e}.setting-switch-row small{font-size:8px;color:#7a899d;line-height:1.5}.setting-switch-row input{width:22px;height:22px;accent-color:#0874e8}.premium-settings-note{margin-top:12px;padding:11px;border-radius:10px;background:#f6f9fd;color:#66778d;font-size:8px;line-height:1.7}
 </style></head>
 
 <body>
@@ -1550,11 +1552,13 @@ header{
       </div>
 
       <div class="premium-breakdown">
-        <div class="premium-mini-title">レース場別</div>
-        <div id="premiumPlaceAnalysis" class="premium-list-row"><span>データ収集中</span></div>
-
-        <div class="premium-mini-title">相性のいい選手</div>
-        <div id="premiumPlayerAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+        <button class="premium-combo-toggle" type="button" onclick="togglePremiumVenuePlayers(this)"><span>レース場別 ＋ 相性のいい選手</span><b>＋</b></button>
+        <div id="premiumVenuePlayers" class="premium-combo-panel">
+          <div class="premium-mini-title">レース場別 <small>全投票データを集計</small></div>
+          <div id="premiumPlaceAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+          <div class="premium-mini-title">相性のいい選手 <small>回収率100%超のみ</small></div>
+          <div id="premiumPlayerAnalysis" class="premium-list-row"><span>データ収集中</span></div>
+        </div>
 
         <div class="premium-mini-title">グレード別</div>
         <div id="premiumGradeAnalysis" class="premium-list-row"><span>データ収集中</span></div>
@@ -1779,18 +1783,24 @@ header{
 </section>
 
 <section id="premiumSettingsPage" class="page">
-  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>Premium</strong><span></span></div>
-  <div class="card">
-    <div class="notice">Premiumは現在準備中です。詳細入力・コース別分析・気象条件分析などを予定しています。</div>
+  <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>Premium設定</strong><span></span></div>
+  <div class="card premium-settings-card">
+    <div class="section-title"><span>詳細入力</span></div>
+    <label class="setting-switch-row"><span><strong>レースデータを自動取得</strong><small>日付・場・Rから選手・展示・結果を取得</small></span><input id="settingPremiumAutoFetch" type="checkbox" onchange="saveAppSettings()"></label>
+    <label class="setting-switch-row"><span><strong>女子戦ハートを表示</strong><small>女子戦の選手名に ♥ を表示</small></span><input id="settingPremiumWomenHeart" type="checkbox" onchange="saveAppSettings()"></label>
+    <div style="height:16px"></div>
+    <div class="section-title"><span>分析</span></div>
+    <label class="setting-switch-row"><span><strong>通常入力もPremium分析に含める</strong><small>収支・回収率・レース場別は全投票データで分析</small></span><input id="settingPremiumAllRecords" type="checkbox" onchange="saveAppSettings()"></label>
+    <div class="premium-settings-note">Premium項目が必要な「展示・自信度・購入タイミング・決まり手」などは、詳細入力済みの記録だけで分析します。</div>
     <div style="height:12px"></div>
-    <button class="secondary-button" onclick="showPremiumInfo()">Premium機能を見る</button>
+    <button class="secondary-button" onclick="showPremiumInfo()">Premium機能一覧を見る</button>
   </div>
 </section>
 
 <section id="appInfoSettingsPage" class="page">
   <div class="settings-page-head"><button onclick="showPage('settingsPage',document.querySelector('[data-page=settingsPage]'))">‹ 設定</button><strong>アプリ情報</strong><span></span></div>
   <div class="card">
-    <div class="helper">BOAT SCORE<br>Version 1.0 RC35</div>
+    <div class="helper">BOAT SCORE<br>Version 1.0 RC37</div>
     <div style="height:12px"></div>
     <button class="secondary-button" onclick="showPage('infoPage')">利用規約・プライバシー・運営情報</button>
   </div>
@@ -1815,7 +1825,7 @@ header{
       <div class="helper" style="line-height:1.8">広告を掲載する場合、収支入力ボタンやナビゲーションなどの操作要素と広告を明確に区別し、誤タップを誘発しない配置にします。</div>
       <div style="height:18px"></div>
       <div class="section-title"><span>お問い合わせ・運営情報</span></div>
-      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC35</div>
+      <div class="helper" style="line-height:1.8">お問い合わせ窓口は一般公開前に設定します。<br>サービス名：BOAT SCORE<br>Version 1.0 RC37</div>
     </div>
   </section>
 
@@ -2186,6 +2196,7 @@ let loadedRaceRacers=[];
 let loadedRaceKey="";
 
 function scheduleRaceRosterFetch(){
+  if(!getAppSettings().premiumAutoFetch)return;
   clearTimeout(raceRosterTimer);
   raceRosterTimer=setTimeout(()=>fetchRaceRoster(false),180);
 }
@@ -2618,7 +2629,7 @@ function premiumDisplayValue(v){
 }
 
 function femaleHeartHTML(p){
-  return p?.womenRace ? '<span class="bs-female-heart">♥</span>' : '';
+  return p?.womenRace && getAppSettings().premiumWomenHeart ? '<span class="bs-female-heart">♥</span>' : '';
 }
 function raceResultTableHTML(r){
   const p=r?.premium||{};
@@ -3024,7 +3035,7 @@ function dayRaceRacersHTML(r){
       return `<div class="day-racer-chip" data-lane="${Number(x.lane)||0}">
         <span class="day-racer-lane">${Number(x.lane)||"-"}</span>
         <span class="day-racer-info">
-          <span class="day-racer-name-line"><span class="day-racer-name">${escapeHTML(x.name||"不明")}${r?.premium?.womenRace?'<span class="bs-female-heart">♥</span>':""}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</span>
+          <span class="day-racer-name-line"><span class="day-racer-name">${escapeHTML(x.name||"不明")}${r?.premium?.womenRace&&getAppSettings().premiumWomenHeart?'<span class="bs-female-heart">♥</span>':""}</span>${rank?`<span class="racer-grade ${racerGradeClass(rank)}">${escapeHTML(rank)}</span>`:""}</span>
 
         </span>
       </div>`;
@@ -3652,7 +3663,7 @@ function showSaveToast(message="保存しました"){
 }
 
 function getAppSettings(){
-  const defaults={autoReturn:true,keepPlace:true,showManshu:true,plusSign:true,defaultPlace:""};
+  const defaults={autoReturn:true,keepPlace:true,showManshu:true,plusSign:true,defaultPlace:"",premiumAutoFetch:true,premiumWomenHeart:true,premiumAllRecords:true};
   try{return {...defaults,...JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")}}catch(e){return defaults}
 }
 function saveAppSettings(){
@@ -3662,12 +3673,15 @@ function saveAppSettings(){
   s.showManshu=!!document.getElementById("settingManshu")?.checked;
   s.plusSign=!!document.getElementById("settingPlusSign")?.checked;
   s.defaultPlace=document.getElementById("defaultPlaceSetting")?.value||"";
+  if(document.getElementById("settingPremiumAutoFetch"))s.premiumAutoFetch=!!document.getElementById("settingPremiumAutoFetch").checked;
+  if(document.getElementById("settingPremiumWomenHeart"))s.premiumWomenHeart=!!document.getElementById("settingPremiumWomenHeart").checked;
+  if(document.getElementById("settingPremiumAllRecords"))s.premiumAllRecords=!!document.getElementById("settingPremiumAllRecords").checked;
   localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
   autoReturnEnabled=s.autoReturn;
 }
 function loadAppSettings(){
   const s=getAppSettings();
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v};set("settingAutoReturn",s.autoReturn);set("settingKeepPlace",s.keepPlace);set("settingManshu",s.showManshu);set("settingPlusSign",s.plusSign);
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.checked=v};set("settingAutoReturn",s.autoReturn);set("settingKeepPlace",s.keepPlace);set("settingManshu",s.showManshu);set("settingPlusSign",s.plusSign);set("settingPremiumAutoFetch",s.premiumAutoFetch);set("settingPremiumWomenHeart",s.premiumWomenHeart);set("settingPremiumAllRecords",s.premiumAllRecords);
   const dp=document.getElementById("defaultPlaceSetting");if(dp)dp.value=s.defaultPlace||"";
   autoReturnEnabled=s.autoReturn;updateSettingsFavoriteSummary();
 }
@@ -3757,6 +3771,19 @@ function premiumStatChips(items,limit=5){
     <em>${x.confidence}</em>
   </div>`).join("");
 }
+function togglePremiumVenuePlayers(btn){
+  const box=document.getElementById("premiumVenuePlayers");if(!box)return;
+  box.classList.toggle("open");if(btn?.querySelector("b"))btn.querySelector("b").textContent=box.classList.contains("open")?"−":"＋";
+}
+function premiumPlayerGroups(records){
+  const map=new Map();
+  records.forEach(r=>{
+    const racers=Array.isArray(r.premium?.raceRacers)?r.premium.raceRacers:[];
+    const names=[...new Set(racers.map(x=>(x.name||"").trim()).filter(Boolean))];
+    names.forEach(name=>{if(!map.has(name))map.set(name,[]);map.get(name).push(r)});
+  });
+  return [...map.entries()].map(([key,list])=>({key,list,...calcStats(list),confidence:premiumConfidenceLabel(list.length)}));
+}
 function renderPremiumAnalysis(){
   const all=getData();
   const premiumRecords=all.filter(r=>{
@@ -3764,14 +3791,16 @@ function renderPremiumAnalysis(){
     if(!p)return false;
     return Object.entries(p).some(([k,v])=>v!==""&&v!==0&&v!==false&&v!==null&&v!==undefined);
   });
+  const includeAll=getAppSettings().premiumAllRecords;
+  const analysisRecords=includeAll?all:premiumRecords;
   const badge=document.getElementById("premiumRecordBadge");
-  if(badge)badge.textContent=`${premiumRecords.length}件`;
-  const total=calcStats(premiumRecords);
+  if(badge)badge.textContent=`${analysisRecords.length}件`;
+  const total=calcStats(analysisRecords);
   const setText=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};
   setText("premiumTotalProfit",signedMoney(total.profit));
   setText("premiumTotalRate",`${total.rate.toFixed(1)}%`);
   setText("premiumTotalHit",`${total.hitRate.toFixed(1)}%`);
-  setText("premiumTotalCount",`${premiumRecords.length}件`);
+  setText("premiumTotalCount",`${analysisRecords.length}件`);
   const profitEl=document.getElementById("premiumTotalProfit");
   if(profitEl){profitEl.classList.toggle("plus",total.profit>0);profitEl.classList.toggle("minus",total.profit<0);}
 
@@ -3798,8 +3827,8 @@ function renderPremiumAnalysis(){
   if(bestBox)bestBox.innerHTML=best.length?best.map(x=>premiumPatternHTML(x,"good")).join(""):'<div class="premium-empty">プラス傾向のデータを収集中</div>';
   if(worstBox)worstBox.innerHTML=worst.length?worst.map(x=>premiumPatternHTML(x,"weak")).join(""):'<div class="premium-empty">マイナス傾向のデータを収集中</div>';
 
-  const place=premiumGroup(premiumRecords,r=>r.place).sort((a,b)=>b.count-a.count||b.rate-a.rate);
-  const player=premiumGroup(premiumRecords,r=>r.premium?.winnerName).filter(x=>x.count>=1).sort((a,b)=>b.rate-a.rate||b.profit-a.profit);
+  const place=premiumGroup(analysisRecords,r=>r.place).sort((a,b)=>b.count-a.count||b.rate-a.rate);
+  const player=premiumPlayerGroups(premiumRecords).filter(x=>x.count>=1&&x.rate>100).sort((a,b)=>b.rate-a.rate||b.profit-a.profit);
   const grade=premiumGroup(premiumRecords,r=>{const p=r.premium||{};return p.grade?p.grade+(p.womenRace?"（女子戦）":""):""}).sort((a,b)=>b.count-a.count||b.rate-a.rate);
   const winningMove=premiumGroup(premiumRecords,r=>r.premium?.winningMove).sort((a,b)=>b.count-a.count||b.rate-a.rate);
   const courseMove=premiumGroup(premiumRecords,r=>{
@@ -3863,180 +3892,43 @@ function renderAnalysisUpgrade(){
  drawTrendLine(rs,analysisPeriod,y,mo);
 }
 function drawTrendLine(rs,period,y,mo){
-  const c=document.getElementById("trendLineCanvas");
-  if(!c) return;
-
-  const rect=c.getBoundingClientRect();
-  const dpr=window.devicePixelRatio||1;
-  const W=Math.max(310,rect.width), H=Math.max(230,rect.height);
-  c.width=Math.floor(W*dpr);
-  c.height=Math.floor(H*dpr);
-
-  const ctx=c.getContext("2d");
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.clearRect(0,0,W,H);
-
-  const pad={l:58,r:18,t:36,b:34};
-  let points=[], cumulativeProfit=0, cumulativeBet=0;
-
-  const addPoint=(label,list)=>{
-    list.forEach(a=>{
-      cumulativeProfit+=Number(a.returnAmount)-Number(a.bet);
-      cumulativeBet+=Number(a.bet);
-    });
-    points.push({label,profit:cumulativeProfit,bet:cumulativeBet});
-  };
-
-  if(period==="today"){
-    for(let race=1;race<=12;race++){
-      addPoint(`${race}R`,rs.filter(a=>Number(a.race)===race));
-    }
-  }else if(period==="month"){
-    const days=new Date(y,mo+1,0).getDate();
-    for(let day=1;day<=days;day++){
-      const ds=`${y}-${String(mo+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-      addPoint(String(day),rs.filter(a=>a.date===ds));
-    }
-  }else{
-    for(let m=0;m<12;m++){
-      addPoint(`${m+1}月`,rs.filter(a=>parseLocalDate(a.date).getMonth()===m));
-    }
-  }
-
-  if(!points.length) return;
-
-  const vals=[0,...points.flatMap(p=>[p.profit,p.bet])];
-  let min=Math.min(...vals), max=Math.max(...vals);
-  if(min===max){min-=1;max+=1;}
-  const margin=Math.max(1,(max-min)*.08);
-  min-=margin; max+=margin;
-  const range=max-min;
-
+  const c=document.getElementById("trendLineCanvas"); if(!c)return;
+  const rect=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  const W=Math.max(310,rect.width),H=Math.max(230,rect.height);
+  c.width=Math.floor(W*dpr); c.height=Math.floor(H*dpr);
+  const ctx=c.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  const pad={l:72,r:18,t:36,b:34}; let points=[],profit=0,bet=0;
+  const add=(label,list)=>{list.forEach(a=>{profit+=Number(a.returnAmount)-Number(a.bet);bet+=Number(a.bet)});points.push({label,profit,bet})};
+  if(period==="today"){for(let r=1;r<=12;r++)add(`${r}R`,rs.filter(a=>Number(a.race)===r))}
+  else if(period==="month"){const days=new Date(y,mo+1,0).getDate();for(let d=1;d<=days;d++){const ds=`${y}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;add(String(d),rs.filter(a=>a.date===ds))}}
+  else{for(let m=0;m<12;m++)add(`${m+1}月`,rs.filter(a=>parseLocalDate(a.date).getMonth()===m))}
+  if(!points.length)return;
+  const vals=[0,...points.flatMap(p=>[p.profit,p.bet])];let min=Math.min(...vals),max=Math.max(...vals);
+  if(min===max){min-=1;max+=1} const margin=Math.max(1000,(max-min)*.08);min-=margin;max+=margin;const range=max-min;
   const x=i=>pad.l+(W-pad.l-pad.r)*(points.length<=1?0:i/(points.length-1));
   const yv=v=>pad.t+(H-pad.t-pad.b)*(max-v)/range;
-  const moneyLabel=v=>{
-    const n=Math.round(v);
-    if(Math.abs(n)>=1000000)return `${(n/1000000).toFixed(1)}M`;
-    if(Math.abs(n)>=10000)return `${Math.round(n/1000)}k`;
-    return n.toLocaleString();
-  };
+  const yen=v=>`${Math.round(v).toLocaleString()}円`;
 
-  // Grid + Y labels.
-  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";
-  ctx.textAlign="right";
-  ctx.textBaseline="middle";
-  for(let i=0;i<5;i++){
-    const value=max-(range*i/4);
-    const yy=pad.t+(H-pad.t-pad.b)*(i/4);
-    ctx.strokeStyle="rgba(129,149,174,.18)";
-    ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();
-    ctx.fillStyle="#7d8b9e";
-    ctx.fillText(`${moneyLabel(value)}円`,pad.l-7,yy);
-  }
+  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";ctx.textAlign="right";ctx.textBaseline="middle";
+  const gridCount=4;
+  for(let i=0;i<gridCount;i++){const value=max-(range*i/(gridCount-1)),yy=pad.t+(H-pad.t-pad.b)*(i/(gridCount-1));
+    ctx.strokeStyle="rgba(129,149,174,.18)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();
+    ctx.fillStyle="#73849a";ctx.fillText(yen(value),pad.l-8,yy)}
+  if(min<0&&max>0){ctx.strokeStyle="rgba(78,95,118,.42)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,yv(0));ctx.lineTo(W-pad.r,yv(0));ctx.stroke();ctx.setLineDash([])}
+  const build=key=>{ctx.beginPath();ctx.moveTo(x(0),yv(points[0][key]));for(let i=1;i<points.length;i++){const x0=x(i-1),y0=yv(points[i-1][key]),x1=x(i),y1=yv(points[i][key]),mx=(x0+x1)/2;ctx.bezierCurveTo(mx,y0,mx,y1,x1,y1)}};
+  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);grad.addColorStop(0,"rgba(8,103,223,.18)");grad.addColorStop(1,"rgba(8,103,223,0)");
+  build("profit");ctx.lineTo(x(points.length-1),H-pad.b);ctx.lineTo(x(0),H-pad.b);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+  ctx.strokeStyle="#8c98aa";ctx.lineWidth=2;ctx.setLineDash([6,4]);build("bet");ctx.stroke();ctx.setLineDash([]);
+  ctx.save();ctx.shadowColor="rgba(8,103,223,.20)";ctx.shadowBlur=7;ctx.strokeStyle="#0867df";ctx.lineWidth=3;ctx.lineCap="round";ctx.lineJoin="round";build("profit");ctx.stroke();ctx.restore();
 
-  // Zero line.
-  if(min<0&&max>0){
-    ctx.strokeStyle="rgba(78,95,118,.48)";
-    ctx.setLineDash([4,4]);
-    ctx.beginPath();ctx.moveTo(pad.l,yv(0));ctx.lineTo(W-pad.r,yv(0));ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  const buildLine=(key)=>{
-    ctx.beginPath();
-    ctx.moveTo(x(0),yv(points[0][key]));
-    for(let i=1;i<points.length;i++){
-      const x0=x(i-1), y0=yv(points[i-1][key]);
-      const x1=x(i), y1=yv(points[i][key]);
-      const mx=(x0+x1)/2;
-      ctx.bezierCurveTo(mx,y0,mx,y1,x1,y1);
-    }
-  };
-
-  // Profit area fill.
-  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
-  grad.addColorStop(0,"rgba(8,103,223,.20)");
-  grad.addColorStop(1,"rgba(8,103,223,0)");
-  buildLine("profit");
-  ctx.lineTo(x(points.length-1),H-pad.b);
-  ctx.lineTo(x(0),H-pad.b);
-  ctx.closePath();
-  ctx.fillStyle=grad;
-  ctx.fill();
-
-  // Investment line.
-  ctx.strokeStyle="#8c98aa";
-  ctx.lineWidth=2;
-  ctx.setLineDash([6,4]);
-  buildLine("bet");
-  ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Profit line.
-  ctx.save();
-  ctx.shadowColor="rgba(8,103,223,.24)";
-  ctx.shadowBlur=8;
-  ctx.strokeStyle="#0867df";
-  ctx.lineWidth=3;
-  ctx.lineCap="round";
-  ctx.lineJoin="round";
-  buildLine("profit");
-  ctx.stroke();
-  ctx.restore();
-
-  // X labels and selected point labels.
-  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";
-  ctx.textAlign="center";
-  ctx.textBaseline="alphabetic";
-  const labelEvery=period==="month"?5:1;
-  points.forEach((p,i)=>{
-    const show=period!=="month" || i===0 || i===points.length-1 || (i+1)%labelEvery===0;
-    if(show){
-      ctx.fillStyle="#7b8798";
-      ctx.fillText(p.label,x(i),H-10);
-    }
-
-    const pointShow=period==="year" || i===points.length-1 || (period==="today"&&i%3===2) || (period==="month"&&(i+1)%5===0);
-    if(pointShow){
-      const px=x(i),py=yv(p.profit);
-      ctx.beginPath();ctx.arc(px,py,3.5,0,Math.PI*2);
-      ctx.fillStyle="#fff";ctx.fill();
-      ctx.strokeStyle="#0867df";ctx.lineWidth=2;ctx.stroke();
-
-      const txt=(p.profit>0?"+":"")+Math.round(p.profit).toLocaleString()+"円";
-      ctx.font="700 8px -apple-system,BlinkMacSystemFont,sans-serif";
-      const tw=ctx.measureText(txt).width+10;
-      let bx=px-tw/2;
-      bx=Math.max(pad.l,Math.min(W-pad.r-tw,bx));
-      let by=py-24;
-      if(by<pad.t+2)by=py+8;
-      ctx.fillStyle="rgba(255,255,255,.94)";
-      ctx.strokeStyle="rgba(8,103,223,.18)";
-      ctx.lineWidth=1;
-      roundRect(ctx,bx,by,tw,18,8);ctx.fill();ctx.stroke();
-      ctx.fillStyle=p.profit>=0?"#0867df":"#e33434";
-      ctx.textAlign="center";
-      ctx.fillText(txt,bx+tw/2,by+12);
-    }
-  });
-
-  // Current values header pills.
-  const last=points[points.length-1];
-  const profitText=`収支 ${(last.profit>0?"+":"")}${Math.round(last.profit).toLocaleString()}円`;
-  const betText=`総投資 ${Math.round(last.bet).toLocaleString()}円`;
-  ctx.font="700 10px -apple-system,BlinkMacSystemFont,sans-serif";
-  const pW=ctx.measureText(profitText).width+16;
-  const bW=ctx.measureText(betText).width+16;
-
-  ctx.fillStyle=last.profit>=0?"#0867df":"#e33434";
-  roundRect(ctx,pad.l,7,pW,22,11);ctx.fill();
-  ctx.fillStyle="#fff";ctx.textAlign="center";ctx.fillText(profitText,pad.l+pW/2,21);
-
-  const bx=Math.min(W-pad.r-bW,pad.l+pW+7);
-  ctx.fillStyle="#eef2f7";
-  roundRect(ctx,bx,7,bW,22,11);ctx.fill();
-  ctx.fillStyle="#5f6f82";ctx.fillText(betText,bx+bW/2,21);
+  points.forEach((p,i)=>{const show=period==="year"||i===points.length-1||(period==="today"&&i%3===2)||(period==="month"&&(i+1)%5===0);if(!show)return;
+    const px=x(i),py=yv(p.profit);ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();ctx.strokeStyle="#0867df";ctx.lineWidth=2;ctx.stroke()});
+  ctx.font="9px -apple-system,BlinkMacSystemFont,sans-serif";ctx.textAlign="center";ctx.textBaseline="alphabetic";
+  points.forEach((p,i)=>{const show=period!=="month"||i===0||i===points.length-1||(i+1)%5===0;if(show){ctx.fillStyle="#7b8798";ctx.fillText(p.label,x(i),H-10)}});
+  const last=points[points.length-1],pt=`収支 ${(last.profit>0?"+":"")}${Math.round(last.profit).toLocaleString()}円`,bt=`総投資 ${Math.round(last.bet).toLocaleString()}円`;
+  ctx.font="700 10px -apple-system,BlinkMacSystemFont,sans-serif";const pw=ctx.measureText(pt).width+16,bw=ctx.measureText(bt).width+16;
+  ctx.fillStyle=last.profit>=0?"#0867df":"#e33434";roundRect(ctx,pad.l,7,pw,22,11);ctx.fill();ctx.fillStyle="#fff";ctx.textAlign="center";ctx.fillText(pt,pad.l+pw/2,21);
+  const bx=Math.min(W-pad.r-bw,pad.l+pw+7);ctx.fillStyle="#eef2f7";roundRect(ctx,bx,7,bw,22,11);ctx.fill();ctx.fillStyle="#5f6f82";ctx.fillText(bt,bx+bw/2,21);
 }
 function roundRect(ctx,x,y,w,h,r){
   const rr=Math.min(r,w/2,h/2);
